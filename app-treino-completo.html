@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#2c2c2a">
+    <meta name="description" content="App de treino com 5 programas, dicas inteligentes e progressão automática">
+    <title>Meu Treino - App Completo</title>
+    
+    <link rel="manifest" href="./manifest.json">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2c2c2a;
+            --secondary: #888780;
+            --accent: #378ADD;
+            --danger: #E24B4A;
+            --success: #639922;
+            --warning: #BA7517;
+            --surface-0: #f9f9f7;
+            --surface-1: #f1efe8;
+            --surface-2: #ffffff;
+            --border: #d3d1c7;
+            --text-primary: #2c2c2a;
+            --text-secondary: #888780;
+            --text-muted: #b4b2a9;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary: #ffffff;
+                --secondary: #b4b2a9;
+                --surface-0: #0b0b0b;
+                --surface-1: #1a1a18;
+                --surface-2: #2c2c2a;
+                --border: #444441;
+                --text-primary: #ffffff;
+                --text-secondary: #b4b2a9;
+                --text-muted: #5f5e5a;
+            }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--surface-0);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: var(--surface-0);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        header {
+            background: var(--surface-2);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 500;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--surface-1);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .icon-btn:hover {
+            background: var(--border);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface-2);
+            padding: 0 1rem;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 12px 8px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .nav-tab.active {
+            color: var(--text-primary);
+            border-bottom-color: var(--text-primary);
+        }
+
+        .content {
+            padding: 1rem;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        .program-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .program-card {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .program-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .program-card.active {
+            border-color: var(--accent);
+            background: var(--surface-1);
+        }
+
+        .program-title {
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .program-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .program-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .workout-card {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 12px;
+        }
+
+        .exercise-title {
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .exercise-meta {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 0.75rem;
+        }
+
+        input[type="number"],
+        input[type="text"] {
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+            background: var(--surface-1);
+            color: var(--text-primary);
+        }
+
+        input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .btn {
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--surface-1);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: var(--border);
+        }
+
+        .btn-primary {
+            background: var(--text-primary);
+            color: white;
+            border-color: var(--text-primary);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-danger {
+            color: var(--danger);
+            border-color: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 0.75rem;
+        }
+
+        .today-records {
+            background: var(--surface-1);
+            border-radius: 6px;
+            padding: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        .today-records-title {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .record-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            font-size: 13px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .record-item:last-child {
+            border-bottom: none;
+        }
+
+        .tip-card {
+            background: linear-gradient(135deg, var(--accent) 0%, #185FA5 100%);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .tip-title {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 15px;
+        }
+
+        .tip-text {
+            font-size: 13px;
+            line-height: 1.5;
+            opacity: 0.95;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--success);
+            transition: width 0.3s;
+        }
+
+        .alert {
+            background: var(--warning);
+            border: 1px solid var(--warning);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .alert-title {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-text {
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width: 480px;
+            margin: 0 auto;
+            background: var(--surface-2);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .nav-btn.active {
+            color: var(--accent);
+        }
+
+        .nav-btn-icon {
+            font-size: 24px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .modal-content {
+            background: var(--surface-2);
+            border-radius: 16px 16px 0 0;
+            width: 100%;
+            max-width: 480px;
+            padding: 1.5rem;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        @supports (padding: max(0px)) {
+            .modal-content {
+                padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+            }
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                max-width: 100vw;
+            }
+        }
+
+        .chart-container {
+            position: relative;
+            height: 250px;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💪 Meu Treino</h1>
+            <div class="header-icons">
+                <button class="icon-btn" onclick="app.toggleSettings()">⚙️</button>
+                <button class="icon-btn" onclick="app.toggleNotifications()">🔔</button>
+            </div>
+        </header>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="app.switchTab('programs')">Programas</button>
+            <button class="nav-tab" onclick="app.switchTab('workout')">Treino</button>
+            <button class="nav-tab" onclick="app.switchTab('progress')">Progresso</button>
+            <button class="nav-tab" onclick="app.switchTab('tips')">Dicas</button>
+        </div>
+
+        <div class="content">
+            <!-- PROGRAMS VIEW -->
+            <div id="programs" class="view active">
+                <h2 style="font-size: 18px; font-weight: 500; margin-bottom: 1rem;">Escolha seu programa</h2>
+                <div class="program-grid" id="programsGrid"></div>
+            </div>
+
+            <!-- WORKOUT VIEW -->
+            <div id="workout" class="view">
+                <div id="workoutContent"></div>
+            </div>
+
+            <!-- PROGRESS VIEW -->
+            <div id="progress" class="view">
+                <div id="progressContent"></div>
+            </div>
+
+            <!-- TIPS VIEW -->
+            <div id="tips" class="view">
+                <div id="tipsContent"></div>
+            </div>
+        </div>
+
+        <!-- BOTTOM NAVIGATION -->
+        <div class="bottom-nav">
+            <button class="nav-btn active" onclick="app.switchTab('programs')">
+                <span class="nav-btn-icon">📚</span>
+                <span>Programas</span>
+            </button>
+            <button class="nav-btn" onclick="app.switchTab('workout')">
+                <span class="nav-btn-icon">⏱️</span>
+                <span>Treino</span>
+            </button>
+            <button class="nav-btn" onclick="app.switchTab('progress')">
+                <span class="nav-btn-icon">📊</span>
+                <span>Progresso</span>
+            </button>
+            <button class="nav-btn" onclick="app.switchTab('tips')">
+                <span class="nav-btn-icon">💡</span>
+                <span>Dicas</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- SETTINGS MODAL -->
+    <div id="settingsModal" class="modal" onclick="if(event.target === this) app.toggleSettings()">
+        <div class="modal-content">
+            <h2 class="modal-title">Configurações</h2>
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">
+                    Notificações diárias
+                </label>
+                <input type="checkbox" id="notificationsToggle" onchange="app.saveSettings()" style="width: 20px; height: 20px; cursor: pointer;">
+            </div>
+            <button class="btn btn-danger" onclick="app.resetData()">Limpar todos os dados</button>
+            <button class="btn" onclick="app.toggleSettings()" style="margin-top: 8px;">Fechar</button>
+        </div>
+    </div>
+
+    <script>
+        class TreinoApp {
+            constructor() {
+                this.programs = [
+                    {
+                        id: 'fullbody',
+                        name: 'Full Body',
+                        desc: 'Todo corpo em cada treino',
+                        days: 3,
+                        difficulty: 'Iniciante',
+                        exercises: [
+                            { name: 'Agachamento Livre', sets: 4, reps: '6-10' },
+                            { name: 'Supino Reto', sets: 4, reps: '6-10' },
+                            { name: 'Puxada Frontal', sets: 4, reps: '8-12' },
+                            { name: 'Rosca Direta', sets: 3, reps: '8-12' },
+                            { name: 'Tríceps Corda', sets: 3, reps: '10-12' }
+                        ]
+                    },
+                    {
+                        id: 'ppl',
+                        name: 'Push/Pull/Legs',
+                        desc: 'Dividido por grupos musculares',
+                        days: 6,
+                        difficulty: 'Intermediário',
+                        exercises: [
+                            { name: 'Supino Reto', sets: 4, reps: '6-10' },
+                            { name: 'Desenvolvimento', sets: 4, reps: '8-12' },
+                            { name: 'Tríceps Francês', sets: 3, reps: '10-12' }
+                        ]
+                    },
+                    {
+                        id: 'upperlower',
+                        name: 'Upper/Lower',
+                        desc: 'Membros superiores e inferiores',
+                        days: 4,
+                        difficulty: 'Intermediário',
+                        exercises: [
+                            { name: 'Supino Reto', sets: 4, reps: '6-10' },
+                            { name: 'Remada Baixa', sets: 4, reps: '8-12' },
+                            { name: 'Agachamento', sets: 4, reps: '6-10' }
+                        ]
+                    },
+                    {
+                        id: 'hipertrofia',
+                        name: 'Hipertrofia Máxima',
+                        desc: 'Foco em ganho de massa',
+                        days: 4,
+                        difficulty: 'Avançado',
+                        exercises: [
+                            { name: 'Supino Inclinado', sets: 5, reps: '8-12' },
+                            { name: 'Leg Press', sets: 4, reps: '10-15' },
+                            { name: 'Rosca Scott', sets: 4, reps: '8-12' }
+                        ]
+                    },
+                    {
+                        id: 'definicao',
+                        name: 'Definição',
+                        desc: 'Perda de gordura com músculo',
+                        days: 5,
+                        difficulty: 'Avançado',
+                        exercises: [
+                            { name: 'Supino Reto', sets: 4, reps: '10-12' },
+                            { name: 'Puxada Frente', sets: 4, reps: '10-12' },
+                            { name: 'Agachamento', sets: 4, reps: '12-15' },
+                            { name: 'Cardio Moderado', sets: 1, reps: '30min' }
+                        ]
+                    }
+                ];
+
+                this.state = {
+                    selectedProgram: null,
+                    currentDay: new Date().toISOString().split('T')[0],
+                    workoutLog: {},
+                    notifications: true,
+                    startDate: localStorage.getItem('meuTreino_startDate') || new Date().toISOString().split('T')[0]
+                };
+
+                this.loadState();
+                this.renderPrograms();
+                this.registerServiceWorker();
+            }
+
+            async registerServiceWorker() {
+                if ('serviceWorker' in navigator) {
+                    try {
+                        const sw = `
+                            self.addEventListener('install', () => self.skipWaiting());
+                            self.addEventListener('activate', () => self.clients.claim());
+                            self.addEventListener('fetch', (e) => {
+                                e.respondWith(
+                                    caches.match(e.request).then(r => r || fetch(e.request)).catch(() => new Response('Offline'))
+                                );
+                            });
+                        `;
+                        const blob = new Blob([sw], { type: 'application/javascript' });
+                        const url = URL.createObjectURL(blob);
+                        await navigator.serviceWorker.register(url);
+                    } catch (e) {
+                        console.log('SW registration failed');
+                    }
+                }
+            }
+
+            loadState() {
+                const saved = localStorage.getItem('meuTreino_state');
+                if (saved) {
+                    const loaded = JSON.parse(saved);
+                    this.state = { ...this.state, ...loaded };
+                }
+            }
+
+            saveState() {
+                localStorage.setItem('meuTreino_state', JSON.stringify(this.state));
+            }
+
+            saveSettings() {
+                this.state.notifications = document.getElementById('notificationsToggle')?.checked || false;
+                this.saveState();
+            }
+
+            renderPrograms() {
+                const grid = document.getElementById('programsGrid');
+                grid.innerHTML = this.programs.map(p => `
+                    <div class="program-card ${this.state.selectedProgram === p.id ? 'active' : ''}" onclick="app.selectProgram('${p.id}')">
+                        <div class="program-title">${p.name}</div>
+                        <div class="program-desc">${p.desc}</div>
+                        <div class="program-meta">
+                            <span>📅 ${p.days}x/semana</span>
+                            <span>⭐ ${p.difficulty}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            selectProgram(id) {
+                this.state.selectedProgram = id;
+                this.state.startDate = new Date().toISOString().split('T')[0];
+                this.saveState();
+                this.renderPrograms();
+                this.renderWorkout();
+                this.switchTab('workout');
+            }
+
+            renderWorkout() {
+                const program = this.programs.find(p => p.id === this.state.selectedProgram);
+                if (!program) {
+                    document.getElementById('workoutContent').innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 2rem;">Selecione um programa primeiro</p>';
+                    return;
+                }
+
+                const daysSince = this.getDaysSinceStart();
+                const shouldChange = daysSince >= 40;
+
+                let html = '';
+
+                if (shouldChange) {
+                    html += `
+                        <div class="alert">
+                            <div class="alert-title">🎯 Hora de mudar!</div>
+                            <div class="alert-text">Você completou 40 dias. É hora de renovar seu programa!</div>
+                        </div>
+                    `;
+                }
+
+                html += `
+                    <div style="margin-bottom: 1.5rem;">
+                        <h2 style="font-size: 18px; font-weight: 500; margin-bottom: 0.5rem;">Programa: ${program.name}</h2>
+                        <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 1rem;">Dias: ${daysSince} / 40</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${Math.min((daysSince/40)*100, 100)}%"></div>
+                        </div>
+                    </div>
+                `;
+
+                html += program.exercises.map((ex, i) => `
+                    <div class="workout-card">
+                        <div class="exercise-title">${ex.name}</div>
+                        <div class="exercise-meta">${ex.sets} séries × ${ex.reps} reps</div>
+                        <div class="input-group">
+                            <input type="number" id="set-${i}" placeholder="Série" />
+                            <input type="number" id="reps-${i}" placeholder="Reps" />
+                            <input type="number" id="weight-${i}" placeholder="Peso" step="0.5" />
+                        </div>
+                        <button class="btn btn-primary" onclick="app.recordExercise(${i}, '${ex.name}')">+ Registrar</button>
+                        <div id="records-${i}" class="today-records" style="display: none;">
+                            <div class="today-records-title">Registros de hoje</div>
+                            <div id="records-list-${i}"></div>
+                        </div>
+                    </div>
+                `).join('');
+
+                document.getElementById('workoutContent').innerHTML = html;
+                this.loadRecords(program.exercises);
+            }
+
+            recordExercise(index, name) {
+                const setVal = document.getElementById(`set-${index}`)?.value;
+                const repsVal = document.getElementById(`reps-${index}`)?.value;
+                const weightVal = document.getElementById(`weight-${index}`)?.value;
+
+                if (!setVal || !repsVal || !weightVal) {
+                    alert('Preencha todos os campos');
+                    return;
+                }
+
+                const key = `${this.state.selectedProgram}_${name}_${this.state.currentDay}`;
+                if (!this.state.workoutLog[key]) this.state.workoutLog[key] = [];
+
+                this.state.workoutLog[key].push({
+                    set: parseInt(setVal),
+                    reps: parseInt(repsVal),
+                    weight: parseFloat(weightVal)
+                });
+
+                this.saveState();
+                document.getElementById(`set-${index}`).value = '';
+                document.getElementById(`reps-${index}`).value = '';
+                document.getElementById(`weight-${index}`).value = '';
+                this.renderWorkout();
+            }
+
+            loadRecords(exercises) {
+                exercises.forEach((ex, i) => {
+                    const key = `${this.state.selectedProgram}_${ex.name}_${this.state.currentDay}`;
+                    const records = this.state.workoutLog[key] || [];
+                    
+                    if (records.length > 0) {
+                        const container = document.getElementById(`records-${i}`);
+                        if (container) {
+                            container.style.display = 'block';
+                            container.querySelector('#records-list-' + i).innerHTML = records.map((r, ri) => `
+                                <div class="record-item">
+                                    <span><strong>S${r.set}:</strong> ${r.reps}x${r.weight}kg</span>
+                                    <button onclick="app.deleteRecord('${key}', ${ri})" style="background: none; border: none; color: var(--danger); cursor: pointer;">✕</button>
+                                </div>
+                            `).join('');
+                        }
+                    }
+                });
+            }
+
+            deleteRecord(key, index) {
+                if (this.state.workoutLog[key]) {
+                    this.state.workoutLog[key].splice(index, 1);
+                    this.saveState();
+                    this.renderWorkout();
+                }
+            }
+
+            renderProgress() {
+                const program = this.programs.find(p => p.id === this.state.selectedProgram);
+                const daysSince = this.getDaysSinceStart();
+
+                let html = `
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-label">Dias no ciclo</div>
+                            <div class="stat-value">${daysSince}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Dias restantes</div>
+                            <div class="stat-value">${Math.max(0, 40 - daysSince)}</div>
+                        </div>
+                    </div>
+                `;
+
+                if (program) {
+                    html += '<h3 style="font-weight: 500; margin-bottom: 1rem;">Seus melhores pesos</h3>';
+                    program.exercises.forEach(ex => {
+                        const records = Object.values(this.state.workoutLog)
+                            .flat()
+                            .filter(r => r.weight);
+                        const maxWeight = Math.max(...records.map(r => r.weight), 0);
+                        
+                        html += `
+                            <div class="workout-card">
+                                <div class="exercise-title">${ex.name}</div>
+                                <div style="font-size: 24px; font-weight: 500; color: var(--accent);">${maxWeight.toFixed(1)}kg</div>
+                            </div>
+                        `;
+                    });
+                }
+
+                document.getElementById('progressContent').innerHTML = html;
+            }
+
+            renderTips() {
+                const daysSince = this.getDaysSinceStart();
+                const phase = Math.floor(daysSince / 10);
+
+                const tips = [
+                    {
+                        phase: 0,
+                        title: '🔥 Adaptação Inicial',
+                        text: 'Seus músculos estão se adaptando. Concentre-se na técnica e não force demais.'
+                    },
+                    {
+                        phase: 1,
+                        title: '💪 Ganho de Força',
+                        text: 'Você deve estar mais forte! Aumente progressivamente o peso em 2-5% a cada semana.'
+                    },
+                    {
+                        phase: 2,
+                        title: '🏗️ Hipertrofia em Progresso',
+                        text: 'Trabalhe na amplitude do movimento e aumente volume. Mais séries, mais resultado!'
+                    },
+                    {
+                        phase: 3,
+                        title: '⚡ Intensidade Máxima',
+                        text: 'Reduz descanso, aumenta intensidade. Use técnicas avançadas como drop sets.'
+                    },
+                    {
+                        phase: 4,
+                        title: '🎯 Prepare-se para Mudar',
+                        text: 'Seu corpo se adaptou. Em breve, escolha um novo programa para continuar progredindo.'
+                    }
+                ];
+
+                const currentTip = tips[Math.min(phase, tips.length - 1)];
+
+                let html = `
+                    <div class="tip-card">
+                        <div class="tip-title">${currentTip.title}</div>
+                        <div class="tip-text">${currentTip.text}</div>
+                    </div>
+                `;
+
+                html += `
+                    <h3 style="font-weight: 500; margin-bottom: 1rem; margin-top: 1.5rem;">Dicas gerais</h3>
+                    <div class="workout-card">
+                        <div style="margin-bottom: 1rem;">
+                            <strong style="color: var(--text-primary);">📊 Progressão</strong>
+                            <p style="color: var(--text-secondary); font-size: 13px; margin-top: 0.5rem;">Aumente peso ou reps a cada treino. Pequenos aumentos geram grandes resultados!</p>
+                        </div>
+                    </div>
+                    <div class="workout-card">
+                        <div style="margin-bottom: 1rem;">
+                            <strong style="color: var(--text-primary);">🍗 Nutrição</strong>
+                            <p style="color: var(--text-secondary); font-size: 13px; margin-top: 0.5rem;">Proteína: 1.6-2.2g por kg. Carbos antes/depois do treino. Gordura: 25-30%.</p>
+                        </div>
+                    </div>
+                    <div class="workout-card">
+                        <div style="margin-bottom: 1rem;">
+                            <strong style="color: var(--text-primary);">😴 Recuperação</strong>
+                            <p style="color: var(--text-secondary); font-size: 13px; margin-top: 0.5rem;">Durma 7-9 horas. O músculo cresce durante o descanso, não no treino!</p>
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('tipsContent').innerHTML = html;
+            }
+
+            getDaysSinceStart() {
+                const start = new Date(this.state.startDate);
+                const today = new Date();
+                return Math.floor((today - start) / (1000 * 60 * 60 * 24));
+            }
+
+            switchTab(tab) {
+                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                document.getElementById(tab).classList.add('active');
+
+                document.querySelectorAll('.nav-tab').forEach(t => {
+                    const tabName = t.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
+                    t.classList.toggle('active', tabName === tab);
+                });
+
+                document.querySelectorAll('.nav-btn').forEach(b => {
+                    const tabName = b.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
+                    b.classList.toggle('active', tabName === tab);
+                });
+
+                if (tab === 'progress') this.renderProgress();
+                if (tab === 'tips') this.renderTips();
+                if (tab === 'workout') this.renderWorkout();
+            }
+
+            toggleSettings() {
+                document.getElementById('settingsModal').classList.toggle('active');
+                document.getElementById('notificationsToggle').checked = this.state.notifications;
+            }
+
+            toggleNotifications() {
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    new Notification('Treino Meu', {
+                        body: 'Hora de treinar!',
+                        icon: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2250%22 y=%2270%22 font-size=%2280%22 text-anchor=%22middle%22>💪</text></svg>'
+                    });
+                } else if ('Notification' in window) {
+                    Notification.requestPermission();
+                }
+            }
+
+            resetData() {
+                if (confirm('Deseja deletar todos os dados?')) {
+                    localStorage.clear();
+                    location.reload();
+                }
+            }
+        }
+
+        const app = new TreinoApp();
+
+        // Request notification permission
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+    </script>
+</body>
+</html>
