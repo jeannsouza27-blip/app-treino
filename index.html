@@ -815,6 +815,7 @@
             <button class="btn btn-danger" onclick="app.resetData()">Limpar todos os dados</button>
             <button class="btn" onclick="app.showProfileSetup()" style="margin-top: 8px;">Editar perfil</button>
             <button class="btn" onclick="app.openChangePasswordModal()" style="margin-top: 8px;">Trocar senha</button>
+            <button id="adminAccountsBtn" class="btn" onclick="app.openAdminPanel()" style="margin-top: 8px; display: none;">Gerenciar contas</button>
             <button class="btn" onclick="app.logout()" style="margin-top: 8px;">Sair</button>
             <button class="btn" onclick="app.toggleSettings()" style="margin-top: 8px;">Fechar</button>
         </div>
@@ -842,6 +843,15 @@
 
             <button class="btn btn-primary" onclick="app.changePassword()">Salvar nova senha</button>
             <button class="btn" onclick="app.closeChangePasswordModal()" style="margin-top: 8px;">Cancelar</button>
+        </div>
+    </div>
+
+    <div id="adminPanelModal" class="modal" onclick="if(event.target === this) app.closeAdminPanel()">
+        <div class="modal-content" style="border-top: 4px solid #16a34a;">
+            <h2 class="modal-title">Gerenciar contas</h2>
+            <p class="modal-subtitle">Veja as contas cadastradas e redefina a senha de qualquer usuário que não conseguir entrar.</p>
+            <div id="adminUsersList" style="display: grid; gap: 0.75rem;"></div>
+            <button class="btn" onclick="app.closeAdminPanel()" style="margin-top: 12px;">Fechar</button>
         </div>
     </div>
 
@@ -984,6 +994,7 @@
 
                 this.loadState();
                 this.state.profile = { ...this.defaultProfile, ...(this.state.profile || {}) };
+                this.ensureAdminUser();
                 this.validateSession();
 
                 if (this.isAuthenticated) {
@@ -1391,6 +1402,83 @@
                 alert('Senha alterada com sucesso!');
             }
 
+            ensureAdminUser() {
+                const adminExists = this.users.some(user => user.nome.toLowerCase() === 'admin');
+                if (!adminExists) {
+                    this.users.unshift({ nome: 'admin', senha: 'admin123' });
+                    localStorage.setItem('meuTreino_users', JSON.stringify(this.users));
+                }
+            }
+
+            isAdminUser() {
+                return this.currentUser?.toLowerCase() === 'admin';
+            }
+
+            openAdminPanel() {
+                if (!this.isAdminUser()) {
+                    alert('Acesso restrito ao administrador.');
+                    return;
+                }
+
+                this.renderAdminUsersList();
+                const modal = document.getElementById('adminPanelModal');
+                if (modal) {
+                    modal.classList.add('active');
+                }
+            }
+
+            closeAdminPanel() {
+                const modal = document.getElementById('adminPanelModal');
+                if (modal) {
+                    modal.classList.remove('active');
+                }
+            }
+
+            renderAdminUsersList() {
+                const list = document.getElementById('adminUsersList');
+                if (!list) return;
+
+                list.innerHTML = this.users.map(user => `
+                    <div style="border: 1px solid var(--border); border-radius: 12px; padding: 0.75rem; background: rgba(255,255,255,0.7);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; margin-bottom: 0.4rem;">
+                            <strong style="font-size: 0.96rem; color: var(--text-primary);">${user.nome}</strong>
+                            <span style="font-size: 0.75rem; color: var(--text-secondary);">${user.nome.toLowerCase() === 'admin' ? 'Administrador' : 'Usuário'}</span>
+                        </div>
+                        <div style="margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.85rem;">
+                            Senha atual: <strong style="color: var(--text-primary);">${user.senha}</strong>
+                        </div>
+                        <button class="btn btn-primary" onclick="app.resetUserPassword('${user.nome}')" style="min-height: 40px; font-size: 0.85rem;">Redefinir senha</button>
+                    </div>
+                `).join('');
+            }
+
+            resetUserPassword(nome) {
+                if (!this.isAdminUser()) {
+                    alert('Acesso restrito ao administrador.');
+                    return;
+                }
+
+                const targetUser = this.users.find(user => user.nome.toLowerCase() === nome.toLowerCase());
+                if (!targetUser) {
+                    alert('Usuário não encontrado.');
+                    return;
+                }
+
+                const novaSenha = prompt(`Digite a nova senha para ${targetUser.nome}:`, '1234');
+                if (novaSenha === null) return;
+
+                const senhaTrim = novaSenha.trim();
+                if (!senhaTrim || senhaTrim.length < 4) {
+                    alert('A nova senha deve ter pelo menos 4 caracteres.');
+                    return;
+                }
+
+                targetUser.senha = senhaTrim;
+                localStorage.setItem('meuTreino_users', JSON.stringify(this.users));
+                this.renderAdminUsersList();
+                alert(`Senha redefinida para ${targetUser.nome}.`);
+            }
+
             saveSettings() {
                 this.state.notifications = document.getElementById('notificationsToggle')?.checked || false;
                 this.saveState();
@@ -1713,8 +1801,15 @@
             }
 
             toggleSettings() {
-                document.getElementById('settingsModal').classList.toggle('active');
+                const settingsModal = document.getElementById('settingsModal');
+                const adminAccountsBtn = document.getElementById('adminAccountsBtn');
+
+                settingsModal.classList.toggle('active');
                 document.getElementById('notificationsToggle').checked = this.state.notifications;
+
+                if (adminAccountsBtn) {
+                    adminAccountsBtn.style.display = this.isAdminUser() ? 'block' : 'none';
+                }
             }
 
             toggleNotifications() {
