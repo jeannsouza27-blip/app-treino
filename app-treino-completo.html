@@ -621,9 +621,11 @@
     <div id="authScreen" class="auth-screen">
         <div class="auth-card">
             <h2>Meu Treino</h2>
-            <p>Entre com a senha para acessar o app.</p>
+            <p>Crie sua conta ou entre com nome e senha.</p>
+            <input id="nameInput" type="text" placeholder="Digite seu nome" />
             <input id="passwordInput" type="password" placeholder="Digite sua senha" />
             <button onclick="app.login()">Entrar</button>
+            <button onclick="app.createAccount()" style="margin-top: 0.75rem; background: linear-gradient(135deg, #378ADD, #639922);">Criar conta</button>
         </div>
     </div>
 
@@ -812,7 +814,8 @@
                     }
                 ];
 
-                this.authPassword = localStorage.getItem('meuTreino_password') || 'treino123';
+                this.users = JSON.parse(localStorage.getItem('meuTreino_users') || '[]');
+                this.currentUser = localStorage.getItem('meuTreino_active_user') || '';
                 this.isAuthenticated = sessionStorage.getItem('meuTreino_authenticated') === 'true';
 
                 this.defaultProfile = {
@@ -948,10 +951,17 @@
                 const appContainer = document.getElementById('appContainer');
                 authScreen.style.display = 'flex';
                 appContainer.style.display = 'none';
-                const input = document.getElementById('passwordInput');
-                if (input) {
-                    input.value = '';
-                    input.focus();
+
+                const nameInput = document.getElementById('nameInput');
+                const passwordInput = document.getElementById('passwordInput');
+
+                if (nameInput) {
+                    nameInput.value = this.currentUser || '';
+                    nameInput.focus();
+                }
+
+                if (passwordInput) {
+                    passwordInput.value = '';
                 }
             }
 
@@ -962,21 +972,69 @@
                 appContainer.style.display = 'block';
             }
 
-            login() {
-                const input = document.getElementById('passwordInput');
-                const enteredPassword = input?.value.trim() || '';
+            createAccount() {
+                const nameInput = document.getElementById('nameInput');
+                const passwordInput = document.getElementById('passwordInput');
+                const nome = nameInput?.value.trim() || '';
+                const senha = passwordInput?.value.trim() || '';
 
-                if (enteredPassword === this.authPassword) {
-                    sessionStorage.setItem('meuTreino_authenticated', 'true');
-                    this.isAuthenticated = true;
-                    this.hideLogin();
-                    this.renderApp();
+                if (!nome || !senha) {
+                    alert('Digite nome e senha para criar a conta.');
                     return;
                 }
 
-                alert('Senha incorreta. Tente novamente.');
-                input.value = '';
-                input.focus();
+                if (nome.length < 2) {
+                    alert('O nome deve ter pelo menos 2 caracteres.');
+                    return;
+                }
+
+                if (senha.length < 4) {
+                    alert('A senha deve ter pelo menos 4 caracteres.');
+                    return;
+                }
+
+                const alreadyExists = this.users.some(user => user.nome.toLowerCase() === nome.toLowerCase());
+                if (alreadyExists) {
+                    alert('Esse nome já está cadastrado. Tente outro.');
+                    return;
+                }
+
+                this.users.push({ nome, senha });
+                localStorage.setItem('meuTreino_users', JSON.stringify(this.users));
+
+                sessionStorage.setItem('meuTreino_authenticated', 'true');
+                localStorage.setItem('meuTreino_active_user', nome);
+                this.currentUser = nome;
+                this.isAuthenticated = true;
+
+                this.hideLogin();
+                this.renderApp();
+            }
+
+            login() {
+                const nameInput = document.getElementById('nameInput');
+                const passwordInput = document.getElementById('passwordInput');
+                const nome = nameInput?.value.trim() || '';
+                const senha = passwordInput?.value.trim() || '';
+
+                if (!nome || !senha) {
+                    alert('Digite nome e senha para entrar.');
+                    return;
+                }
+
+                const user = this.users.find(u => u.nome.toLowerCase() === nome.toLowerCase() && u.senha === senha);
+
+                if (!user) {
+                    alert('Usuário ou senha inválidos. Se ainda não tiver conta, crie uma.');
+                    return;
+                }
+
+                sessionStorage.setItem('meuTreino_authenticated', 'true');
+                localStorage.setItem('meuTreino_active_user', user.nome);
+                this.currentUser = user.nome;
+                this.isAuthenticated = true;
+                this.hideLogin();
+                this.renderApp();
             }
 
             logout() {
