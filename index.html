@@ -814,8 +814,34 @@
             </div>
             <button class="btn btn-danger" onclick="app.resetData()">Limpar todos os dados</button>
             <button class="btn" onclick="app.showProfileSetup()" style="margin-top: 8px;">Editar perfil</button>
+            <button class="btn" onclick="app.openChangePasswordModal()" style="margin-top: 8px;">Trocar senha</button>
             <button class="btn" onclick="app.logout()" style="margin-top: 8px;">Sair</button>
             <button class="btn" onclick="app.toggleSettings()" style="margin-top: 8px;">Fechar</button>
+        </div>
+    </div>
+
+    <div id="changePasswordModal" class="modal" onclick="if(event.target === this) app.closeChangePasswordModal()">
+        <div class="modal-content" style="border-top: 4px solid #4f46e5;">
+            <h2 class="modal-title">Trocar senha</h2>
+            <p class="modal-subtitle">Digite sua senha atual e escolha uma nova senha.</p>
+
+            <div style="margin-bottom: 0.8rem;">
+                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: 0.9rem;">Senha atual</label>
+                <input id="currentPasswordInput" type="password" placeholder="Senha atual" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.85); color: var(--text-primary); padding: 0.7rem 0.8rem;" />
+            </div>
+
+            <div style="margin-bottom: 0.8rem;">
+                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: 0.9rem;">Nova senha</label>
+                <input id="newPasswordInput" type="password" placeholder="Nova senha" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.85); color: var(--text-primary); padding: 0.7rem 0.8rem;" />
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: 0.9rem;">Repetir nova senha</label>
+                <input id="newPasswordConfirmInput" type="password" placeholder="Repita a nova senha" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.85); color: var(--text-primary); padding: 0.7rem 0.8rem;" />
+            </div>
+
+            <button class="btn btn-primary" onclick="app.changePassword()">Salvar nova senha</button>
+            <button class="btn" onclick="app.closeChangePasswordModal()" style="margin-top: 8px;">Cancelar</button>
         </div>
     </div>
 
@@ -1295,6 +1321,74 @@
                 this.currentUser = '';
                 this.isAuthenticated = false;
                 this.showLogin();
+            }
+
+            openChangePasswordModal() {
+                const modal = document.getElementById('changePasswordModal');
+                const currentPasswordInput = document.getElementById('currentPasswordInput');
+                const newPasswordInput = document.getElementById('newPasswordInput');
+                const newPasswordConfirmInput = document.getElementById('newPasswordConfirmInput');
+
+                if (currentPasswordInput) currentPasswordInput.value = '';
+                if (newPasswordInput) newPasswordInput.value = '';
+                if (newPasswordConfirmInput) newPasswordConfirmInput.value = '';
+
+                if (modal) {
+                    modal.classList.add('active');
+                }
+
+                if (currentPasswordInput) {
+                    currentPasswordInput.focus();
+                }
+            }
+
+            closeChangePasswordModal() {
+                const modal = document.getElementById('changePasswordModal');
+                if (modal) {
+                    modal.classList.remove('active');
+                }
+            }
+
+            changePassword() {
+                const currentPassword = document.getElementById('currentPasswordInput')?.value.trim() || '';
+                const newPassword = document.getElementById('newPasswordInput')?.value.trim() || '';
+                const newPasswordConfirm = document.getElementById('newPasswordConfirmInput')?.value.trim() || '';
+
+                if (!this.currentUser) {
+                    alert('Você precisa estar logado para trocar a senha.');
+                    return;
+                }
+
+                if (!currentPassword || !newPassword || !newPasswordConfirm) {
+                    alert('Preencha a senha atual, a nova senha e a confirmação para continuar.');
+                    return;
+                }
+
+                const user = this.users.find(u => u.nome.toLowerCase() === this.currentUser.toLowerCase());
+                if (!user) {
+                    alert('Usuário não encontrado.');
+                    return;
+                }
+
+                if (user.senha !== currentPassword) {
+                    alert('A senha atual está incorreta.');
+                    return;
+                }
+
+                if (newPassword.length < 4) {
+                    alert('A nova senha deve ter pelo menos 4 caracteres.');
+                    return;
+                }
+
+                if (newPassword !== newPasswordConfirm) {
+                    alert('A nova senha e a confirmação não conferem.');
+                    return;
+                }
+
+                user.senha = newPassword;
+                localStorage.setItem('meuTreino_users', JSON.stringify(this.users));
+                this.closeChangePasswordModal();
+                alert('Senha alterada com sucesso!');
             }
 
             saveSettings() {
