@@ -635,7 +635,10 @@
             <h2>Meu Treino</h2>
             <p>Crie sua conta ou entre com nome e senha.</p>
             <input id="nameInput" type="text" placeholder="Digite seu nome" />
-            <input id="passwordInput" type="password" placeholder="Digite sua senha" />
+            <div class="password-input-wrap">
+                <input id="passwordInput" type="password" placeholder="Digite sua senha" />
+                <button type="button" class="password-toggle-btn" onclick="app.togglePasswordVisibility('passwordInput', this)">Mostrar</button>
+            </div>
             <button onclick="app.login()">Entrar</button>
             <button onclick="app.openCreateAccountModal()" style="margin-top: 0.75rem; background: linear-gradient(135deg, #378ADD, #639922);">Criar conta</button>
         </div>
@@ -653,12 +656,18 @@
 
             <div style="margin-bottom: 0.9rem;">
                 <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary);">Senha</label>
-                <input id="createPasswordInput" type="password" placeholder="Crie sua senha" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary); padding: 0.7rem 0.8rem;" />
+                <div class="password-input-wrap" style="margin-bottom: 0;">
+                    <input id="createPasswordInput" type="password" placeholder="Crie sua senha" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary); padding: 0.7rem 0.8rem; padding-right: 3rem;" />
+                    <button type="button" class="password-toggle-btn" onclick="app.togglePasswordVisibility('createPasswordInput', this)" style="color: var(--text-secondary);">Mostrar</button>
+                </div>
             </div>
 
             <div style="margin-bottom: 1rem;">
                 <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary);">Repetir senha</label>
-                <input id="createPasswordConfirmInput" type="password" placeholder="Repita a senha" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary); padding: 0.7rem 0.8rem;" />
+                <div class="password-input-wrap" style="margin-bottom: 0;">
+                    <input id="createPasswordConfirmInput" type="password" placeholder="Repita a senha" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary); padding: 0.7rem 0.8rem; padding-right: 3rem;" />
+                    <button type="button" class="password-toggle-btn" onclick="app.togglePasswordVisibility('createPasswordConfirmInput', this)" style="color: var(--text-secondary);">Mostrar</button>
+                </div>
             </div>
 
             <button class="btn" onclick="app.submitCreateAccount()">Salvar conta</button>
@@ -752,17 +761,26 @@
 
             <div style="margin-bottom: 0.8rem;">
                 <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: 0.9rem;">Senha atual</label>
-                <input id="currentPasswordInput" type="password" placeholder="Senha atual" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.85); color: var(--text-primary); padding: 0.7rem 0.8rem;" />
+                <div class="password-input-wrap" style="margin-bottom: 0;">
+                    <input id="currentPasswordInput" type="password" placeholder="Senha atual" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.85); color: var(--text-primary); padding: 0.7rem 0.8rem; padding-right: 3rem;" />
+                    <button type="button" class="password-toggle-btn" onclick="app.togglePasswordVisibility('currentPasswordInput', this)" style="color: var(--text-secondary);">Mostrar</button>
+                </div>
             </div>
 
             <div style="margin-bottom: 0.8rem;">
                 <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: 0.9rem;">Nova senha</label>
-                <input id="newPasswordInput" type="password" placeholder="Nova senha" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.85); color: var(--text-primary); padding: 0.7rem 0.8rem;" />
+                <div class="password-input-wrap" style="margin-bottom: 0;">
+                    <input id="newPasswordInput" type="password" placeholder="Nova senha" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.85); color: var(--text-primary); padding: 0.7rem 0.8rem; padding-right: 3rem;" />
+                    <button type="button" class="password-toggle-btn" onclick="app.togglePasswordVisibility('newPasswordInput', this)" style="color: var(--text-secondary);">Mostrar</button>
+                </div>
             </div>
 
             <div style="margin-bottom: 1rem;">
                 <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: 0.9rem;">Repetir nova senha</label>
-                <input id="newPasswordConfirmInput" type="password" placeholder="Repita a nova senha" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.85); color: var(--text-primary); padding: 0.7rem 0.8rem;" />
+                <div class="password-input-wrap" style="margin-bottom: 0;">
+                    <input id="newPasswordConfirmInput" type="password" placeholder="Repita a nova senha" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.85); color: var(--text-primary); padding: 0.7rem 0.8rem; padding-right: 3rem;" />
+                    <button type="button" class="password-toggle-btn" onclick="app.togglePasswordVisibility('newPasswordConfirmInput', this)" style="color: var(--text-secondary);">Mostrar</button>
+                </div>
             </div>
 
             <button class="btn btn-primary" onclick="app.changePassword()">Salvar nova senha</button>
@@ -889,7 +907,15 @@
                 ];
 
                 try {
-                    this.users = JSON.parse(localStorage.getItem('meuTreino_users') || '[]');
+                    const parsedUsers = JSON.parse(localStorage.getItem('meuTreino_users') || '[]');
+                    this.users = Array.isArray(parsedUsers)
+                        ? parsedUsers
+                            .filter(user => user && typeof user.nome === 'string' && typeof user.senha === 'string')
+                            .map(user => ({
+                                nome: user.nome.trim(),
+                                senha: user.senha.trim()
+                            }))
+                        : [];
                 } catch (error) {
                     this.users = [];
                     localStorage.removeItem('meuTreino_users');
@@ -1178,6 +1204,15 @@
                 if (modal) {
                     modal.classList.remove('active');
                 }
+            }
+
+            togglePasswordVisibility(inputId, button) {
+                const input = document.getElementById(inputId);
+                if (!input || !button) return;
+
+                const isHidden = input.type === 'password';
+                input.type = isHidden ? 'text' : 'password';
+                button.textContent = isHidden ? 'Ocultar' : 'Mostrar';
             }
 
             submitCreateAccount() {
