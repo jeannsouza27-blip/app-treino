@@ -481,24 +481,27 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(15, 23, 42, 0.58);
             z-index: 1000;
             padding: 1rem;
         }
 
         .modal.active {
             display: flex;
-            align-items: flex-end;
+            align-items: center;
+            justify-content: center;
         }
 
         .modal-content {
-            background: var(--surface-2);
-            border-radius: 16px 16px 0 0;
+            background: linear-gradient(180deg, #ffffff 0%, #eef4ff 100%);
+            border-radius: 22px;
+            border: 1px solid rgba(79, 70, 229, 0.12);
             width: 100%;
-            max-width: 480px;
-            padding: 1.5rem;
-            max-height: 80vh;
+            max-width: 420px;
+            padding: 1.2rem;
+            max-height: calc(100vh - 2rem);
             overflow-y: auto;
+            box-shadow: 0 24px 50px rgba(15, 23, 42, 0.22);
         }
 
         @supports (padding: max(0px)) {
@@ -508,9 +511,18 @@
         }
 
         .modal-title {
-            font-size: 18px;
-            font-weight: 500;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .modal-subtitle {
             margin-bottom: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            line-height: 1.45;
         }
 
         @media (max-width: 480px) {
@@ -625,7 +637,32 @@
             <input id="nameInput" type="text" placeholder="Digite seu nome" />
             <input id="passwordInput" type="password" placeholder="Digite sua senha" />
             <button onclick="app.login()">Entrar</button>
-            <button onclick="app.createAccount()" style="margin-top: 0.75rem; background: linear-gradient(135deg, #378ADD, #639922);">Criar conta</button>
+            <button onclick="app.openCreateAccountModal()" style="margin-top: 0.75rem; background: linear-gradient(135deg, #378ADD, #639922);">Criar conta</button>
+        </div>
+    </div>
+
+    <div id="createAccountModal" class="modal" onclick="if(event.target === this) app.closeCreateAccountModal()">
+        <div class="modal-content">
+            <h2 class="modal-title">Criar conta</h2>
+            <p style="margin-bottom: 1rem; color: var(--text-secondary);">Preencha seu nome e senha para criar a conta.</p>
+
+            <div style="margin-bottom: 0.9rem;">
+                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary);">Nome</label>
+                <input id="createNameInput" type="text" placeholder="Digite seu nome" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary); padding: 0.7rem 0.8rem;" />
+            </div>
+
+            <div style="margin-bottom: 0.9rem;">
+                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary);">Senha</label>
+                <input id="createPasswordInput" type="password" placeholder="Crie sua senha" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary); padding: 0.7rem 0.8rem;" />
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary);">Repetir senha</label>
+                <input id="createPasswordConfirmInput" type="password" placeholder="Repita a senha" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary); padding: 0.7rem 0.8rem;" />
+            </div>
+
+            <button class="btn" onclick="app.submitCreateAccount()">Salvar conta</button>
+            <button class="btn" onclick="app.closeCreateAccountModal()" style="margin-top: 8px;">Cancelar</button>
         </div>
     </div>
 
@@ -707,23 +744,23 @@
     </div>
 
     <div id="profileModal" class="modal" onclick="if(event.target === this) app.closeProfileSetup()">
-        <div class="modal-content">
+        <div class="modal-content" style="border-top: 4px solid #4f46e5;">
             <h2 class="modal-title">Ficha de cadastro</h2>
-            <p style="margin-bottom: 1rem; color: var(--text-secondary);">Complete seus dados para receber um treino mais adequado ao seu perfil.</p>
+            <p class="modal-subtitle">Complete seus dados para receber um treino mais adequado ao seu perfil.</p>
 
-            <div style="margin-bottom: 0.9rem;">
-                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary);">Peso (kg)</label>
-                <input id="profilePeso" type="number" min="30" max="250" step="0.5" placeholder="Ex: 72.5" />
+            <div style="margin-bottom: 0.8rem;">
+                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: 0.9rem;">Peso (kg)</label>
+                <input id="profilePeso" type="number" min="30" max="250" step="0.5" placeholder="Ex: 72,5" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.85); color: var(--text-primary); padding: 0.7rem 0.8rem;" />
             </div>
 
-            <div style="margin-bottom: 0.9rem;">
-                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary);">Altura (cm)</label>
-                <input id="profileAltura" type="number" min="120" max="240" step="1" placeholder="Ex: 175" />
+            <div style="margin-bottom: 0.8rem;">
+                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: 0.9rem;">Altura (cm)</label>
+                <input id="profileAltura" type="number" min="120" max="240" step="1" placeholder="Ex: 175" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.85); color: var(--text-primary); padding: 0.7rem 0.8rem;" />
             </div>
 
-            <div style="margin-bottom: 0.9rem;">
-                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary);">Sexo</label>
-                <select id="profileSexo" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary); padding: 0.7rem 0.8rem;">
+            <div style="margin-bottom: 0.8rem;">
+                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: 0.9rem;">Sexo</label>
+                <select id="profileSexo" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.85); color: var(--text-primary); padding: 0.7rem 0.8rem;">
                     <option value="">Selecione</option>
                     <option value="Masculino">Masculino</option>
                     <option value="Feminino">Feminino</option>
@@ -732,8 +769,8 @@
             </div>
 
             <div style="margin-bottom: 1rem;">
-                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary);">Objetivo</label>
-                <select id="profileObjetivo" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary); padding: 0.7rem 0.8rem;">
+                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: 0.9rem;">Objetivo</label>
+                <select id="profileObjetivo" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.85); color: var(--text-primary); padding: 0.7rem 0.8rem;">
                     <option value="">Selecione</option>
                     <option value="emagrecimento">Emagrecimento</option>
                     <option value="hipertrofia">Hipertrofia</option>
@@ -742,7 +779,7 @@
                 </select>
             </div>
 
-            <button class="btn" onclick="app.saveProfile()">Salvar perfil</button>
+            <button class="btn btn-primary" onclick="app.saveProfile()">Salvar perfil</button>
         </div>
     </div>
 
@@ -1080,14 +1117,39 @@
                 appContainer.style.display = 'block';
             }
 
-            createAccount() {
-                const nameInput = document.getElementById('nameInput');
-                const passwordInput = document.getElementById('passwordInput');
-                const nome = nameInput?.value.trim() || '';
-                const senha = passwordInput?.value.trim() || '';
+            openCreateAccountModal() {
+                const modal = document.getElementById('createAccountModal');
+                const createNameInput = document.getElementById('createNameInput');
+                const createPasswordInput = document.getElementById('createPasswordInput');
+                const createPasswordConfirmInput = document.getElementById('createPasswordConfirmInput');
 
-                if (!nome || !senha) {
-                    alert('Digite nome e senha para criar a conta.');
+                if (createNameInput) {
+                    createNameInput.value = document.getElementById('nameInput')?.value.trim() || '';
+                    createNameInput.focus();
+                }
+
+                if (createPasswordInput) createPasswordInput.value = '';
+                if (createPasswordConfirmInput) createPasswordConfirmInput.value = '';
+
+                if (modal) {
+                    modal.classList.add('active');
+                }
+            }
+
+            closeCreateAccountModal() {
+                const modal = document.getElementById('createAccountModal');
+                if (modal) {
+                    modal.classList.remove('active');
+                }
+            }
+
+            submitCreateAccount() {
+                const nome = document.getElementById('createNameInput')?.value.trim() || '';
+                const senha = document.getElementById('createPasswordInput')?.value.trim() || '';
+                const confirmarSenha = document.getElementById('createPasswordConfirmInput')?.value.trim() || '';
+
+                if (!nome || !senha || !confirmarSenha) {
+                    alert('Preencha nome, senha e repetir senha para criar a conta.');
                     return;
                 }
 
@@ -1101,6 +1163,11 @@
                     return;
                 }
 
+                if (senha !== confirmarSenha) {
+                    alert('As senhas não conferem. Digite a mesma senha nos dois campos.');
+                    return;
+                }
+
                 const alreadyExists = this.users.some(user => user.nome.toLowerCase() === nome.toLowerCase());
                 if (alreadyExists) {
                     alert('Esse nome já está cadastrado. Tente outro.');
@@ -1109,25 +1176,15 @@
 
                 this.users.push({ nome, senha });
                 localStorage.setItem('meuTreino_users', JSON.stringify(this.users));
+                this.closeCreateAccountModal();
 
-                this.state = {
-                    ...this.state,
-                    selectedProgram: null,
-                    currentDay: new Date().toISOString().split('T')[0],
-                    workoutLog: {},
-                    weightHistory: [],
-                    startDate: new Date().toISOString().split('T')[0],
-                    profile: { ...this.defaultProfile }
-                };
-                this.saveState();
+                const nameInput = document.getElementById('nameInput');
+                const passwordInput = document.getElementById('passwordInput');
+                if (nameInput) nameInput.value = nome;
+                if (passwordInput) passwordInput.value = '';
 
-                sessionStorage.setItem('meuTreino_authenticated', 'true');
-                localStorage.setItem('meuTreino_active_user', nome);
-                this.currentUser = nome;
-                this.isAuthenticated = true;
-
-                this.hideLogin();
-                this.renderApp();
+                this.showProfileSetup();
+                alert('Conta criada com sucesso! Complete seu perfil para continuar.');
             }
 
             login() {
