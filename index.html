@@ -112,25 +112,34 @@
         .password-input-wrap {
             position: relative;
             margin-bottom: 0.9rem;
+            display: flex;
+            align-items: center;
         }
 
         .password-input-wrap input {
             margin-bottom: 0;
-            padding-right: 3.2rem;
+            padding-right: 4.8rem;
+            box-sizing: border-box;
+            width: 100%;
         }
 
         .password-toggle-btn {
             position: absolute;
-            right: 0.5rem;
+            right: 0.55rem;
             top: 50%;
             transform: translateY(-50%);
+            z-index: 2;
             border: none;
-            background: transparent;
+            background: rgba(15, 23, 42, 0.12);
+            border-radius: 999px;
             color: rgba(255,255,255,0.8);
             font-weight: 700;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             cursor: pointer;
-            padding: 0.3rem 0.5rem;
+            padding: 0.35rem 0.6rem;
+            min-width: 54px;
+            text-align: center;
+            line-height: 1.2;
         }
 
         .auth-card input::placeholder {
