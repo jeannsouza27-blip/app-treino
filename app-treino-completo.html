@@ -53,6 +53,60 @@
             overflow-x: hidden;
         }
 
+        .auth-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            background: var(--surface-0);
+        }
+
+        .auth-card {
+            width: min(100%, 360px);
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+            padding: 1.5rem;
+        }
+
+        .auth-card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .auth-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .auth-card input {
+            width: 100%;
+            min-height: 48px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--surface-1);
+            color: var(--text-primary);
+            padding: 0.8rem 0.9rem;
+            margin-bottom: 0.9rem;
+            font-size: 1rem;
+        }
+
+        .auth-card button {
+            width: 100%;
+            min-height: 50px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #378ADD, #639922);
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
         .container {
             max-width: 480px;
             margin: 0 auto;
@@ -461,21 +515,21 @@
 
         @media (max-width: 480px) {
             html {
-                font-size: 22px;
+                font-size: 19px;
             }
 
             body {
-                font-size: 1.03rem;
+                font-size: 0.98rem;
             }
 
             .container {
                 max-width: 100vw;
                 width: 100vw;
-                padding-bottom: 100px;
+                padding-bottom: 88px;
             }
 
             .content {
-                padding: 1.35rem;
+                padding: 1rem;
             }
 
             .nav-tabs {
@@ -483,8 +537,8 @@
             }
 
             .nav-tab {
-                font-size: 0.92rem;
-                padding: 13px 6px;
+                font-size: 0.8rem;
+                padding: 11px 6px;
             }
 
             .program-card,
@@ -496,21 +550,21 @@
             }
 
             .program-grid {
-                gap: 12px;
+                gap: 10px;
             }
 
             .input-group {
                 grid-template-columns: 1fr 1fr 1fr;
-                gap: 10px;
+                gap: 8px;
             }
 
             .program-card {
-                padding: 1.15rem 0.95rem;
-                min-height: 132px;
+                padding: 0.9rem 0.8rem;
+                min-height: 112px;
             }
 
             .program-title {
-                font-size: 1.42rem;
+                font-size: 1.18rem;
             }
 
             .program-desc,
@@ -518,41 +572,41 @@
             .exercise-meta,
             .tip-text,
             .alert-text {
-                font-size: 0.98rem;
+                font-size: 0.82rem;
             }
 
             h2 {
-                font-size: 1.22rem;
+                font-size: 1rem;
             }
 
             .btn {
-                padding: 12px 14px;
-                font-size: 1.08rem;
-                min-height: 54px;
+                padding: 10px 11px;
+                font-size: 0.95rem;
+                min-height: 46px;
             }
 
             .nav-btn {
-                min-height: 88px;
-                font-size: 0.9rem;
+                min-height: 78px;
+                font-size: 0.75rem;
             }
 
             .nav-btn-icon {
-                font-size: 1.8rem;
+                font-size: 1.4rem;
             }
 
             .workout-card {
-                padding: 1.25rem 0.95rem 1rem;
-                min-height: 168px;
+                padding: 1rem 0.8rem 0.9rem;
+                min-height: 138px;
             }
 
             .exercise-title {
-                font-size: 1.3rem;
+                font-size: 1.05rem;
             }
 
             input[type="number"],
             input[type="text"] {
-                min-height: 49px;
-                font-size: 1.04rem;
+                min-height: 43px;
+                font-size: 0.92rem;
             }
         }
 
@@ -564,7 +618,16 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div id="authScreen" class="auth-screen">
+        <div class="auth-card">
+            <h2>Meu Treino</h2>
+            <p>Entre com a senha para acessar o app.</p>
+            <input id="passwordInput" type="password" placeholder="Digite sua senha" />
+            <button onclick="app.login()">Entrar</button>
+        </div>
+    </div>
+
+    <div id="appContainer" class="container" style="display: none;">
         <header>
             <h1>💪 Meu Treino</h1>
             <div class="header-icons">
@@ -635,7 +698,48 @@
                 <input type="checkbox" id="notificationsToggle" onchange="app.saveSettings()" style="width: 20px; height: 20px; cursor: pointer;">
             </div>
             <button class="btn btn-danger" onclick="app.resetData()">Limpar todos os dados</button>
+            <button class="btn" onclick="app.logout()" style="margin-top: 8px;">Sair</button>
             <button class="btn" onclick="app.toggleSettings()" style="margin-top: 8px;">Fechar</button>
+        </div>
+    </div>
+
+    <div id="profileModal" class="modal" onclick="if(event.target === this) app.closeProfileSetup()">
+        <div class="modal-content">
+            <h2 class="modal-title">Ficha de cadastro</h2>
+            <p style="margin-bottom: 1rem; color: var(--text-secondary);">Complete seus dados para receber um treino mais adequado ao seu perfil.</p>
+
+            <div style="margin-bottom: 0.9rem;">
+                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary);">Peso (kg)</label>
+                <input id="profilePeso" type="number" min="30" max="250" step="0.5" placeholder="Ex: 72.5" />
+            </div>
+
+            <div style="margin-bottom: 0.9rem;">
+                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary);">Altura (cm)</label>
+                <input id="profileAltura" type="number" min="120" max="240" step="1" placeholder="Ex: 175" />
+            </div>
+
+            <div style="margin-bottom: 0.9rem;">
+                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary);">Sexo</label>
+                <select id="profileSexo" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary); padding: 0.7rem 0.8rem;">
+                    <option value="">Selecione</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Feminino">Feminino</option>
+                    <option value="Outro">Outro</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary);">Objetivo</label>
+                <select id="profileObjetivo" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary); padding: 0.7rem 0.8rem;">
+                    <option value="">Selecione</option>
+                    <option value="emagrecimento">Emagrecimento</option>
+                    <option value="hipertrofia">Hipertrofia</option>
+                    <option value="forca">Força</option>
+                    <option value="condicionamento">Condicionamento</option>
+                </select>
+            </div>
+
+            <button class="btn" onclick="app.saveProfile()">Salvar perfil</button>
         </div>
     </div>
 
@@ -708,17 +812,34 @@
                     }
                 ];
 
+                this.authPassword = localStorage.getItem('meuTreino_password') || 'treino123';
+                this.isAuthenticated = sessionStorage.getItem('meuTreino_authenticated') === 'true';
+
+                this.defaultProfile = {
+                    peso: '',
+                    altura: '',
+                    sexo: '',
+                    objetivo: '',
+                    completed: false
+                };
+
                 this.state = {
                     selectedProgram: null,
                     currentDay: new Date().toISOString().split('T')[0],
                     workoutLog: {},
                     notifications: true,
-                    startDate: localStorage.getItem('meuTreino_startDate') || new Date().toISOString().split('T')[0]
+                    startDate: localStorage.getItem('meuTreino_startDate') || new Date().toISOString().split('T')[0],
+                    profile: { ...this.defaultProfile }
                 };
 
                 this.loadState();
-                this.renderPrograms();
-                this.registerServiceWorker();
+                this.state.profile = { ...this.defaultProfile, ...(this.state.profile || {}) };
+
+                if (this.isAuthenticated) {
+                    this.renderApp();
+                } else {
+                    this.showLogin();
+                }
             }
 
             async registerServiceWorker() {
@@ -752,6 +873,116 @@
 
             saveState() {
                 localStorage.setItem('meuTreino_state', JSON.stringify(this.state));
+            }
+
+            getRecommendedProgramId() {
+                const objetivo = this.state.profile?.objetivo || '';
+
+                if (objetivo === 'emagrecimento') return 'definicao';
+                if (objetivo === 'hipertrofia') return 'hipertrofia';
+                if (objetivo === 'forca') return 'ppl';
+                if (objetivo === 'condicionamento') return 'fullbody';
+                return 'fullbody';
+            }
+
+            renderApp() {
+                if (!this.state.profile.completed) {
+                    this.showProfileSetup();
+                } else {
+                    this.closeProfileSetup();
+                    if (!this.state.selectedProgram) {
+                        this.state.selectedProgram = this.getRecommendedProgramId();
+                    }
+                }
+
+                this.renderPrograms();
+                this.renderWorkout();
+                this.switchTab('programs');
+                this.registerServiceWorker();
+            }
+
+            showProfileSetup() {
+                const modal = document.getElementById('profileModal');
+                const profile = this.state.profile || this.defaultProfile;
+
+                document.getElementById('profilePeso').value = profile.peso || '';
+                document.getElementById('profileAltura').value = profile.altura || '';
+                document.getElementById('profileSexo').value = profile.sexo || '';
+                document.getElementById('profileObjetivo').value = profile.objetivo || '';
+
+                modal.classList.add('active');
+            }
+
+            closeProfileSetup() {
+                const modal = document.getElementById('profileModal');
+                modal.classList.remove('active');
+            }
+
+            saveProfile() {
+                const peso = document.getElementById('profilePeso').value.trim();
+                const altura = document.getElementById('profileAltura').value.trim();
+                const sexo = document.getElementById('profileSexo').value.trim();
+                const objetivo = document.getElementById('profileObjetivo').value.trim();
+
+                if (!peso || !altura || !sexo || !objetivo) {
+                    alert('Preencha peso, altura, sexo e objetivo para continuar.');
+                    return;
+                }
+
+                this.state.profile = {
+                    peso: Number(peso),
+                    altura: Number(altura),
+                    sexo,
+                    objetivo,
+                    completed: true
+                };
+
+                this.saveState();
+                this.closeProfileSetup();
+                this.state.selectedProgram = this.getRecommendedProgramId();
+                this.renderApp();
+            }
+
+            showLogin() {
+                const authScreen = document.getElementById('authScreen');
+                const appContainer = document.getElementById('appContainer');
+                authScreen.style.display = 'flex';
+                appContainer.style.display = 'none';
+                const input = document.getElementById('passwordInput');
+                if (input) {
+                    input.value = '';
+                    input.focus();
+                }
+            }
+
+            hideLogin() {
+                const authScreen = document.getElementById('authScreen');
+                const appContainer = document.getElementById('appContainer');
+                authScreen.style.display = 'none';
+                appContainer.style.display = 'block';
+            }
+
+            login() {
+                const input = document.getElementById('passwordInput');
+                const enteredPassword = input?.value.trim() || '';
+
+                if (enteredPassword === this.authPassword) {
+                    sessionStorage.setItem('meuTreino_authenticated', 'true');
+                    this.isAuthenticated = true;
+                    this.hideLogin();
+                    this.renderApp();
+                    return;
+                }
+
+                alert('Senha incorreta. Tente novamente.');
+                input.value = '';
+                input.focus();
+            }
+
+            logout() {
+                sessionStorage.removeItem('meuTreino_authenticated');
+                this.isAuthenticated = false;
+                this.showLogin();
             }
 
             saveSettings() {
