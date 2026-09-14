@@ -19,21 +19,21 @@
         :root {
             --primary: #0f172a;
             --secondary: #475569;
-            --accent: #4f46e5;
-            --accent-2: #22c55e;
-            --accent-3: #14b8a6;
+            --accent: #2563eb;
+            --accent-2: #0ea5e9;
+            --accent-3: #10b981;
             --danger: #ef4444;
             --success: #16a34a;
             --warning: #f59e0b;
-            --surface-0: #f4f7fb;
-            --surface-1: #eaf1f9;
+            --surface-0: #edf4ff;
+            --surface-1: #e5edf9;
             --surface-2: #ffffff;
-            --border: #d7e0ee;
+            --border: #d9e4f1;
             --text-primary: #0f172a;
             --text-secondary: #475569;
             --text-muted: #7c8aa5;
-            --shadow-soft: 0 10px 28px rgba(79, 70, 229, 0.12);
-            --shadow-card: 0 8px 20px rgba(15, 23, 42, 0.08);
+            --shadow-soft: 0 16px 36px rgba(37, 99, 235, 0.12);
+            --shadow-card: 0 10px 24px rgba(15, 23, 42, 0.08);
         }
 
         @media (prefers-color-scheme: dark) {
@@ -58,8 +58,8 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background:
-                radial-gradient(circle at top, rgba(79, 70, 229, 0.25), transparent 32%),
-                linear-gradient(180deg, #0e1322 0%, #0b1120 24%, #101a2d 100%);
+                radial-gradient(circle at top, rgba(37, 99, 235, 0.18), transparent 28%),
+                linear-gradient(180deg, #edf4ff 0%, #e4eefc 35%, #eef8f6 100%);
             color: var(--text-primary);
             overflow-x: hidden;
             min-height: 100vh;
@@ -72,42 +72,51 @@
             justify-content: center;
             padding: 1.5rem;
             background:
-                radial-gradient(circle at top, rgba(79, 70, 229, 0.25), transparent 32%),
-                linear-gradient(180deg, #0e1322 0%, #0b1120 24%, #101a2d 100%);
+                radial-gradient(circle at top, rgba(37, 99, 235, 0.22), transparent 26%),
+                linear-gradient(180deg, #edf4ff 0%, #e7f0fb 38%, #effaf7 100%);
         }
 
         .auth-card {
-            width: min(100%, 340px);
-            background: rgba(15, 23, 42, 0.9);
+            width: min(100%, 360px);
+            background: rgba(11, 18, 32, 0.92);
             border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 22px;
-            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.45);
+            border-radius: 24px;
+            box-shadow: 0 22px 44px rgba(15, 23, 42, 0.3);
             padding: 1.2rem 1rem 1rem;
+            backdrop-filter: blur(10px);
         }
 
         .auth-card h2 {
             font-size: 2rem;
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.45rem;
             color: #ffffff;
             line-height: 1.1;
+            letter-spacing: -0.04em;
         }
 
         .auth-card p {
-            color: rgba(255,255,255,0.75);
-            margin-bottom: 0.9rem;
+            color: rgba(255,255,255,0.76);
+            margin-bottom: 0.95rem;
             font-size: 0.92rem;
         }
 
         .auth-card input {
             width: 100%;
-            min-height: 44px;
+            min-height: 46px;
             border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.1);
-            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.07);
             color: #ffffff;
-            padding: 0.75rem 0.85rem;
-            margin-bottom: 0.75rem;
+            padding: 0.8rem 0.9rem;
+            margin-bottom: 0.8rem;
             font-size: 1rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .auth-card input:focus {
+            border-color: rgba(14, 165, 233, 0.9);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.18);
+            outline: none;
         }
 
         .password-input-wrap {
@@ -133,11 +142,18 @@
             min-height: 50px;
             border: none;
             border-radius: 12px;
-            background: linear-gradient(135deg, #4f46e5, #14b8a6);
+            background: linear-gradient(135deg, #2563eb, #10b981);
             color: white;
             font-weight: 700;
             font-size: 1rem;
             cursor: pointer;
+            box-shadow: 0 14px 24px rgba(37, 99, 235, 0.26);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .auth-card button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 16px 30px rgba(37, 99, 235, 0.32);
         }
 
         .auth-card .password-toggle-btn {
@@ -146,7 +162,7 @@
             min-height: 42px;
             border: none;
             border-radius: 12px;
-            background: linear-gradient(135deg, rgba(79, 70, 229, 0.9), rgba(20, 184, 166, 0.95));
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.9), rgba(16, 185, 129, 0.95));
             color: #ffffff;
             font-weight: 700;
             font-size: 0.9rem;
@@ -161,16 +177,16 @@
             max-width: 100%;
             width: min(100%, 640px);
             margin: 0 auto;
-            background: linear-gradient(180deg, rgba(17,28,49,0.96), rgba(10,18,32,0.96));
+            background: linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.08));
             min-height: 100vh;
             padding-bottom: 100px;
             position: relative;
-            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1), 0 20px 40px rgba(15, 23, 42, 0.12);
         }
 
         header {
-            background: linear-gradient(135deg, rgba(69, 87, 175, 0.95), rgba(29, 135, 128, 0.96));
-            border-bottom: 1px solid rgba(255,255,255,0.18);
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(30, 64, 175, 0.94), rgba(6, 182, 212, 0.8));
+            border-bottom: 1px solid rgba(255,255,255,0.12);
             padding: 0.85rem 1rem calc(0.9rem + env(safe-area-inset-top, 0px));
             display: flex;
             justify-content: space-between;
@@ -178,8 +194,8 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 10px 24px rgba(6, 9, 16, 0.35);
-            backdrop-filter: blur(6px);
+            box-shadow: 0 12px 26px rgba(15, 23, 42, 0.25);
+            backdrop-filter: blur(8px);
         }
 
         h1 {
@@ -217,10 +233,10 @@
         .nav-tabs {
             display: flex;
             gap: 0;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-            background: rgba(15, 23, 42, 0.84);
-            padding: 0 0.75rem;
-            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+            background: rgba(15, 23, 42, 0.78);
+            padding: 0.4rem 0.75rem 0;
+            backdrop-filter: blur(10px);
             position: sticky;
             top: 72px;
             z-index: 90;
@@ -228,22 +244,24 @@
 
         .nav-tab {
             flex: 1;
-            padding: 12px 8px;
+            padding: 12px 8px 11px;
             border: none;
-            background: none;
+            background: transparent;
             cursor: pointer;
             font-size: 13px;
-            font-weight: 600;
-            color: var(--text-secondary);
+            font-weight: 700;
+            color: rgba(255,255,255,0.7);
             border-bottom: 2px solid transparent;
             transition: all 0.2s ease;
+            letter-spacing: 0.01em;
         }
 
         .nav-tab.active {
             color: #ffffff;
             border-bottom-color: #ffffff;
-            background: rgba(255,255,255,0.04);
+            background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.02));
             border-radius: 10px 10px 0 0;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
         }
 
         .content {
@@ -272,13 +290,13 @@
         }
 
         .program-card {
-            background: linear-gradient(180deg, var(--surface-2) 0%, rgba(79, 70, 229, 0.03) 100%);
-            border: 1px solid var(--border);
-            border-radius: 16px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(239, 246, 255, 0.96) 100%);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            border-radius: 20px;
             padding: 1.05rem 1rem;
             cursor: pointer;
             transition: all 0.25s ease;
-            box-shadow: var(--shadow-card);
+            box-shadow: 0 12px 26px rgba(15, 23, 42, 0.07);
             position: relative;
             overflow: hidden;
         }
@@ -295,9 +313,9 @@
         }
 
         .program-card:hover {
-            border-color: rgba(79, 70, 229, 0.5);
+            border-color: rgba(37, 99, 235, 0.45);
             transform: translateY(-2px);
-            box-shadow: 0 12px 26px rgba(79, 70, 229, 0.18);
+            box-shadow: 0 16px 32px rgba(37, 99, 235, 0.12);
         }
 
         .program-card:hover::before,
@@ -306,8 +324,9 @@
         }
 
         .program-card.active {
-            border-color: rgba(79, 70, 229, 0.7);
-            background: linear-gradient(180deg, rgba(79, 70, 229, 0.08), rgba(20, 184, 166, 0.06));
+            border-color: rgba(37, 99, 235, 0.7);
+            background: linear-gradient(180deg, rgba(37, 99, 235, 0.08), rgba(14, 165, 233, 0.06));
+            box-shadow: 0 18px 34px rgba(37, 99, 235, 0.14);
         }
 
         .program-title {
@@ -330,12 +349,12 @@
         }
 
         .workout-card {
-            background: linear-gradient(180deg, var(--surface-2) 0%, rgba(20, 184, 166, 0.03) 100%);
-            border: 1px solid var(--border);
-            border-radius: 16px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(239, 246, 255, 0.96) 100%);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            border-radius: 20px;
             padding: 1.2rem 1rem 1rem;
             margin-bottom: 14px;
-            box-shadow: var(--shadow-card);
+            box-shadow: 0 12px 26px rgba(15, 23, 42, 0.06);
             min-height: 128px;
         }
 
@@ -354,9 +373,10 @@
 
         .input-group {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 10px;
             margin-bottom: 0.9rem;
+            align-items: stretch;
         }
 
         input[type="number"],
@@ -368,6 +388,8 @@
             background: var(--surface-1);
             color: var(--text-primary);
             min-height: 42px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         input::placeholder {
@@ -398,7 +420,7 @@
             background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
             color: white;
             border-color: transparent;
-            box-shadow: 0 12px 22px rgba(79, 70, 229, 0.28);
+            box-shadow: 0 12px 22px rgba(37, 99, 235, 0.24);
             border-radius: 12px;
         }
 
@@ -459,11 +481,12 @@
         }
 
         .tip-card {
-            background: linear-gradient(135deg, var(--accent) 0%, #185FA5 100%);
-            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.96), rgba(14, 165, 233, 0.9), rgba(16, 185, 129, 0.82));
+            border-radius: 16px;
             padding: 1.25rem;
             margin-bottom: 1rem;
             color: white;
+            box-shadow: 0 16px 28px rgba(37, 99, 235, 0.18);
         }
 
         .tip-title {
@@ -486,11 +509,12 @@
         }
 
         .stat-card {
-            background: var(--surface-2);
-            border: 1px solid var(--border);
-            border-radius: 12px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(233, 242, 255, 0.94));
+            border: 1px solid rgba(148, 163, 184, 0.24);
+            border-radius: 16px;
             padding: 1rem;
             text-align: center;
+            box-shadow: 0 10px 22px rgba(15, 23, 42, 0.04);
         }
 
         .stat-label {
@@ -600,15 +624,21 @@
         }
 
         .modal-content {
-            background: linear-gradient(180deg, #ffffff 0%, #eef4ff 100%);
+            background: linear-gradient(180deg, #ffffff 0%, #edf5ff 100%);
             border-radius: 22px;
-            border: 1px solid rgba(79, 70, 229, 0.12);
+            border: 1px solid rgba(148, 163, 184, 0.22);
             width: 100%;
             max-width: 420px;
             padding: 1.2rem;
             max-height: calc(100vh - 2rem);
             overflow-y: auto;
             box-shadow: 0 24px 50px rgba(15, 23, 42, 0.22);
+        }
+
+        .modal-content input,
+        .modal-content select {
+            width: 100%;
+            box-sizing: border-box;
         }
 
         @supports (padding: max(0px)) {
@@ -727,6 +757,20 @@
             input[type="text"] {
                 min-height: 43px;
                 font-size: 0.92rem;
+            }
+
+            .modal-content {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .input-group {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -854,6 +898,8 @@
                 <input type="checkbox" id="notificationsToggle" onchange="app.saveSettings()" style="width: 20px; height: 20px; cursor: pointer;">
             </div>
             <button class="btn btn-danger" onclick="app.resetData()">Limpar todos os dados</button>
+            <button class="btn" onclick="app.exportBackup()" style="margin-top: 8px;">Exportar backup</button>
+            <button class="btn" onclick="app.triggerBackupImport()" style="margin-top: 8px;">Importar backup</button>
             <button class="btn" onclick="app.showProfileSetup()" style="margin-top: 8px;">Editar perfil</button>
             <button class="btn" onclick="app.openChangePasswordModal()" style="margin-top: 8px;">Trocar senha</button>
             <button id="adminAccountsBtn" class="btn" onclick="app.openAdminPanel()" style="margin-top: 8px; display: none;">Gerenciar contas</button>
@@ -944,6 +990,8 @@
             <button class="btn btn-primary" onclick="app.saveProfile()">Salvar perfil</button>
         </div>
     </div>
+
+    <input id="backupImportInput" type="file" accept=".json" style="display: none;" onchange="app.importBackup(this.files && this.files[0])" />
 
     <script>
         class TreinoApp {
@@ -1381,7 +1429,7 @@
                 const user = this.users.find(u => u.nome.toLowerCase() === nome.toLowerCase() && u.senha === senha);
 
                 if (!user) {
-                    alert('Usuário ou senha inválidos. Se ainda não tiver conta, crie uma.');
+                    alert('Esse usuário não está salvo neste aparelho. Como o app ainda usa armazenamento local, contas criadas em outro celular não aparecem aqui. Para usar em vários dispositivos, é preciso conectar o app a um banco de dados.');
                     return;
                 }
 
@@ -1888,6 +1936,80 @@
                 } else if ('Notification' in window) {
                     Notification.requestPermission();
                 }
+            }
+
+            exportBackup() {
+                const payload = {
+                    version: 1,
+                    exportedAt: new Date().toISOString(),
+                    users: this.users,
+                    state: this.state,
+                    currentUser: this.currentUser
+                };
+
+                const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `meu-treino-backup-${new Date().toISOString().slice(0, 10)}.json`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+
+                alert('Backup exportado com sucesso. Use o arquivo em outro aparelho para importar os dados.');
+            }
+
+            triggerBackupImport() {
+                const input = document.getElementById('backupImportInput');
+                if (input) {
+                    input.value = '';
+                    input.click();
+                }
+            }
+
+            importBackup(file) {
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = () => {
+                    try {
+                        const data = JSON.parse(String(reader.result || '{}'));
+                        if (!data || !Array.isArray(data.users) || !data.state) {
+                            throw new Error('Formato inválido');
+                        }
+
+                        const safeUsers = data.users
+                            .filter(user => user && typeof user.nome === 'string' && typeof user.senha === 'string')
+                            .map(user => ({
+                                nome: user.nome.trim(),
+                                senha: user.senha.trim()
+                            }))
+                            .filter(user => user.nome && user.senha);
+
+                        if (!safeUsers.length) {
+                            throw new Error('Nenhum usuário válido encontrado no backup');
+                        }
+
+                        localStorage.setItem('meuTreino_users', JSON.stringify(safeUsers));
+                        localStorage.setItem('meuTreino_state', JSON.stringify(data.state));
+
+                        if (typeof data.currentUser === 'string' && data.currentUser.trim()) {
+                            localStorage.setItem('meuTreino_active_user', data.currentUser.trim());
+                            sessionStorage.setItem('meuTreino_authenticated', 'true');
+                        } else {
+                            localStorage.removeItem('meuTreino_active_user');
+                            sessionStorage.removeItem('meuTreino_authenticated');
+                        }
+
+                        alert('Backup importado com sucesso. Recarregando a página...');
+                        location.reload();
+                    } catch (error) {
+                        alert('Arquivo de backup inválido. Verifique se o arquivo foi exportado por este app.');
+                    }
+                };
+
+                reader.readAsText(file);
             }
 
             resetData() {

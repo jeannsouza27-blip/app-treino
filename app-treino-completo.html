@@ -289,19 +289,23 @@
 
         .input-group {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 0.75rem;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 0.9rem;
+            align-items: stretch;
         }
 
         input[type="number"],
         input[type="text"] {
-            padding: 8px;
+            padding: 10px 9px;
             border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 14px;
+            border-radius: 8px;
+            font-size: 15px;
             background: var(--surface-1);
             color: var(--text-primary);
+            min-height: 42px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         input::placeholder {
@@ -533,6 +537,12 @@
             box-shadow: 0 24px 50px rgba(15, 23, 42, 0.22);
         }
 
+        .modal-content input,
+        .modal-content select {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
         @supports (padding: max(0px)) {
             .modal-content {
                 padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
@@ -648,6 +658,20 @@
             input[type="text"] {
                 min-height: 43px;
                 font-size: 0.92rem;
+            }
+
+            .modal-content {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .input-group {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -775,6 +799,8 @@
                 <input type="checkbox" id="notificationsToggle" onchange="app.saveSettings()" style="width: 20px; height: 20px; cursor: pointer;">
             </div>
             <button class="btn btn-danger" onclick="app.resetData()">Limpar todos os dados</button>
+            <button class="btn" onclick="app.exportBackup()" style="margin-top: 8px;">Exportar backup</button>
+            <button class="btn" onclick="app.triggerBackupImport()" style="margin-top: 8px;">Importar backup</button>
             <button class="btn" onclick="app.showProfileSetup()" style="margin-top: 8px;">Editar perfil</button>
             <button class="btn" onclick="app.openChangePasswordModal()" style="margin-top: 8px;">Trocar senha</button>
             <button id="adminAccountsBtn" class="btn" onclick="app.openAdminPanel()" style="margin-top: 8px; display: none;">Gerenciar contas</button>
@@ -865,6 +891,8 @@
             <button class="btn btn-primary" onclick="app.saveProfile()">Salvar perfil</button>
         </div>
     </div>
+
+    <input id="backupImportInput" type="file" accept=".json" style="display: none;" onchange="app.importBackup(this.files && this.files[0])" />
 
     <script>
         class TreinoApp {
@@ -1302,7 +1330,7 @@
                 const user = this.users.find(u => u.nome.toLowerCase() === nome.toLowerCase() && u.senha === senha);
 
                 if (!user) {
-                    alert('Usuário ou senha inválidos. Se ainda não tiver conta, crie uma.');
+                    alert('Esse usuário não está salvo neste aparelho. Como o app ainda usa armazenamento local, contas criadas em outro celular não aparecem aqui. Para usar em vários dispositivos, é preciso conectar o app a um banco de dados.');
                     return;
                 }
 
@@ -1809,6 +1837,80 @@
                 } else if ('Notification' in window) {
                     Notification.requestPermission();
                 }
+            }
+
+            exportBackup() {
+                const payload = {
+                    version: 1,
+                    exportedAt: new Date().toISOString(),
+                    users: this.users,
+                    state: this.state,
+                    currentUser: this.currentUser
+                };
+
+                const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `meu-treino-backup-${new Date().toISOString().slice(0, 10)}.json`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+
+                alert('Backup exportado com sucesso. Use o arquivo em outro aparelho para importar os dados.');
+            }
+
+            triggerBackupImport() {
+                const input = document.getElementById('backupImportInput');
+                if (input) {
+                    input.value = '';
+                    input.click();
+                }
+            }
+
+            importBackup(file) {
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = () => {
+                    try {
+                        const data = JSON.parse(String(reader.result || '{}'));
+                        if (!data || !Array.isArray(data.users) || !data.state) {
+                            throw new Error('Formato inválido');
+                        }
+
+                        const safeUsers = data.users
+                            .filter(user => user && typeof user.nome === 'string' && typeof user.senha === 'string')
+                            .map(user => ({
+                                nome: user.nome.trim(),
+                                senha: user.senha.trim()
+                            }))
+                            .filter(user => user.nome && user.senha);
+
+                        if (!safeUsers.length) {
+                            throw new Error('Nenhum usuário válido encontrado no backup');
+                        }
+
+                        localStorage.setItem('meuTreino_users', JSON.stringify(safeUsers));
+                        localStorage.setItem('meuTreino_state', JSON.stringify(data.state));
+
+                        if (typeof data.currentUser === 'string' && data.currentUser.trim()) {
+                            localStorage.setItem('meuTreino_active_user', data.currentUser.trim());
+                            sessionStorage.setItem('meuTreino_authenticated', 'true');
+                        } else {
+                            localStorage.removeItem('meuTreino_active_user');
+                            sessionStorage.removeItem('meuTreino_authenticated');
+                        }
+
+                        alert('Backup importado com sucesso. Recarregando a página...');
+                        location.reload();
+                    } catch (error) {
+                        alert('Arquivo de backup inválido. Verifique se o arquivo foi exportado por este app.');
+                    }
+                };
+
+                reader.readAsText(file);
             }
 
             resetData() {
