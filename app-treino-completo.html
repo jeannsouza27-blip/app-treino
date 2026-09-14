@@ -839,6 +839,7 @@
 
                 this.loadState();
                 this.state.profile = { ...this.defaultProfile, ...(this.state.profile || {}) };
+                this.validateSession();
 
                 if (this.isAuthenticated) {
                     this.renderApp();
@@ -873,6 +874,17 @@
                 if (saved) {
                     const loaded = JSON.parse(saved);
                     this.state = { ...this.state, ...loaded };
+                }
+            }
+
+            validateSession() {
+                const hasValidCurrentUser = !!this.currentUser && this.users.some(user => user.nome.toLowerCase() === this.currentUser.toLowerCase());
+
+                if (this.isAuthenticated && !hasValidCurrentUser) {
+                    this.isAuthenticated = false;
+                    this.currentUser = '';
+                    sessionStorage.removeItem('meuTreino_authenticated');
+                    localStorage.removeItem('meuTreino_active_user');
                 }
             }
 
@@ -1079,6 +1091,17 @@
                 this.users.push({ nome, senha });
                 localStorage.setItem('meuTreino_users', JSON.stringify(this.users));
 
+                this.state = {
+                    ...this.state,
+                    selectedProgram: null,
+                    currentDay: new Date().toISOString().split('T')[0],
+                    workoutLog: {},
+                    weightHistory: [],
+                    startDate: new Date().toISOString().split('T')[0],
+                    profile: { ...this.defaultProfile }
+                };
+                this.saveState();
+
                 sessionStorage.setItem('meuTreino_authenticated', 'true');
                 localStorage.setItem('meuTreino_active_user', nome);
                 this.currentUser = nome;
@@ -1116,6 +1139,8 @@
 
             logout() {
                 sessionStorage.removeItem('meuTreino_authenticated');
+                localStorage.removeItem('meuTreino_active_user');
+                this.currentUser = '';
                 this.isAuthenticated = false;
                 this.showLogin();
             }
