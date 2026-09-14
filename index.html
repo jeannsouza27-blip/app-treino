@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#2c2c2a">
-    <meta name="description" content="App de treino com 5 programas, dicas inteligentes e progressão automática">
-    <title>Meu Treino - App Completo</title>
+    <meta name="description" content="Projeto Shape - Jeann, aplicativo mobile-first de hipertrofia, composição corporal, nutrição e coach pessoal.">
+    <title>Projeto Shape - Jeann</title>
     
     <link rel="manifest" href="./manifest.json">
     
@@ -834,8 +834,8 @@
 <body>
     <div id="authScreen" class="auth-screen">
         <div class="auth-card">
-            <h2>Meu Treino</h2>
-            <p>Crie sua conta ou entre com nome e senha.</p>
+            <h2>Projeto Shape</h2>
+            <p>Bem-vindo(a), Jeann. Entre com seu nome e senha para acessar o coach pessoal.</p>
             <input id="nameInput" type="text" placeholder="Digite seu nome" />
             <div class="password-input-wrap">
                 <input id="passwordInput" type="password" placeholder="Digite sua senha" />
@@ -879,7 +879,7 @@
 
     <div id="appContainer" class="container" style="display: none;">
         <header>
-            <h1>💪 Meu Treino</h1>
+            <h1>💪 Projeto Shape - Jeann</h1>
             <div class="header-icons">
                 <button class="icon-btn" onclick="app.toggleSettings()">⚙️</button>
                 <button class="icon-btn" onclick="app.toggleNotifications()">🔔</button>
@@ -887,16 +887,17 @@
         </header>
 
         <div class="nav-tabs">
-            <button class="nav-tab active" onclick="app.switchTab('programs')">Programas</button>
+            <button class="nav-tab active" onclick="app.switchTab('programs')">Início</button>
             <button class="nav-tab" onclick="app.switchTab('workout')">Treino</button>
             <button class="nav-tab" onclick="app.switchTab('progress')">Progresso</button>
-            <button class="nav-tab" onclick="app.switchTab('tips')">Dicas</button>
+            <button class="nav-tab" onclick="app.switchTab('nutrition')">Nutrição</button>
+            <button class="nav-tab" onclick="app.switchTab('supplements')">Suplementos</button>
+            <button class="nav-tab" onclick="app.switchTab('coach')">Coach</button>
         </div>
 
         <div class="content">
             <!-- PROGRAMS VIEW -->
             <div id="programs" class="view active">
-                <h2 style="font-size: 18px; font-weight: 500; margin-bottom: 1rem;">Escolha seu programa</h2>
                 <div class="program-grid" id="programsGrid"></div>
             </div>
 
@@ -910,29 +911,47 @@
                 <div id="progressContent"></div>
             </div>
 
-            <!-- TIPS VIEW -->
-            <div id="tips" class="view">
-                <div id="tipsContent"></div>
+            <!-- NUTRITION VIEW -->
+            <div id="nutrition" class="view">
+                <div id="nutritionContent"></div>
+            </div>
+
+            <!-- SUPPLEMENTS VIEW -->
+            <div id="supplements" class="view">
+                <div id="supplementsContent"></div>
+            </div>
+
+            <!-- COACH VIEW -->
+            <div id="coach" class="view">
+                <div id="coachContent"></div>
             </div>
         </div>
 
         <!-- BOTTOM NAVIGATION -->
         <div class="bottom-nav">
             <button class="nav-btn active" onclick="app.switchTab('programs')">
-                <span class="nav-btn-icon">📚</span>
-                <span>Programas</span>
+                <span class="nav-btn-icon">🏠</span>
+                <span>Início</span>
             </button>
             <button class="nav-btn" onclick="app.switchTab('workout')">
-                <span class="nav-btn-icon">⏱️</span>
+                <span class="nav-btn-icon">🏋️</span>
                 <span>Treino</span>
             </button>
             <button class="nav-btn" onclick="app.switchTab('progress')">
                 <span class="nav-btn-icon">📊</span>
                 <span>Progresso</span>
             </button>
-            <button class="nav-btn" onclick="app.switchTab('tips')">
-                <span class="nav-btn-icon">💡</span>
-                <span>Dicas</span>
+            <button class="nav-btn" onclick="app.switchTab('nutrition')">
+                <span class="nav-btn-icon">🥗</span>
+                <span>Nutrição</span>
+            </button>
+            <button class="nav-btn" onclick="app.switchTab('supplements')">
+                <span class="nav-btn-icon">💊</span>
+                <span>Supl.</span>
+            </button>
+            <button class="nav-btn" onclick="app.switchTab('coach')">
+                <span class="nav-btn-icon">🤖</span>
+                <span>Coach</span>
             </button>
         </div>
     </div>
@@ -1214,11 +1233,14 @@
                 this.isAuthenticated = sessionStorage.getItem('meuTreino_authenticated') === 'true';
 
                 this.defaultProfile = {
-                    peso: '',
-                    altura: '',
-                    sexo: '',
-                    objetivo: '',
-                    completed: false
+                    nome: 'Jeann',
+                    idade: 37,
+                    peso: 82,
+                    altura: 179,
+                    gordura: 20.2,
+                    sexo: 'Masculino',
+                    objetivo: 'hipertrofia',
+                    completed: true
                 };
 
                 this.state = {
@@ -1228,6 +1250,20 @@
                     notifications: true,
                     startDate: localStorage.getItem('meuTreino_startDate') || new Date().toISOString().split('T')[0],
                     weightHistory: [],
+                    completedWorkouts: {},
+                    nutritionLog: {
+                        cafe: false,
+                        almoco: false,
+                        preTreino: false,
+                        posTreino: false,
+                        ceia: false
+                    },
+                    supplementChecks: {
+                        creatina: false,
+                        whey: false,
+                        zma: false,
+                        omega3: false
+                    },
                     profile: { ...this.defaultProfile }
                 };
 
@@ -1383,12 +1419,17 @@
                 } else {
                     this.closeProfileSetup();
                     if (!this.state.selectedProgram) {
-                        this.state.selectedProgram = this.getRecommendedProgramId();
+                        this.state.selectedProgram = this.getCurrentWorkoutProgramId();
                     }
                 }
 
+                this.state.selectedProgram = this.getCurrentWorkoutProgramId();
                 this.renderPrograms();
                 this.renderWorkout();
+                this.renderProgress();
+                this.renderNutrition();
+                this.renderSupplements();
+                this.renderCoach();
                 this.switchTab('programs');
                 this.registerServiceWorker();
             }
@@ -1734,7 +1775,53 @@
 
             renderPrograms() {
                 const grid = document.getElementById('programsGrid');
-                grid.innerHTML = this.programs.map(p => `
+                const profile = this.state.profile || {};
+                const currentProgram = this.getCurrentWorkoutProgramId();
+                const currentProgramData = this.programs.find(p => p.id === currentProgram) || this.programs[0];
+                const currentWorkoutLabel = currentProgram === 'fullbody' ? 'Treino Full Body A' : 'Treino Full Body B';
+                const streak = Math.max(1, Math.min(30, this.getDaysSinceStart() + 1));
+                const gorduraMeta = 15;
+                const gorduraAtual = Number(profile.gordura || 20.2);
+                const objetivoTexto = profile.objetivo === 'hipertrofia' ? 'ganho de massa e definição' : 'recomposição corporal';
+                const motivation = this.getMotivationalMessage();
+
+                const homeHtml = `
+                    <div class="workout-card">
+                        <div class="exercise-title">Resumo diário</div>
+                        <div class="stats-grid" style="margin-top: 1rem;">
+                            <div class="stat-card">
+                                <div class="stat-label">Peso atual</div>
+                                <div class="stat-value">${profile.peso || 82}kg</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Gordura</div>
+                                <div class="stat-value">${gorduraAtual.toFixed(1)}%</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Meta</div>
+                                <div class="stat-value">${gorduraMeta}%</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Streak</div>
+                                <div class="stat-value">${streak} dias</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="workout-card" style="margin-top: 1rem;">
+                        <div class="exercise-title">Frase motivacional</div>
+                        <p style="margin-top: 0.75rem; color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5;">${motivation}</p>
+                    </div>
+
+                    <div class="workout-card" style="margin-top: 1rem;">
+                        <div class="exercise-title">Treino do dia</div>
+                        <div style="margin-top: 0.75rem; font-size: 1rem; font-weight: 700; color: var(--text-primary);">${currentWorkoutLabel}</div>
+                        <div style="margin-top: 0.35rem; color: var(--text-secondary); font-size: 0.88rem;">Objetivo: ${objetivoTexto}</div>
+                        <button class="btn btn-primary" onclick="app.switchTab('workout')" style="margin-top: 0.9rem;">Abrir treino</button>
+                    </div>
+                `;
+
+                const cardsHtml = this.programs.map(p => `
                     <div class="program-card ${this.state.selectedProgram === p.id ? 'active' : ''}" onclick="app.selectProgram('${p.id}')">
                         <div class="program-title">${p.name}</div>
                         <div class="program-desc">${p.desc}</div>
@@ -1744,6 +1831,156 @@
                         </div>
                     </div>
                 `).join('');
+
+                grid.innerHTML = homeHtml + `<h3 style="font-weight: 600; margin: 1.25rem 0 0.75rem;">Programas disponíveis</h3>${cardsHtml}`;
+            }
+
+            getCurrentWorkoutProgramId() {
+                const daysSince = this.getDaysSinceStart();
+                return daysSince % 2 === 0 ? 'fullbody' : 'fullbodyB';
+            }
+
+            getMotivationalMessage() {
+                const profile = this.state.profile || {};
+                const gorduraAtual = Number(profile.gordura || 20.2);
+                const objetivo = profile.objetivo === 'hipertrofia' ? 'músculo' : 'definição';
+                const fase = gorduraAtual > 18 ? 'Mantenha o foco e avance de forma inteligente.' : 'Você está no caminho certo para a sua melhor versão.';
+                return `Jeann, seu foco agora é ${objetivo} e sua evolução está no caminho certo. ${fase}`;
+            }
+
+            completeWorkout(programId) {
+                if (!this.state.completedWorkouts) {
+                    this.state.completedWorkouts = {};
+                }
+
+                this.state.completedWorkouts[programId] = true;
+                this.saveState();
+                this.renderWorkout();
+            }
+
+            toggleMeal(meal) {
+                if (!this.state.nutritionLog) {
+                    this.state.nutritionLog = {};
+                }
+
+                this.state.nutritionLog[meal] = !this.state.nutritionLog[meal];
+                this.saveState();
+                this.renderNutrition();
+            }
+
+            toggleSupplement(name) {
+                if (!this.state.supplementChecks) {
+                    this.state.supplementChecks = {};
+                }
+
+                this.state.supplementChecks[name] = !this.state.supplementChecks[name];
+                this.saveState();
+                this.renderSupplements();
+            }
+
+            renderNutrition() {
+                const content = document.getElementById('nutritionContent');
+                const meals = [
+                    { key: 'cafe', label: 'Café da manhã', detail: 'Proteína e carboidrato' },
+                    { key: 'almoco', label: 'Almoço', detail: 'Refeição principal' },
+                    { key: 'preTreino', label: 'Pré treino', detail: 'Carboidrato + água' },
+                    { key: 'posTreino', label: 'Pós treino', detail: 'Proteína e recuperação' },
+                    { key: 'ceia', label: 'Ceia', detail: 'Leve e equilibrada' }
+                ];
+
+                const mealItems = meals.map(meal => {
+                    const checked = this.state.nutritionLog?.[meal.key] ? 'checked' : '';
+                    return `
+                        <button class="workout-card" onclick="app.toggleMeal('${meal.key}')" style="display:flex; align-items:center; justify-content:space-between; width:100%; background:${checked ? 'rgba(16,185,129,0.09)' : 'rgba(255,255,255,0.7)'}; border:${checked ? '1px solid rgba(16,185,129,0.6)' : '1px solid var(--border)'}; text-align:left; padding: 0.9rem 1rem; margin-bottom: 0.65rem; cursor:pointer;">
+                            <div>
+                                <div style="font-weight:700; color: var(--text-primary);">${meal.label}</div>
+                                <div style="font-size:0.82rem; color: var(--text-secondary); margin-top:0.2rem;">${meal.detail}</div>
+                            </div>
+                            <span style="font-size: 1.2rem;">${checked ? '✓' : '○'}</span>
+                        </button>
+                    `;
+                }).join('');
+
+                content.innerHTML = `
+                    <div class="workout-card">
+                        <div class="exercise-title">Meta diária</div>
+                        <div class="stats-grid" style="margin-top: 1rem;">
+                            <div class="stat-card">
+                                <div class="stat-label">Proteína</div>
+                                <div class="stat-value">160g</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Água</div>
+                                <div class="stat-value">3L</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <h3 style="font-weight: 600; margin-bottom: 0.75rem;">Checklist alimentar</h3>
+                        ${mealItems}
+                    </div>
+                `;
+            }
+
+            renderSupplements() {
+                const content = document.getElementById('supplementsContent');
+                const items = [
+                    { key: 'creatina', label: 'Creatina 5g', time: '07:00', text: 'Tome sua creatina.' },
+                    { key: 'whey', label: 'Whey', time: '16:00', text: 'Hora do pré-treino.' },
+                    { key: 'zma', label: 'ZMA', time: '20:45', text: 'Tome seu ZMA.' },
+                    { key: 'omega3', label: 'Ômega 3', time: 'Noite', text: 'Apoie recuperação.' }
+                ];
+
+                const list = items.map(item => {
+                    const checked = this.state.supplementChecks?.[item.key] ? 'checked' : '';
+                    return `
+                        <button class="workout-card" onclick="app.toggleSupplement('${item.key}')" style="display:flex; align-items:center; justify-content:space-between; width:100%; background:${checked ? 'rgba(37,99,235,0.08)' : 'rgba(255,255,255,0.7)'}; border:${checked ? '1px solid rgba(37,99,235,0.6)' : '1px solid var(--border)'}; text-align:left; padding:0.85rem 1rem; margin-bottom:0.7rem;">
+                            <div>
+                                <div style="font-weight:700; color: var(--text-primary);">${item.label}</div>
+                                <div style="font-size:0.82rem; color: var(--text-secondary); margin-top:0.2rem;">${item.time} • ${item.text}</div>
+                            </div>
+                            <span style="font-size: 1.1rem;">${checked ? '✓' : '○'}</span>
+                        </button>
+                    `;
+                }).join('');
+
+                content.innerHTML = `
+                    <div class="workout-card">
+                        <div class="exercise-title">Suplementos diários</div>
+                        <div style="margin-top: 0.9rem;">${list}</div>
+                    </div>
+                `;
+            }
+
+            renderCoach() {
+                const content = document.getElementById('coachContent');
+                const profile = this.state.profile || {};
+                const gorduraAtual = Number(profile.gordura || 20.2);
+                const gorduraAnterior = 20.2;
+                const evolucao = gorduraAnterior - gorduraAtual;
+                const coachText = evolucao > 0
+                    ? `Jeann, sua gordura caiu de ${gorduraAnterior.toFixed(1)}% para ${gorduraAtual.toFixed(1)}%. Excelente evolução. Continue mantendo 160g de proteína por dia.`
+                    : `Jeann, seu processo continua em evolução. Mantenha consistência, hidratação e foco em 160g de proteína por dia.`;
+
+                const achievements = [
+                    '🥇 Meta de gordura: 15%',
+                    '🔥 Streak de treino atual: ' + Math.max(1, Math.min(30, this.getDaysSinceStart() + 1)) + ' dias',
+                    '💪 Foco em hipertrofia e recomposição corporal'
+                ];
+
+                content.innerHTML = `
+                    <div class="workout-card">
+                        <div class="exercise-title">Coach Shape</div>
+                        <p style="margin-top: 0.85rem; color: var(--text-secondary); line-height:1.5; font-size:0.95rem;">${coachText}</p>
+                    </div>
+
+                    <div class="workout-card" style="margin-top: 1rem;">
+                        <div class="exercise-title">Metas e conquistas</div>
+                        <ul style="margin-top: 0.9rem; color: var(--text-secondary); line-height:1.8; padding-left: 1.1rem;">
+                            ${achievements.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
             }
 
             selectProgram(id) {
@@ -1756,7 +1993,7 @@
             }
 
             renderWorkout() {
-                const program = this.programs.find(p => p.id === this.state.selectedProgram);
+                const program = this.programs.find(p => p.id === (this.state.selectedProgram || this.getCurrentWorkoutProgramId()));
                 if (!program) {
                     document.getElementById('workoutContent').innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 2rem;">Selecione um programa primeiro</p>';
                     return;
@@ -1767,6 +2004,10 @@
                 const summary = this.getProfileSummary();
                 const pesoAtual = this.state.profile?.peso ? `${Number(this.state.profile.peso).toFixed(1)}kg` : 'Sem peso cadastrado';
                 const imc = summary.bmi ? summary.bmi.toFixed(1) : '—';
+                const isCompleted = this.state.completedWorkouts?.[program.id];
+                const completionTitle = program.id === 'fullbody'
+                    ? 'Parabéns Jeann! Treino A concluído.'
+                    : 'Excelente trabalho Jeann! Amanhã é dia do Treino A.';
 
                 let html = '';
 
@@ -1798,6 +2039,19 @@
                         </div>
                     </div>
                 `;
+
+                if (isCompleted) {
+                    html += `
+                        <div class="alert" style="margin-bottom: 1rem; background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.4);">
+                            <div class="alert-title">✅ ${completionTitle}</div>
+                            <div class="alert-text">${program.id === 'fullbody' ? 'Inicie o Treino B amanhã para continuar a sequência.' : 'Hoje é o dia do Treino A. Volte amanhã para repetir a rotina.'}</div>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <button class="btn btn-primary" onclick="app.completeWorkout('${program.id}')" style="margin-bottom: 1rem; width: 100%;">Concluir treino</button>
+                    `;
+                }
 
                 html += program.exercises.map((ex, i) => {
                     const guide = this.exerciseGuide?.[ex.name] || {
@@ -2061,6 +2315,10 @@
                 if (tab === 'progress') this.renderProgress();
                 if (tab === 'tips') this.renderTips();
                 if (tab === 'workout') this.renderWorkout();
+                if (tab === 'nutrition') this.renderNutrition();
+                if (tab === 'supplements') this.renderSupplements();
+                if (tab === 'coach') this.renderCoach();
+                if (tab === 'programs') this.renderPrograms();
             }
 
             toggleSettings() {
