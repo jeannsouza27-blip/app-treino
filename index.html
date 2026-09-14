@@ -891,7 +891,13 @@
                     }
                 ];
 
-                this.users = JSON.parse(localStorage.getItem('meuTreino_users') || '[]');
+                try {
+                    this.users = JSON.parse(localStorage.getItem('meuTreino_users') || '[]');
+                } catch (error) {
+                    this.users = [];
+                    localStorage.removeItem('meuTreino_users');
+                }
+
                 this.currentUser = localStorage.getItem('meuTreino_active_user') || '';
                 this.isAuthenticated = sessionStorage.getItem('meuTreino_authenticated') === 'true';
 
@@ -947,9 +953,22 @@
 
             loadState() {
                 const saved = localStorage.getItem('meuTreino_state');
-                if (saved) {
+                if (!saved) return;
+
+                try {
                     const loaded = JSON.parse(saved);
                     this.state = { ...this.state, ...loaded };
+                } catch (error) {
+                    localStorage.removeItem('meuTreino_state');
+                    this.state = {
+                        selectedProgram: null,
+                        currentDay: new Date().toISOString().split('T')[0],
+                        workoutLog: {},
+                        notifications: true,
+                        startDate: new Date().toISOString().split('T')[0],
+                        weightHistory: [],
+                        profile: { ...this.defaultProfile }
+                    };
                 }
             }
 
