@@ -284,7 +284,42 @@
         .exercise-meta {
             font-size: 13px;
             color: var(--text-secondary);
+            margin-bottom: 0.55rem;
+        }
+
+        .exercise-head {
+            display: grid;
+            grid-template-columns: 110px 1fr;
+            gap: 0.9rem;
+            align-items: center;
             margin-bottom: 1rem;
+        }
+
+        .exercise-thumb {
+            width: 110px;
+            height: 110px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(148, 163, 184, 0.24);
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(14, 165, 233, 0.06));
+            box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06);
+        }
+
+        .exercise-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .exercise-body {
+            min-width: 0;
+        }
+
+        .exercise-description {
+            font-size: 0.8rem;
+            line-height: 1.45;
+            color: var(--text-secondary);
         }
 
         .input-group {
@@ -963,6 +998,65 @@
                     }
                 ];
 
+                this.exerciseGuide = {
+                    'Agachamento Livre': {
+                        image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=900&q=80',
+                        description: 'Desça com os joelhos alinhados aos pés e mantenha o tronco firme, controlando a descida e subida.'
+                    },
+                    'Supino Reto': {
+                        image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=900&q=80',
+                        description: 'Abaixe a barra até o peito com controle e empurre para cima sem arquear as costas.'
+                    },
+                    'Puxada Frontal': {
+                        image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=900&q=80',
+                        description: 'Puxe a barra em direção ao peito mantendo os ombros baixos e o core engajado.'
+                    },
+                    'Rosca Direta': {
+                        image: 'https://images.unsplash.com/photo-1517832606299-7ae9b720a186?auto=format&fit=crop&w=900&q=80',
+                        description: 'Flexione os cotovelos com os braços junto ao corpo e mantenha os ombros relaxados.'
+                    },
+                    'Tríceps Corda': {
+                        image: 'https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=900&q=80',
+                        description: 'Estenda os braços na linha do corpo, focando na contração final dos tríceps.'
+                    },
+                    'Desenvolvimento': {
+                        image: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=900&q=80',
+                        description: 'Eleve a barra até acima do ombro e abaixe com controle, mantendo o tronco estável.'
+                    },
+                    'Tríceps Francês': {
+                        image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=900&q=80',
+                        description: 'Flexione os braços com a barra atrás da cabeça e estenda lentamente para cima.'
+                    },
+                    'Remada Baixa': {
+                        image: 'https://images.unsplash.com/photo-1541534401786-2077eed87a74?auto=format&fit=crop&w=900&q=80',
+                        description: 'Traga a barra em direção ao abdômen com o peito aberto e os cotovelos bem para trás.'
+                    },
+                    'Agachamento': {
+                        image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=900&q=80',
+                        description: 'Mantenha o peso sobre os calcanhares e desça com linha de movimento controlada.'
+                    },
+                    'Supino Inclinado': {
+                        image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=900&q=80',
+                        description: 'Use o banco inclinado para estimular mais o peitoral superior e mantenha o movimento firme.'
+                    },
+                    'Leg Press': {
+                        image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=900&q=80',
+                        description: 'Desça com controle e empurre o peso sem perder a postura da lombar.'
+                    },
+                    'Rosca Scott': {
+                        image: 'https://images.unsplash.com/photo-1517832606299-7ae9b720a186?auto=format&fit=crop&w=900&q=80',
+                        description: 'Flexione os braços com o cotovelo apoiado e concentre a contração no bíceps.'
+                    },
+                    'Puxada Frente': {
+                        image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=900&q=80',
+                        description: 'Puxe a barra com atenção à postura, trazendos com controle até o tronco.'
+                    },
+                    'Cardio Moderado': {
+                        image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=900&q=80',
+                        description: 'Mantenha ritmo constante, respirando de forma tranquila e sem exagerar na intensidade.'
+                    }
+                };
+
                 try {
                     const parsedUsers = JSON.parse(localStorage.getItem('meuTreino_users') || '[]');
                     this.users = Array.isArray(parsedUsers)
@@ -1567,22 +1661,37 @@
                     </div>
                 `;
 
-                html += program.exercises.map((ex, i) => `
-                    <div class="workout-card">
-                        <div class="exercise-title">${ex.name}</div>
-                        <div class="exercise-meta">${ex.sets} séries × ${ex.reps} reps</div>
-                        <div class="input-group">
-                            <input type="number" id="set-${i}" placeholder="Série" />
-                            <input type="number" id="reps-${i}" placeholder="Reps" />
-                            <input type="number" id="weight-${i}" placeholder="Peso" step="0.5" />
+                html += program.exercises.map((ex, i) => {
+                    const guide = this.exerciseGuide?.[ex.name] || {
+                        image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=900&q=80',
+                        description: 'Faça com controle, mantendo a técnica correta e o movimento estável.'
+                    };
+
+                    return `
+                        <div class="workout-card">
+                            <div class="exercise-head">
+                                <div class="exercise-thumb">
+                                    <img class="exercise-image" src="${guide.image}" alt="${ex.name}" />
+                                </div>
+                                <div class="exercise-body">
+                                    <div class="exercise-title">${ex.name}</div>
+                                    <div class="exercise-meta">${ex.sets} séries × ${ex.reps} reps</div>
+                                    <div class="exercise-description">${guide.description}</div>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <input type="number" id="set-${i}" placeholder="Série" />
+                                <input type="number" id="reps-${i}" placeholder="Reps" />
+                                <input type="number" id="weight-${i}" placeholder="Peso" step="0.5" />
+                            </div>
+                            <button class="btn btn-primary" onclick="app.recordExercise(${i}, '${ex.name}')">+ Registrar</button>
+                            <div id="records-${i}" class="today-records" style="display: none;">
+                                <div class="today-records-title">Registros de hoje</div>
+                                <div id="records-list-${i}"></div>
+                            </div>
                         </div>
-                        <button class="btn btn-primary" onclick="app.recordExercise(${i}, '${ex.name}')">+ Registrar</button>
-                        <div id="records-${i}" class="today-records" style="display: none;">
-                            <div class="today-records-title">Registros de hoje</div>
-                            <div id="records-list-${i}"></div>
-                        </div>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
 
                 document.getElementById('workoutContent').innerHTML = html;
                 this.loadRecords(program.exercises);
