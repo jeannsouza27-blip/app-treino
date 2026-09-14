@@ -241,19 +241,20 @@
             background: linear-gradient(180deg, var(--surface-2) 0%, rgba(20, 184, 166, 0.03) 100%);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 1rem;
-            margin-bottom: 12px;
+            padding: 1.1rem 1rem 1rem;
+            margin-bottom: 14px;
             box-shadow: var(--shadow-card);
         }
 
         .exercise-title {
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 4px;
+            margin-bottom: 6px;
+            font-size: 1.05rem;
         }
 
         .exercise-meta {
-            font-size: 13px;
+            font-size: 0.86rem;
             color: var(--text-secondary);
             margin-bottom: 1rem;
         }
@@ -261,18 +262,19 @@
         .input-group {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 0.75rem;
+            gap: 10px;
+            margin-bottom: 0.9rem;
         }
 
         input[type="number"],
         input[type="text"] {
-            padding: 8px;
+            padding: 10px 9px;
             border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 14px;
+            border-radius: 8px;
+            font-size: 15px;
             background: var(--surface-1);
             color: var(--text-primary);
+            min-height: 42px;
         }
 
         input::placeholder {
@@ -280,16 +282,17 @@
         }
 
         .btn {
-            padding: 10px 12px;
+            padding: 12px 14px;
             border: 1px solid var(--border);
             border-radius: 10px;
             background: linear-gradient(180deg, var(--surface-1) 0%, rgba(255,255,255,0.8) 100%);
             color: var(--text-primary);
             cursor: pointer;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
             transition: all 0.2s ease;
             width: 100%;
+            min-height: 46px;
             box-shadow: 0 4px 10px rgba(15, 23, 42, 0.05);
         }
 
