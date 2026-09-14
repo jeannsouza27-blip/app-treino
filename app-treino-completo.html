@@ -700,6 +700,7 @@
                 <input type="checkbox" id="notificationsToggle" onchange="app.saveSettings()" style="width: 20px; height: 20px; cursor: pointer;">
             </div>
             <button class="btn btn-danger" onclick="app.resetData()">Limpar todos os dados</button>
+            <button class="btn" onclick="app.showProfileSetup()" style="margin-top: 8px;">Editar perfil</button>
             <button class="btn" onclick="app.logout()" style="margin-top: 8px;">Sair</button>
             <button class="btn" onclick="app.toggleSettings()" style="margin-top: 8px;">Fechar</button>
         </div>
@@ -832,6 +833,7 @@
                     workoutLog: {},
                     notifications: true,
                     startDate: localStorage.getItem('meuTreino_startDate') || new Date().toISOString().split('T')[0],
+                    weightHistory: [],
                     profile: { ...this.defaultProfile }
                 };
 
@@ -880,12 +882,79 @@
 
             getRecommendedProgramId() {
                 const objetivo = this.state.profile?.objetivo || '';
+                const peso = Number(this.state.profile?.peso || 0);
+                const altura = Number(this.state.profile?.altura || 0);
+                const bmi = peso > 0 && altura > 0 ? peso / ((altura / 100) ** 2) : 0;
 
-                if (objetivo === 'emagrecimento') return 'definicao';
+                if (objetivo === 'emagrecimento') return bmi >= 25 ? 'definicao' : 'fullbody';
                 if (objetivo === 'hipertrofia') return 'hipertrofia';
                 if (objetivo === 'forca') return 'ppl';
-                if (objetivo === 'condicionamento') return 'fullbody';
+                if (objetivo === 'condicionamento') return bmi >= 30 ? 'fullbody' : 'upperlower';
                 return 'fullbody';
+            }
+
+            getProfileSummary() {
+                const profile = this.state.profile || {};
+                const peso = Number(profile.peso || 0);
+                const altura = Number(profile.altura || 0);
+                const objetivo = profile.objetivo || 'condicionamento';
+                const bmi = peso > 0 && altura > 0 ? peso / ((altura / 100) ** 2) : 0;
+
+                const objetivoLabels = {
+                    emagrecimento: 'Emagrecimento',
+                    hipertrofia: 'Hipertrofia',
+                    forca: 'Força',
+                    condicionamento: 'Condicionamento'
+                };
+
+                const intensityByGoal = {
+                    emagrecimento: 'Moderada',
+                    hipertrofia: 'Alta',
+                    forca: 'Alta',
+                    condicionamento: 'Moderada'
+                };
+
+                let recommendation = 'Continue com a técnica correta e aumente o peso apenas quando conseguir manter a forma.';
+                if (objetivo === 'emagrecimento') {
+                    recommendation = 'Mantenha um volume moderado, priorize cardio e aumente a intensidade aos poucos.';
+                } else if (objetivo === 'hipertrofia') {
+                    recommendation = 'Busque mais volume e aumente o peso gradualmente ao longo das semanas.';
+                } else if (objetivo === 'forca') {
+                    recommendation = 'Foque em carga progressiva e descanso adequado entre as séries.';
+                } else if (objetivo === 'condicionamento') {
+                    recommendation = 'Use carga controlada, mantenha ritmo constante e priorize resistência.';
+                }
+
+                const incremento = peso > 0 ? Math.max(1.5, Math.min(4, peso * 0.025)).toFixed(1) : '2.0';
+
+                return {
+                    bmi,
+                    objetivoLabel: objetivoLabels[objetivo] || 'Condicionamento',
+                    intensity: intensityByGoal[objetivo] || 'Moderada',
+                    recommendation,
+                    incremento
+                };
+            }
+
+            getWeeklyEvolutionData() {
+                const history = Array.isArray(this.state.weightHistory) ? [...this.state.weightHistory] : [];
+                const pesoAtual = Number(this.state.profile?.peso || 0);
+
+                if (pesoAtual > 0 && (!history.length || Number(history[history.length - 1].peso) !== pesoAtual)) {
+                    history.push({
+                        date: this.state.currentDay,
+                        peso: pesoAtual
+                    });
+                }
+
+                return history
+                    .filter(item => Number(item.peso) > 0)
+                    .sort((a, b) => new Date(a.date) - new Date(b.date))
+                    .slice(-6)
+                    .map(item => ({
+                        label: new Date(item.date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+                        peso: Number(item.peso)
+                    }));
             }
 
             renderApp() {
@@ -932,8 +1001,16 @@
                     return;
                 }
 
+                const novoPeso = Number(peso);
+                const hoje = new Date().toISOString().split('T')[0];
+                const ultimoPeso = this.state.weightHistory?.[this.state.weightHistory.length - 1];
+
+                if (novoPeso > 0 && (!ultimoPeso || ultimoPeso.date !== hoje || Number(ultimoPeso.peso) !== novoPeso)) {
+                    this.state.weightHistory = [...(this.state.weightHistory || []), { date: hoje, peso: novoPeso }];
+                }
+
                 this.state.profile = {
-                    peso: Number(peso),
+                    peso: novoPeso,
                     altura: Number(altura),
                     sexo,
                     objetivo,
@@ -1080,6 +1157,9 @@
 
                 const daysSince = this.getDaysSinceStart();
                 const shouldChange = daysSince >= 40;
+                const summary = this.getProfileSummary();
+                const pesoAtual = this.state.profile?.peso ? `${Number(this.state.profile.peso).toFixed(1)}kg` : 'Sem peso cadastrado';
+                const imc = summary.bmi ? summary.bmi.toFixed(1) : '—';
 
                 let html = '';
 
@@ -1093,6 +1173,16 @@
                 }
 
                 html += `
+                    <div class="alert" style="margin-bottom: 1rem;">
+                        <div class="alert-title">📈 Treino recomendado</div>
+                        <div class="alert-text">
+                            ${program.name} • Objetivo: ${summary.objetivoLabel} • Peso atual: ${pesoAtual} • IMC: ${imc}
+                            <br>
+                            ${summary.recommendation}
+                            <br>
+                            Sugestão de progresso: aumente cerca de ${summary.incremento}kg por semana quando conseguir completar as repetições com boa forma.
+                        </div>
+                    </div>
                     <div style="margin-bottom: 1.5rem;">
                         <h2 style="font-size: 18px; font-weight: 500; margin-bottom: 0.5rem;">Programa: ${program.name}</h2>
                         <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 1rem;">Dias: ${daysSince} / 40</p>
@@ -1180,6 +1270,13 @@
             renderProgress() {
                 const program = this.programs.find(p => p.id === this.state.selectedProgram);
                 const daysSince = this.getDaysSinceStart();
+                const pesoAtual = this.state.profile?.peso ? `${Number(this.state.profile.peso).toFixed(1)}kg` : 'Sem peso';
+                const summary = this.getProfileSummary();
+                const weeklyData = this.getWeeklyEvolutionData();
+                const maxPeso = weeklyData.length > 0 ? Math.max(...weeklyData.map(item => item.peso), 1) : 1;
+                const pesoInicial = weeklyData.length > 0 ? weeklyData[0].peso : Number(this.state.profile?.peso || 0);
+                const pesoFinal = weeklyData.length > 0 ? weeklyData[weeklyData.length - 1].peso : Number(this.state.profile?.peso || 0);
+                const variacao = pesoFinal - pesoInicial;
 
                 let html = `
                     <div class="stats-grid">
@@ -1191,17 +1288,56 @@
                             <div class="stat-label">Dias restantes</div>
                             <div class="stat-value">${Math.max(0, 40 - daysSince)}</div>
                         </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Peso atual</div>
+                            <div class="stat-value">${pesoAtual}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">IMC</div>
+                            <div class="stat-value">${summary.bmi ? summary.bmi.toFixed(1) : '--'}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Objetivo</div>
+                            <div class="stat-value">${summary.objetivoLabel}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Evolução</div>
+                            <div class="stat-value">${variacao >= 0 ? '+' : ''}${variacao.toFixed(1)}kg</div>
+                        </div>
                     </div>
                 `;
 
+                if (weeklyData.length > 1) {
+                    html += `
+                        <div class="workout-card" style="margin-top: 1rem;">
+                            <div class="exercise-title">📉 Evolução semanal</div>
+                            <div style="margin-top: 1rem;">
+                                ${weeklyData.map(item => `
+                                    <div style="margin-bottom: 0.75rem;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+                                            <span style="font-size: 12px; color: var(--text-secondary);">${item.label}</span>
+                                            <strong style="font-size: 12px; color: var(--text-primary);">${item.peso.toFixed(1)}kg</strong>
+                                        </div>
+                                        <div style="height: 8px; border-radius: 999px; background: rgba(148, 163, 184, 0.2); overflow: hidden;">
+                                            <div style="height: 100%; width: ${(item.peso / maxPeso) * 100}%; border-radius: 999px; background: linear-gradient(135deg, var(--accent), var(--accent-2));"></div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+
                 if (program) {
-                    html += '<h3 style="font-weight: 500; margin-bottom: 1rem;">Seus melhores pesos</h3>';
+                    html += '<h3 style="font-weight: 500; margin-bottom: 1rem; margin-top: 1.5rem;">Seus melhores pesos</h3>';
                     program.exercises.forEach(ex => {
-                        const records = Object.values(this.state.workoutLog)
-                            .flat()
-                            .filter(r => r.weight);
-                        const maxWeight = Math.max(...records.map(r => r.weight), 0);
-                        
+                        const records = Object.entries(this.state.workoutLog)
+                            .filter(([key]) => key.startsWith(`${this.state.selectedProgram}_${ex.name}_`))
+                            .flatMap(([, list]) => list)
+                            .filter(r => typeof r.weight === 'number' && !isNaN(r.weight));
+
+                        const maxWeight = records.length > 0 ? Math.max(...records.map(r => r.weight)) : 0;
+
                         html += `
                             <div class="workout-card">
                                 <div class="exercise-title">${ex.name}</div>
