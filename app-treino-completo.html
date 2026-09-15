@@ -23,13 +23,13 @@
             --danger: #E24B4A;
             --success: #639922;
             --warning: #BA7517;
-            --surface-0: #f9f9f7;
-            --surface-1: #f1efe8;
+            --surface-0: #dce8f5;
+            --surface-1: #eef3f8;
             --surface-2: #ffffff;
-            --border: #d3d1c7;
+            --border: #b8c8d9;
             --text-primary: #2c2c2a;
-            --text-secondary: #888780;
-            --text-muted: #b4b2a9;
+            --text-secondary: #334155;
+            --text-muted: #52657d;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -635,6 +635,69 @@
             line-height: 1.45;
         }
 
+        .profile-photo-editor {
+            display: grid;
+            grid-template-columns: 84px 1fr;
+            gap: 0.8rem;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: #e8f0f8;
+        }
+
+        .profile-photo-preview {
+            width: 84px;
+            height: 84px;
+            border-radius: 16px;
+            object-fit: cover;
+            border: 2px solid var(--accent);
+            background: #cbd8e6;
+        }
+
+        .profile-photo-actions {
+            display: grid;
+            gap: 0.45rem;
+        }
+
+        .profile-photo-actions .btn {
+            min-height: 40px;
+            padding: 0.55rem 0.7rem;
+            font-size: 0.82rem;
+        }
+
+        .profile-progress-card {
+            display: grid;
+            grid-template-columns: 88px 1fr;
+            gap: 0.9rem;
+            align-items: center;
+        }
+
+        .profile-progress-photo,
+        .profile-progress-placeholder {
+            width: 88px;
+            height: 88px;
+            border-radius: 18px;
+            object-fit: cover;
+            border: 2px solid var(--accent);
+            background: #cbd8e6;
+        }
+
+        .profile-progress-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .profile-progress-copy p {
+            margin: 0 0 0.65rem;
+            color: var(--text-secondary);
+            font-size: 0.86rem;
+            line-height: 1.4;
+        }
+
         @media (max-width: 480px) {
             html {
                 font-size: 19px;
@@ -943,6 +1006,15 @@
             <h2 class="modal-title">Ficha de cadastro</h2>
             <p class="modal-subtitle">Complete seus dados para receber um treino mais adequado ao seu perfil.</p>
 
+            <div class="profile-photo-editor">
+                <img id="profilePhotoPreview" class="profile-photo-preview" alt="Foto atual do progresso" style="display: none;" />
+                <div id="profilePhotoPlaceholder" class="profile-photo-preview" style="display: flex; align-items: center; justify-content: center; font-size: 1.8rem;">📸</div>
+                <div class="profile-photo-actions">
+                    <label class="btn btn-primary" style="display: flex; align-items: center; justify-content: center; cursor: pointer;">Adicionar ou trocar foto<input id="profilePhotoInput" type="file" accept="image/*" onchange="app.previewProfilePhoto(this)" style="display: none;" /></label>
+                    <button type="button" class="btn" onclick="app.clearProfilePhoto()">Remover foto</button>
+                </div>
+            </div>
+
             <div style="margin-bottom: 0.8rem;">
                 <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: 0.9rem;">Peso (kg)</label>
                 <input id="profilePeso" type="number" min="30" max="250" step="0.5" placeholder="Ex: 72,5" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.85); color: var(--text-primary); padding: 0.7rem 0.8rem;" />
@@ -1191,8 +1263,11 @@
                     altura: '',
                     sexo: '',
                     objetivo: '',
+                    photo: '',
                     completed: false
                 };
+
+                this.pendingProfilePhoto = null;
 
                 this.state = {
                     selectedProgram: null,
@@ -1374,8 +1449,37 @@
                 document.getElementById('profileAltura').value = profile.altura || '';
                 document.getElementById('profileSexo').value = profile.sexo || '';
                 document.getElementById('profileObjetivo').value = profile.objetivo || '';
+                this.pendingProfilePhoto = null;
+                this.updateProfilePhotoPreview(profile.photo || '');
+                document.getElementById('profilePhotoInput').value = '';
 
                 modal.classList.add('active');
+            }
+
+            updateProfilePhotoPreview(photo) {
+                const preview = document.getElementById('profilePhotoPreview');
+                const placeholder = document.getElementById('profilePhotoPlaceholder');
+                if (!preview || !placeholder) return;
+                preview.src = photo || '';
+                preview.style.display = photo ? 'block' : 'none';
+                placeholder.style.display = photo ? 'none' : 'flex';
+            }
+
+            previewProfilePhoto(input) {
+                const file = input?.files?.[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = () => {
+                    this.pendingProfilePhoto = reader.result;
+                    this.updateProfilePhotoPreview(reader.result);
+                };
+                reader.readAsDataURL(file);
+            }
+
+            clearProfilePhoto() {
+                this.pendingProfilePhoto = '';
+                document.getElementById('profilePhotoInput').value = '';
+                this.updateProfilePhotoPreview('');
             }
 
             closeProfileSetup() {
@@ -1403,10 +1507,12 @@
                 }
 
                 this.state.profile = {
+                    ...(this.state.profile || {}),
                     peso: novoPeso,
                     altura: Number(altura),
                     sexo,
                     objetivo,
+                    photo: this.pendingProfilePhoto === null ? (this.state.profile?.photo || '') : this.pendingProfilePhoto,
                     completed: true
                 };
 
@@ -1707,7 +1813,21 @@
 
             renderPrograms() {
                 const grid = document.getElementById('programsGrid');
-                grid.innerHTML = this.programs.map(p => `
+                const profile = this.state.profile || {};
+                const profilePhoto = profile.photo || '';
+                const homeHtml = `
+                    <div class="workout-card profile-progress-card">
+                        <div>
+                            ${profilePhoto ? `<img class="profile-progress-photo" src="${profilePhoto}" alt="Foto atual do progresso" />` : '<div class="profile-progress-placeholder">📸</div>'}
+                        </div>
+                        <div class="profile-progress-copy">
+                            <div class="exercise-title">Seu progresso</div>
+                            <p>Adicione uma foto atual e troque sempre que quiser acompanhar sua evolução.</p>
+                            <button class="btn btn-primary" onclick="app.showProfileSetup()">${profilePhoto ? 'Trocar foto' : 'Adicionar foto'}</button>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML = homeHtml + this.programs.map(p => `
                     <div class="program-card ${this.state.selectedProgram === p.id ? 'active' : ''}" onclick="app.selectProgram('${p.id}')">
                         <div class="program-title">${p.name}</div>
                         <div class="program-desc">${p.desc}</div>
