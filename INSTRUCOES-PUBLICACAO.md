@@ -10,6 +10,20 @@
 
 ## PASSO 2: Publicar no Easypanel
 
+O projeto já está preparado para implantação pelo GitHub: o arquivo `Dockerfile` usa Nginx e publica automaticamente o `index.html`, o `manifest.json` e as imagens locais.
+
+### Via GitHub (recomendado)
+
+1. No EasyPanel, crie um novo **App**.
+2. Escolha **GitHub** como fonte e selecione este repositório.
+3. Selecione a branch principal.
+4. No campo de build, mantenha o **Dockerfile** detectado automaticamente.
+5. Configure a porta pública como `80`.
+6. Faça o deploy e associe seu domínio em **Domains**.
+7. Abra o domínio e confirme o carregamento do `Projeto Shape - Jeann`.
+
+O EasyPanel deve detectar o `Dockerfile` na raiz. Não use a opção Node.js, pois este é um app estático.
+
 ### Via File Manager do Easypanel:
 
 1. Acesse seu **Easypanel**

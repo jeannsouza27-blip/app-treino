@@ -1,7 +1,7 @@
 {
-  "name": "Meu Treino - App de Fitness",
-  "short_name": "Meu Treino",
-  "description": "App completo com 5 programas de treino, dicas inteligentes e progressão automática",
+  "name": "Projeto Shape - Jeann",
+  "short_name": "Projeto Shape",
+  "description": "App de treino com programas, progressao e acompanhamento pessoal",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

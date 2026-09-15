@@ -356,13 +356,27 @@
             margin-bottom: 14px;
             box-shadow: 0 12px 26px rgba(15, 23, 42, 0.06);
             min-height: 128px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .workout-card::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--accent), var(--accent-2));
         }
 
         .exercise-title {
-            font-weight: 600;
-            color: var(--text-primary);
+            font-weight: 800;
+            color: #102a43;
             margin-bottom: 6px;
-            font-size: 1.05rem;
+            font-size: 1.14rem;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+            overflow-wrap: anywhere;
+            word-break: break-word;
         }
 
         .exercise-meta {
@@ -406,10 +420,14 @@
 
         .exercise-body {
             min-width: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             background: linear-gradient(180deg, rgba(255,255,255,0.54), rgba(239,246,255,0.72));
             border: 1px solid rgba(148, 163, 184, 0.18);
             border-radius: 16px;
             padding: 0.72rem 0.8rem;
+            box-shadow: inset 3px 0 0 rgba(37, 99, 235, 0.12);
         }
 
         .exercise-description {
@@ -799,8 +817,27 @@
                 min-height: 138px;
             }
 
+            .exercise-head {
+                grid-template-columns: 96px 1fr;
+                gap: 0.7rem;
+            }
+
+            .exercise-thumb {
+                width: 96px;
+                height: 96px;
+            }
+
             .exercise-title {
-                font-size: 1.05rem;
+                font-size: 1.04rem;
+                line-height: 1.22;
+            }
+
+            .exercise-body {
+                padding: 0.65rem 0.7rem;
+            }
+
+            .exercise-description {
+                font-size: 0.8rem;
             }
 
             input[type="number"],
@@ -815,6 +852,20 @@
         }
 
         @media (max-width: 360px) {
+            .exercise-head {
+                grid-template-columns: 1fr;
+            }
+
+            .exercise-thumb {
+                width: 100%;
+                height: 180px;
+            }
+
+            .exercise-title {
+                font-size: 1.02rem;
+                line-height: 1.2;
+            }
+
             .input-group {
                 grid-template-columns: 1fr;
             }
@@ -1157,60 +1208,96 @@
 
                 this.exerciseGuide = {
                     'Agachamento Livre': {
-                        image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=900&q=80',
+                        image: './ChatGPT Image 14 de set. de 2026, 14_53_50.png',
                         description: 'Desça com os joelhos alinhados aos pés e mantenha o tronco firme, controlando a descida e subida.'
                     },
                     'Supino Reto': {
-                        image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=900&q=80',
+                        image: './ChatGPT Image 14 de set. de 2026, 14_53_50.png',
                         description: 'Abaixe a barra até o peito com controle e empurre para cima sem arquear as costas.'
                     },
                     'Puxada Frontal': {
-                        image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=900&q=80',
+                        image: './ChatGPT Image 14 de set. de 2026, 14_53_50.png',
                         description: 'Puxe a barra em direção ao peito mantendo os ombros baixos e o core engajado.'
                     },
                     'Rosca Direta': {
-                        image: 'https://images.unsplash.com/photo-1517832606299-7ae9b720a186?auto=format&fit=crop&w=900&q=80',
+                        image: './ChatGPT Image 14 de set. de 2026, 14_53_50.png',
                         description: 'Flexione os cotovelos com os braços junto ao corpo e mantenha os ombros relaxados.'
                     },
                     'Tríceps Corda': {
-                        image: 'https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=900&q=80',
+                        image: './ChatGPT Image 14 de set. de 2026, 14_53_50.png',
                         description: 'Estenda os braços na linha do corpo, focando na contração final dos tríceps.'
                     },
                     'Desenvolvimento': {
-                        image: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=900&q=80',
+                        image: './ChatGPT Image 14 de set. de 2026, 14_53_50.png',
                         description: 'Eleve a barra até acima do ombro e abaixe com controle, mantendo o tronco estável.'
                     },
                     'Tríceps Francês': {
-                        image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=900&q=80',
+                        image: './1789409500843-d61b4ec1-6a6c-4e6c-bfa7-1701a10c2bed_3.jpg',
                         description: 'Flexione os braços com a barra atrás da cabeça e estenda lentamente para cima.'
                     },
                     'Remada Baixa': {
-                        image: 'https://images.unsplash.com/photo-1541534401786-2077eed87a74?auto=format&fit=crop&w=900&q=80',
+                        image: './ChatGPT Image 14 de set. de 2026, 14_53_50.png',
                         description: 'Traga a barra em direção ao abdômen com o peito aberto e os cotovelos bem para trás.'
                     },
                     'Agachamento': {
-                        image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=900&q=80',
+                        image: './ChatGPT Image 14 de set. de 2026, 14_53_50.png',
                         description: 'Mantenha o peso sobre os calcanhares e desça com linha de movimento controlada.'
                     },
                     'Supino Inclinado': {
-                        image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=900&q=80',
+                        image: './1789409500843-d61b4ec1-6a6c-4e6c-bfa7-1701a10c2bed_3.jpg',
                         description: 'Use o banco inclinado para estimular mais o peitoral superior e mantenha o movimento firme.'
                     },
                     'Leg Press': {
-                        image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=900&q=80',
+                        image: './ChatGPT Image 14 de set. de 2026, 14_53_50.png',
                         description: 'Desça com controle e empurre o peso sem perder a postura da lombar.'
                     },
                     'Rosca Scott': {
-                        image: 'https://images.unsplash.com/photo-1517832606299-7ae9b720a186?auto=format&fit=crop&w=900&q=80',
+                        image: './1789409500843-d61b4ec1-6a6c-4e6c-bfa7-1701a10c2bed_3.jpg',
                         description: 'Flexione os braços com o cotovelo apoiado e concentre a contração no bíceps.'
                     },
                     'Puxada Frente': {
-                        image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=900&q=80',
+                        image: './ChatGPT Image 14 de set. de 2026, 14_53_50.png',
                         description: 'Puxe a barra com atenção à postura, trazendos com controle até o tronco.'
                     },
                     'Cardio Moderado': {
-                        image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=900&q=80',
+                        image: './ChatGPT Image 14 de set. de 2026, 14_53_50.png',
                         description: 'Mantenha ritmo constante, respirando de forma tranquila e sem exagerar na intensidade.'
+                    },
+                    'Levantamento Terra Romeno': {
+                        image: './1789409500843-d61b4ec1-6a6c-4e6c-bfa7-1701a10c2bed_3.jpg',
+                        description: 'Pegue a barra com amplitude e mantenha a lombar neutra durante a elevação.'
+                    },
+                    'Cadeira Extensora': {
+                        image: './1789409500843-d61b4ec1-6a6c-4e6c-bfa7-1701a10c2bed_3.jpg',
+                        description: 'Estenda os joelhos com controle e foco na contração do quadríceps.'
+                    },
+                    'Remada Cavalinho': {
+                        image: './1789409500843-d61b4ec1-6a6c-4e6c-bfa7-1701a10c2bed_3.jpg',
+                        description: 'Mantenha a coluna estável e puxe a barra até o abdômen com controle.'
+                    },
+                    'Pulldown': {
+                        image: './1789409500843-d61b4ec1-6a6c-4e6c-bfa7-1701a10c2bed_3.jpg',
+                        description: 'Puxe a barra para baixo com ombros baixos e mantenha o tronco firme.'
+                    },
+                    'Elevação Lateral': {
+                        image: './1789409500843-d61b4ec1-6a6c-4e6c-bfa7-1701a10c2bed_3.jpg',
+                        description: 'Eleve os braços com controle até a linha do ombro e mantenha o movimento limpo.'
+                    },
+                    'Rosca Martelo': {
+                        image: './1789409500843-d61b4ec1-6a6c-4e6c-bfa7-1701a10c2bed_3.jpg',
+                        description: 'Levante com pegada neutra e mantenha os cotovelos estáveis durante a execução.'
+                    },
+                    'Panturrilha em Pé': {
+                        image: './1789409500843-d61b4ec1-6a6c-4e6c-bfa7-1701a10c2bed_3.jpg',
+                        description: 'Eleve os calcanhares com controle e mantenha o movimento sempre controlado.'
+                    },
+                    'Elevação de Pernas': {
+                        image: './1789409500843-d61b4ec1-6a6c-4e6c-bfa7-1701a10c2bed_3.jpg',
+                        description: 'Dobre o quadril e mantenha o core firme para controlar a descida.'
+                    },
+                    'Crucifixo': {
+                        image: './ChatGPT Image 14 de set. de 2026, 14_53_50.png',
+                        description: 'Abaixe as alças com os cotovelos levemente fletidos e mantenha o movimento controlado.'
                     }
                 };
 
