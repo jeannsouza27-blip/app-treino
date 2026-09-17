@@ -8,7 +8,10 @@
     <title>Projeto Shape - Jeann</title>
     
     <link rel="manifest" href="./manifest.json">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
         * {
             margin: 0;
@@ -56,7 +59,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background:
                 radial-gradient(circle at top, rgba(37, 99, 235, 0.18), transparent 28%),
                 linear-gradient(180deg, #edf4ff 0%, #e4eefc 35%, #eef8f6 100%);
@@ -493,6 +496,7 @@
         }
 
         .btn-primary:hover {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
             opacity: 0.96;
             transform: translateY(-1px);
         }
@@ -511,6 +515,11 @@
             background: var(--success);
             color: white;
             border-color: var(--success);
+        }
+
+        .btn-success:hover {
+            background: var(--success);
+            opacity: 0.92;
         }
 
         .btn-group {
@@ -644,6 +653,7 @@
             padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 6px);
             backdrop-filter: blur(10px);
             box-shadow: 0 -12px 24px rgba(2, 6, 23, 0.45);
+            z-index: 100;
         }
 
         .nav-btn {
@@ -948,6 +958,410 @@
             height: 250px;
             margin-bottom: 1rem;
         }
+
+        /* ===== Icons ===== */
+        .icon {
+            width: 1em;
+            height: 1em;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .icon-btn .icon { width: 20px; height: 20px; color: #fff; }
+        .nav-btn-icon .icon { width: 22px; height: 22px; }
+        .nav-btn.active .nav-btn-icon .icon { color: #ffffff; }
+
+        /* ===== Exercise groups & records ===== */
+        .exercise-card {
+            animation: cardIn 0.3s ease;
+        }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .exercise-card.flash-success {
+            animation: flashSuccess 0.7s ease;
+        }
+
+        @keyframes flashSuccess {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.55); }
+            40% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.22); }
+            100% { box-shadow: 0 12px 26px rgba(15, 23, 42, 0.06); }
+        }
+
+        .input-field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .input-field label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            padding-left: 2px;
+        }
+
+        input[type="number"],
+        input[type="text"] {
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input[type="number"]:focus,
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .btn-record {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+        }
+
+        .btn-record .icon { width: 18px; height: 18px; }
+
+        .btn-record:hover {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+        }
+
+        .btn-edit-cancel {
+            background: transparent;
+            border: 1px dashed var(--border);
+            color: var(--text-secondary);
+            margin-top: 8px;
+        }
+
+        .btn-edit-cancel:hover {
+            background: rgba(148, 163, 184, 0.12);
+        }
+
+        .today-records {
+            background: rgba(148, 163, 184, 0.08);
+            border-radius: 12px;
+            padding: 0.85rem 0.9rem;
+            margin-top: 0.9rem;
+            border: 1px solid rgba(148, 163, 184, 0.16);
+        }
+
+        .today-records-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 0.55rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .record-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 2px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            border-bottom: 1px dashed rgba(148, 163, 184, 0.28);
+            cursor: pointer;
+            transition: background 0.15s ease;
+            border-radius: 8px;
+        }
+
+        .record-item:hover {
+            background: rgba(37, 99, 235, 0.06);
+        }
+
+        .record-item:last-child {
+            border-bottom: none;
+        }
+
+        .record-main {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .set-badge {
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 26px;
+            height: 22px;
+            padding: 0 6px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 0.02em;
+        }
+
+        .set-badge.s1 { background: linear-gradient(135deg, #2563eb, #3b82f6); }
+        .set-badge.s2 { background: linear-gradient(135deg, #0ea5e9, #22d3ee); }
+        .set-badge.s3 { background: linear-gradient(135deg, #10b981, #34d399); }
+        .set-badge.s4 { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
+        .set-badge.s5 { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+        .set-badge.s0 { background: linear-gradient(135deg, #64748b, #94a3b8); }
+
+        .record-delete {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+        }
+
+        .record-delete:hover { background: rgba(239, 68, 68, 0.12); }
+        .record-delete .icon { width: 15px; height: 15px; }
+
+        /* ===== Finalize workout ===== */
+        .finish-workout-bar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: calc(env(safe-area-inset-bottom, 0px) + 76px);
+            max-width: 520px;
+            margin: 0 auto;
+            padding: 0 1.15rem;
+            z-index: 96;
+            pointer-events: none;
+        }
+
+        .finish-workout-bar .btn-finish {
+            pointer-events: auto;
+        }
+
+        /* spacer so the last exercise card isn't hidden behind the fixed bar */
+        .finish-workout-spacer {
+            height: 76px;
+        }
+
+        .btn-finish {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            min-height: 54px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 16px 30px rgba(5, 150, 105, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-finish:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 36px rgba(5, 150, 105, 0.36);
+        }
+
+        .btn-finish .icon { width: 20px; height: 20px; }
+
+        /* ===== Toast ===== */
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: calc(env(safe-area-inset-bottom, 0px) + 96px);
+            transform: translateX(-50%) translateY(20px);
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #fff;
+            padding: 0.85rem 1.25rem;
+            border-radius: 14px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 16px 32px rgba(5, 150, 105, 0.35);
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            max-width: min(90vw, 420px);
+            text-align: center;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ===== Workout history (Progress tab) ===== */
+        .history-summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 1rem 0;
+        }
+
+        .history-entry {
+            background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(239, 246, 255, 0.96) 100%);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            border-radius: 16px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 22px rgba(15, 23, 42, 0.05);
+        }
+
+        .history-entry summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 0.9rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .history-entry summary::-webkit-details-marker { display: none; }
+
+        .history-entry-date {
+            font-weight: 800;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .history-entry-meta {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .history-chevron {
+            transition: transform 0.2s ease;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        .history-entry[open] .history-chevron {
+            transform: rotate(180deg);
+        }
+
+        .history-entry-body {
+            padding: 0 1rem 1rem;
+            border-top: 1px solid rgba(148, 163, 184, 0.18);
+        }
+
+        .history-exercise-row {
+            padding: 0.65rem 0;
+            border-bottom: 1px dashed rgba(148, 163, 184, 0.25);
+        }
+
+        .history-exercise-row:last-child { border-bottom: none; }
+
+        .history-exercise-name {
+            font-weight: 700;
+            font-size: 0.86rem;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .history-sets-line {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        /* ===== Admin exercises panel ===== */
+        .admin-day-select {
+            width: 100%;
+            min-height: 46px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.9);
+            color: var(--text-primary);
+            padding: 0.6rem 0.7rem;
+            margin-bottom: 0.9rem;
+        }
+
+        .admin-exercise-row {
+            display: grid;
+            grid-template-columns: 52px 1fr auto;
+            gap: 0.7rem;
+            align-items: center;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 0.6rem;
+            margin-bottom: 0.6rem;
+            background: rgba(255,255,255,0.75);
+        }
+
+        .admin-exercise-thumb {
+            width: 52px;
+            height: 52px;
+            border-radius: 10px;
+            object-fit: cover;
+            background: rgba(37, 99, 235, 0.08);
+        }
+
+        .admin-exercise-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .admin-icon-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.9);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+        }
+
+        .admin-icon-btn .icon { width: 15px; height: 15px; }
+        .admin-icon-btn:hover { background: rgba(37, 99, 235, 0.1); }
+
+        .admin-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.6rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .admin-form-grid .full { grid-column: 1 / -1; }
+
+        .admin-form-grid input,
+        .admin-form-grid textarea {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.9);
+            color: var(--text-primary);
+            padding: 0.6rem 0.7rem;
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+
+        .admin-form-grid textarea { resize: vertical; min-height: 60px; }
+
+        .section-divider {
+            border: none;
+            border-top: 1px solid rgba(148, 163, 184, 0.25);
+            margin: 1.1rem 0;
+        }
     </style>
 </head>
 <body>
@@ -1000,8 +1414,12 @@
         <header>
             <h1>💪 Projeto Shape - Jeann</h1>
             <div class="header-icons">
-                <button class="icon-btn" onclick="app.toggleSettings()">⚙️</button>
-                <button class="icon-btn" onclick="app.toggleNotifications()">🔔</button>
+                <button class="icon-btn" onclick="app.toggleSettings()" aria-label="Configurações">
+                    <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                </button>
+                <button class="icon-btn" onclick="app.toggleNotifications()" aria-label="Notificações">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                </button>
             </div>
         </header>
 
@@ -1049,27 +1467,27 @@
         <!-- BOTTOM NAVIGATION -->
         <div class="bottom-nav">
             <button class="nav-btn active" onclick="app.switchTab('programs')">
-                <span class="nav-btn-icon">🏠</span>
+                <span class="nav-btn-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><path d="M9 22V12h6v10"></path></svg></span>
                 <span>Início</span>
             </button>
             <button class="nav-btn" onclick="app.switchTab('workout')">
-                <span class="nav-btn-icon">🏋️</span>
+                <span class="nav-btn-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M6.5 6.5l11 11"></path><path d="M21 21l-1.5-1.5M3 3l1.5 1.5"></path><path d="M18.5 3l2.5 2.5-2.5 2.5M18.5 3L15 6.5"></path><path d="M5.5 21l-2.5-2.5 2.5-2.5M5.5 21L9 17.5"></path><path d="M2.5 5.5l3 3M18.5 18.5l3 3"></path><rect x="14.5" y="14.5" width="2" height="2" rx="0.5" transform="rotate(45 15.5 15.5)"></rect></svg></span>
                 <span>Treino</span>
             </button>
             <button class="nav-btn" onclick="app.switchTab('progress')">
-                <span class="nav-btn-icon">📊</span>
+                <span class="nav-btn-icon"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></span>
                 <span>Progresso</span>
             </button>
             <button class="nav-btn" onclick="app.switchTab('nutrition')">
-                <span class="nav-btn-icon">🥗</span>
+                <span class="nav-btn-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 4 13V9a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v4a7 7 0 0 1-7 7z"></path><path d="M11 8V4a2 2 0 0 1 4 0"></path><path d="M4 13h14"></path></svg></span>
                 <span>Nutrição</span>
             </button>
             <button class="nav-btn" onclick="app.switchTab('supplements')">
-                <span class="nav-btn-icon">💊</span>
+                <span class="nav-btn-icon"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="6" rx="3" transform="rotate(-45 12 12)"></rect><line x1="8.5" y1="15.5" x2="12" y2="12"></line></svg></span>
                 <span>Supl.</span>
             </button>
             <button class="nav-btn" onclick="app.switchTab('coach')">
-                <span class="nav-btn-icon">🤖</span>
+                <span class="nav-btn-icon"><svg class="icon" viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="12" rx="3"></rect><path d="M12 8V4"></path><circle cx="12" cy="3" r="1"></circle><line x1="9" y1="13" x2="9" y2="15"></line><line x1="15" y1="13" x2="15" y2="15"></line><line x1="4" y1="13" x2="2" y2="13"></line><line x1="22" y1="13" x2="20" y2="13"></line></svg></span>
                 <span>Coach</span>
             </button>
         </div>
@@ -1091,6 +1509,7 @@
             <button class="btn" onclick="app.showProfileSetup()" style="margin-top: 8px;">Editar perfil</button>
             <button class="btn" onclick="app.openChangePasswordModal()" style="margin-top: 8px;">Trocar senha</button>
             <button id="adminAccountsBtn" class="btn" onclick="app.openAdminPanel()" style="margin-top: 8px; display: none;">Gerenciar contas</button>
+            <button id="adminExercisesBtn" class="btn" onclick="app.openAdminExercisesPanel()" style="margin-top: 8px; display: none;">Gerenciar exercícios</button>
             <button class="btn" onclick="app.logout()" style="margin-top: 8px;">Sair</button>
             <button class="btn" onclick="app.toggleSettings()" style="margin-top: 8px;">Fechar</button>
         </div>
@@ -1136,6 +1555,58 @@
             <p class="modal-subtitle">Veja as contas cadastradas e redefina a senha de qualquer usuário que não conseguir entrar.</p>
             <div id="adminUsersList" style="display: grid; gap: 0.75rem;"></div>
             <button class="btn" onclick="app.closeAdminPanel()" style="margin-top: 12px;">Fechar</button>
+        </div>
+    </div>
+
+    <div id="finishWorkoutModal" class="modal" onclick="if(event.target === this) app.closeFinishWorkoutModal()">
+        <div class="modal-content" style="border-top: 4px solid #10b981;">
+            <h2 class="modal-title">Finalizar treino</h2>
+            <p class="modal-subtitle">Deseja finalizar o treino de hoje? Os registros serão salvos no histórico e a área "Registros de hoje" será limpa para o próximo treino.</p>
+            <button class="btn btn-finish" onclick="app.finalizeWorkout()">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg>
+                Confirmar e finalizar
+            </button>
+            <button class="btn" onclick="app.closeFinishWorkoutModal()" style="margin-top: 8px;">Cancelar</button>
+        </div>
+    </div>
+
+    <div id="adminExercisesModal" class="modal" onclick="if(event.target === this) app.closeAdminExercisesPanel()">
+        <div class="modal-content" style="border-top: 4px solid #16a34a; max-width: 480px;">
+            <h2 class="modal-title">Gerenciar exercícios</h2>
+            <p class="modal-subtitle">Adicione, edite ou remova exercícios, defina fotos de demonstração e organize a ordem de cada dia de treino.</p>
+
+            <label style="display:block; margin-bottom:0.35rem; color: var(--text-secondary); font-size:0.85rem;">Dia de treino</label>
+            <select id="adminDaySelect" class="admin-day-select" onchange="app.resetExerciseForm(); app.renderAdminExercisesPanel()"></select>
+
+            <div style="display:flex; gap:8px; margin-bottom: 1rem;">
+                <button class="btn" onclick="app.promptNewProgramDay()" style="font-size:0.82rem; min-height:38px;">+ Novo dia</button>
+                <button class="btn btn-danger" onclick="app.deleteProgramDay()" style="font-size:0.82rem; min-height:38px;">Excluir dia</button>
+            </div>
+
+            <div id="adminExercisesList"></div>
+
+            <hr class="section-divider" />
+
+            <h3 id="adminExerciseFormTitle" style="font-size:0.95rem; font-weight:700; margin-bottom:0.6rem;">Adicionar exercício</h3>
+            <div class="admin-form-grid">
+                <input id="adminExName" type="text" placeholder="Nome do exercício" class="full" />
+                <input id="adminExSets" type="number" min="1" placeholder="Séries" />
+                <input id="adminExReps" type="text" placeholder="Reps (ex: 8-12)" />
+                <textarea id="adminExDesc" placeholder="Descrição / instrução de execução" class="full"></textarea>
+                <label class="btn full" style="display:flex; align-items:center; justify-content:center; cursor:pointer; margin:0;">
+                    <svg class="icon" viewBox="0 0 24 24" style="margin-right:6px;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                    Foto de demonstração
+                    <input id="adminExPhoto" type="file" accept="image/jpeg,image/png,image/webp" onchange="app.previewAdminExercisePhoto(this)" style="display:none;" />
+                </label>
+                <img id="adminExPhotoPreview" class="admin-exercise-thumb full" style="display:none; width:100%; height:120px; margin-top:0.4rem;" />
+            </div>
+
+            <div style="display:flex; gap:8px;">
+                <button id="adminExSaveBtn" class="btn btn-primary" onclick="app.saveExerciseForm()">Adicionar exercício</button>
+                <button id="adminExCancelBtn" class="btn" onclick="app.resetExerciseForm()" style="display:none;">Cancelar</button>
+            </div>
+
+            <button class="btn" onclick="app.closeAdminExercisesPanel()" style="margin-top: 12px;">Fechar</button>
         </div>
     </div>
 
@@ -1193,7 +1664,7 @@
     <script>
         class TreinoApp {
             constructor() {
-                this.programs = [
+                this.defaultPrograms = [
                     {
                         id: 'fullbody',
                         name: 'Full Body A',
@@ -1282,6 +1753,8 @@
                         ]
                     }
                 ];
+
+                this.programs = this.loadPrograms();
 
                 this.exerciseGuide = {
                     'Agachamento Livre': {
@@ -1409,6 +1882,10 @@
                 };
 
                 this.pendingProfilePhoto = null;
+                this.editingExercise = null;
+                this.flashExerciseIndex = null;
+                this.pendingAdminExercisePhoto = null;
+                this.editingAdminExerciseIndex = null;
 
                 this.state = {
                     selectedProgram: null,
@@ -1431,7 +1908,8 @@
                         zma: false,
                         omega3: false
                     },
-                    profile: { ...this.defaultProfile }
+                    profile: { ...this.defaultProfile },
+                    workoutHistory: []
                 };
 
                 this.loadState();
@@ -1483,9 +1961,30 @@
                         notifications: true,
                         startDate: new Date().toISOString().split('T')[0],
                         weightHistory: [],
-                        profile: { ...this.defaultProfile }
+                        profile: { ...this.defaultProfile },
+                        workoutHistory: []
                     };
                 }
+
+                if (!Array.isArray(this.state.workoutHistory)) {
+                    this.state.workoutHistory = [];
+                }
+            }
+
+            loadPrograms() {
+                try {
+                    const saved = localStorage.getItem('meuTreino_programs');
+                    if (!saved) return this.defaultPrograms;
+                    const parsed = JSON.parse(saved);
+                    if (!Array.isArray(parsed) || !parsed.length) return this.defaultPrograms;
+                    return parsed;
+                } catch (error) {
+                    return this.defaultPrograms;
+                }
+            }
+
+            savePrograms() {
+                localStorage.setItem('meuTreino_programs', JSON.stringify(this.programs));
             }
 
             validateSession() {
@@ -1971,6 +2470,250 @@
                 this.saveState();
             }
 
+            openAdminExercisesPanel() {
+                if (!this.isAdminUser()) {
+                    alert('Acesso restrito ao administrador.');
+                    return;
+                }
+
+                this.populateAdminDaySelect();
+                this.resetExerciseForm();
+                this.renderAdminExercisesPanel();
+
+                const modal = document.getElementById('adminExercisesModal');
+                if (modal) modal.classList.add('active');
+            }
+
+            closeAdminExercisesPanel() {
+                const modal = document.getElementById('adminExercisesModal');
+                if (modal) modal.classList.remove('active');
+            }
+
+            populateAdminDaySelect() {
+                const select = document.getElementById('adminDaySelect');
+                if (!select) return;
+
+                const previous = select.value;
+                select.innerHTML = this.programs.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+
+                if (previous && this.programs.some(p => p.id === previous)) {
+                    select.value = previous;
+                }
+            }
+
+            getAdminSelectedProgram() {
+                const select = document.getElementById('adminDaySelect');
+                const id = select?.value || this.programs[0]?.id;
+                return this.programs.find(p => p.id === id) || this.programs[0];
+            }
+
+            renderAdminExercisesPanel() {
+                const list = document.getElementById('adminExercisesList');
+                const program = this.getAdminSelectedProgram();
+                if (!list || !program) return;
+
+                if (!program.exercises.length) {
+                    list.innerHTML = '<p style="color: var(--text-secondary); font-size: 0.85rem; padding: 0.5rem 0;">Nenhum exercício neste dia ainda.</p>';
+                    return;
+                }
+
+                list.innerHTML = program.exercises.map((ex, i) => {
+                    const guide = this.exerciseGuide?.[ex.name] || {};
+                    const image = ex.image || guide.image || 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=200&q=60';
+                    return `
+                        <div class="admin-exercise-row">
+                            <img class="admin-exercise-thumb" src="${image}" alt="${ex.name}" />
+                            <div style="min-width:0;">
+                                <div style="font-weight:700; font-size:0.88rem; color: var(--text-primary); overflow-wrap:anywhere;">${ex.name}</div>
+                                <div style="font-size:0.76rem; color: var(--text-secondary);">${ex.sets} séries × ${ex.reps} reps</div>
+                            </div>
+                            <div class="admin-exercise-actions">
+                                <button class="admin-icon-btn" onclick="app.moveExercise(${i}, -1)" aria-label="Mover para cima" ${i === 0 ? 'disabled' : ''}>
+                                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 19V5"></path><path d="M5 12l7-7 7 7"></path></svg>
+                                </button>
+                                <button class="admin-icon-btn" onclick="app.moveExercise(${i}, 1)" aria-label="Mover para baixo" ${i === program.exercises.length - 1 ? 'disabled' : ''}>
+                                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14"></path><path d="M19 12l-7 7-7-7"></path></svg>
+                                </button>
+                                <button class="admin-icon-btn" onclick="app.editExercisePrefill(${i})" aria-label="Editar">
+                                    <svg class="icon" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"></path></svg>
+                                </button>
+                                <button class="admin-icon-btn" onclick="app.deleteExercise(${i})" aria-label="Excluir" style="color: var(--danger);">
+                                    <svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            promptNewProgramDay() {
+                const name = prompt('Nome do novo dia de treino (ex: Treino C):');
+                if (!name || !name.trim()) return;
+
+                const desc = prompt('Descrição curta (ex: Foco em pernas e ombros):', '') || '';
+                const days = Number(prompt('Quantas vezes por semana?', '3')) || 3;
+                const difficulty = prompt('Nível (Iniciante, Intermediário, Avançado):', 'Intermediário') || 'Intermediário';
+
+                const id = 'custom_' + Date.now();
+                this.programs.push({ id, name: name.trim(), desc, days, difficulty, exercises: [] });
+                this.savePrograms();
+                this.populateAdminDaySelect();
+                document.getElementById('adminDaySelect').value = id;
+                this.resetExerciseForm();
+                this.renderAdminExercisesPanel();
+                this.renderPrograms();
+            }
+
+            deleteProgramDay() {
+                if (this.programs.length <= 1) {
+                    alert('É preciso manter ao menos um dia de treino.');
+                    return;
+                }
+
+                const program = this.getAdminSelectedProgram();
+                if (!program) return;
+                if (!confirm(`Excluir o dia "${program.name}"? Essa ação não pode ser desfeita.`)) return;
+
+                this.programs = this.programs.filter(p => p.id !== program.id);
+                this.savePrograms();
+
+                if (this.state.selectedProgram === program.id) {
+                    this.state.selectedProgram = this.programs[0].id;
+                    this.saveState();
+                }
+
+                this.populateAdminDaySelect();
+                this.resetExerciseForm();
+                this.renderAdminExercisesPanel();
+                this.renderPrograms();
+                this.renderWorkout();
+            }
+
+            moveExercise(index, direction) {
+                const program = this.getAdminSelectedProgram();
+                if (!program) return;
+
+                const target = index + direction;
+                if (target < 0 || target >= program.exercises.length) return;
+
+                const [item] = program.exercises.splice(index, 1);
+                program.exercises.splice(target, 0, item);
+                this.savePrograms();
+                this.renderAdminExercisesPanel();
+                this.renderWorkout();
+            }
+
+            deleteExercise(index) {
+                const program = this.getAdminSelectedProgram();
+                if (!program) return;
+
+                const ex = program.exercises[index];
+                if (!ex || !confirm(`Remover "${ex.name}" deste dia de treino?`)) return;
+
+                program.exercises.splice(index, 1);
+                this.savePrograms();
+
+                if (this.editingAdminExerciseIndex === index) this.resetExerciseForm();
+
+                this.renderAdminExercisesPanel();
+                this.renderWorkout();
+            }
+
+            editExercisePrefill(index) {
+                const program = this.getAdminSelectedProgram();
+                const ex = program?.exercises[index];
+                if (!ex) return;
+
+                this.editingAdminExerciseIndex = index;
+                this.pendingAdminExercisePhoto = null;
+
+                document.getElementById('adminExName').value = ex.name || '';
+                document.getElementById('adminExSets').value = ex.sets || '';
+                document.getElementById('adminExReps').value = ex.reps || '';
+                document.getElementById('adminExDesc').value = ex.description || this.exerciseGuide?.[ex.name]?.description || '';
+
+                const preview = document.getElementById('adminExPhotoPreview');
+                const image = ex.image || this.exerciseGuide?.[ex.name]?.image || '';
+                if (preview) {
+                    preview.src = image;
+                    preview.style.display = image ? 'block' : 'none';
+                }
+
+                document.getElementById('adminExerciseFormTitle').textContent = 'Editar exercício';
+                document.getElementById('adminExSaveBtn').textContent = 'Salvar alterações';
+                document.getElementById('adminExCancelBtn').style.display = 'inline-block';
+            }
+
+            resetExerciseForm() {
+                this.editingAdminExerciseIndex = null;
+                this.pendingAdminExercisePhoto = null;
+
+                const nameInput = document.getElementById('adminExName');
+                if (!nameInput) return;
+
+                nameInput.value = '';
+                document.getElementById('adminExSets').value = '';
+                document.getElementById('adminExReps').value = '';
+                document.getElementById('adminExDesc').value = '';
+                document.getElementById('adminExPhoto').value = '';
+
+                const preview = document.getElementById('adminExPhotoPreview');
+                preview.src = '';
+                preview.style.display = 'none';
+
+                document.getElementById('adminExerciseFormTitle').textContent = 'Adicionar exercício';
+                document.getElementById('adminExSaveBtn').textContent = 'Adicionar exercício';
+                document.getElementById('adminExCancelBtn').style.display = 'none';
+            }
+
+            previewAdminExercisePhoto(input) {
+                const file = input?.files?.[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = () => {
+                    this.pendingAdminExercisePhoto = reader.result;
+                    const preview = document.getElementById('adminExPhotoPreview');
+                    preview.src = reader.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+
+            saveExerciseForm() {
+                const program = this.getAdminSelectedProgram();
+                if (!program) return;
+
+                const name = document.getElementById('adminExName').value.trim();
+                const sets = Number(document.getElementById('adminExSets').value);
+                const reps = document.getElementById('adminExReps').value.trim();
+                const description = document.getElementById('adminExDesc').value.trim();
+
+                if (!name || !sets || !reps) {
+                    alert('Preencha nome, séries e repetições do exercício.');
+                    return;
+                }
+
+                const isEditing = this.editingAdminExerciseIndex !== null && this.editingAdminExerciseIndex !== undefined;
+                const existing = isEditing ? program.exercises[this.editingAdminExerciseIndex] : null;
+                const image = this.pendingAdminExercisePhoto !== null
+                    ? this.pendingAdminExercisePhoto
+                    : (existing?.image || this.exerciseGuide?.[name]?.image || '');
+
+                const exerciseData = { name, sets, reps, description, image };
+
+                if (isEditing && existing) {
+                    program.exercises[this.editingAdminExerciseIndex] = exerciseData;
+                } else {
+                    program.exercises.push(exerciseData);
+                }
+
+                this.savePrograms();
+                this.resetExerciseForm();
+                this.renderAdminExercisesPanel();
+                this.renderWorkout();
+            }
+
             renderPrograms() {
                 const grid = document.getElementById('programsGrid');
                 const profile = this.state.profile || {};
@@ -2055,16 +2798,6 @@
                 const objetivo = profile.objetivo === 'hipertrofia' ? 'músculo' : 'definição';
                 const fase = gorduraAtual > 18 ? 'Mantenha o foco e avance de forma inteligente.' : 'Você está no caminho certo para a sua melhor versão.';
                 return `Jeann, seu foco agora é ${objetivo} e sua evolução está no caminho certo. ${fase}`;
-            }
-
-            completeWorkout(programId) {
-                if (!this.state.completedWorkouts) {
-                    this.state.completedWorkouts = {};
-                }
-
-                this.state.completedWorkouts[programId] = true;
-                this.saveState();
-                this.renderWorkout();
             }
 
             toggleMeal(meal) {
@@ -2256,10 +2989,12 @@
                             <div class="alert-text">${program.id === 'fullbody' ? 'Inicie o Treino B amanhã para continuar a sequência.' : 'Hoje é o dia do Treino A. Volte amanhã para repetir a rotina.'}</div>
                         </div>
                     `;
-                } else {
-                    html += `
-                        <button class="btn btn-primary" onclick="app.completeWorkout('${program.id}')" style="margin-bottom: 1rem; width: 100%;">Concluir treino</button>
-                    `;
+                }
+
+                if (!program.exercises.length) {
+                    html += '<p style="color: var(--text-secondary); text-align: center; padding: 2rem;">Nenhum exercício cadastrado para este dia ainda.</p>';
+                    document.getElementById('workoutContent').innerHTML = html;
+                    return;
                 }
 
                 html += program.exercises.map((ex, i) => {
@@ -2267,41 +3002,93 @@
                         image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=900&q=80',
                         description: 'Faça com controle, mantendo a técnica correta e o movimento estável.'
                     };
+                    const image = ex.image || guide.image;
+                    const description = ex.description || guide.description;
+
+                    const key = `${this.state.selectedProgram}_${ex.name}_${this.state.currentDay}`;
+                    const records = this.state.workoutLog[key] || [];
+                    const editing = this.editingExercise && this.editingExercise.index === i ? this.editingExercise : null;
+                    const editingRecord = editing ? records[editing.recIndex] : null;
+
+                    const prefillSet = editingRecord ? editingRecord.set : (records.length + 1);
+                    const prefillReps = editingRecord ? editingRecord.reps : '';
+                    const prefillWeight = editingRecord ? editingRecord.weight : (records.length ? records[records.length - 1].weight : '');
+
+                    const recordsHtml = records.map((r, ri) => {
+                        const badgeClass = r.set >= 1 && r.set <= 5 ? `s${r.set}` : 's0';
+                        return `
+                            <div class="record-item">
+                                <div class="record-main" onclick="app.editRecord(${i}, ${ri})">
+                                    <span class="set-badge ${badgeClass}">S${r.set}</span>
+                                    <span>${r.reps} reps × ${r.weight}kg</span>
+                                </div>
+                                <button class="record-delete" onclick="event.stopPropagation(); app.deleteRecord('${key}', ${ri})" aria-label="Excluir registro">
+                                    <svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>
+                                </button>
+                            </div>
+                        `;
+                    }).join('');
 
                     return `
-                        <div class="workout-card">
+                        <div class="workout-card exercise-card${this.flashExerciseIndex === i ? ' flash-success' : ''}">
                             <div class="exercise-head">
                                 <div class="exercise-thumb">
-                                    <img class="exercise-image" src="${guide.image}" alt="${ex.name}" />
+                                    <img class="exercise-image" src="${image}" alt="${ex.name}" />
                                 </div>
                                 <div class="exercise-body">
                                     <div class="exercise-title">${ex.name}</div>
                                     <div class="exercise-meta">${ex.sets} séries × ${ex.reps} reps</div>
-                                    <div class="exercise-description">${guide.description}</div>
+                                    <div class="exercise-description">${description}</div>
                                 </div>
                             </div>
                             <div class="input-group">
-                                <input type="number" id="set-${i}" placeholder="Série" />
-                                <input type="number" id="reps-${i}" placeholder="Reps" />
-                                <input type="number" id="weight-${i}" placeholder="Peso" step="0.5" />
+                                <div class="input-field">
+                                    <label for="set-${i}">Série</label>
+                                    <input type="number" id="set-${i}" placeholder="Nº" value="${prefillSet}" />
+                                </div>
+                                <div class="input-field">
+                                    <label for="reps-${i}">Reps</label>
+                                    <input type="number" id="reps-${i}" placeholder="Reps" value="${prefillReps}" />
+                                </div>
+                                <div class="input-field">
+                                    <label for="weight-${i}">Peso (kg)</label>
+                                    <input type="number" id="weight-${i}" placeholder="Peso" step="0.5" value="${prefillWeight}" />
+                                </div>
                             </div>
-                            <button class="btn btn-primary" onclick="app.recordExercise(${i}, '${ex.name}')">+ Registrar</button>
-                            <div id="records-${i}" class="today-records" style="display: none;">
+                            <button class="btn btn-primary btn-record" onclick="app.recordExercise(${i}, '${ex.name}')">
+                                <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>
+                                ${editing ? 'Salvar edição' : 'Registrar'}
+                            </button>
+                            ${editing ? `<button class="btn btn-edit-cancel" onclick="app.cancelEditRecord()">Cancelar edição</button>` : ''}
+                            <div id="records-${i}" class="today-records" style="display: ${records.length ? 'block' : 'none'};">
                                 <div class="today-records-title">Registros de hoje</div>
-                                <div id="records-list-${i}"></div>
+                                <div id="records-list-${i}">${recordsHtml}</div>
                             </div>
                         </div>
                     `;
                 }).join('');
 
+                html += `
+                    <div class="finish-workout-spacer"></div>
+                    <div class="finish-workout-bar">
+                        <button class="btn-finish" onclick="app.openFinishWorkoutModal()">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg>
+                            Finalizar Treino
+                        </button>
+                    </div>
+                `;
+
                 document.getElementById('workoutContent').innerHTML = html;
-                this.loadRecords(program.exercises);
+                this.flashExerciseIndex = null;
             }
 
             recordExercise(index, name) {
-                const setVal = document.getElementById(`set-${index}`)?.value;
-                const repsVal = document.getElementById(`reps-${index}`)?.value;
-                const weightVal = document.getElementById(`weight-${index}`)?.value;
+                const setInput = document.getElementById(`set-${index}`);
+                const repsInput = document.getElementById(`reps-${index}`);
+                const weightInput = document.getElementById(`weight-${index}`);
+                const setVal = setInput?.value;
+                const repsVal = repsInput?.value;
+                const weightVal = weightInput?.value;
 
                 if (!setVal || !repsVal || !weightVal) {
                     alert('Preencha todos os campos');
@@ -2311,45 +3098,118 @@
                 const key = `${this.state.selectedProgram}_${name}_${this.state.currentDay}`;
                 if (!this.state.workoutLog[key]) this.state.workoutLog[key] = [];
 
-                this.state.workoutLog[key].push({
+                const entry = {
                     set: parseInt(setVal),
                     reps: parseInt(repsVal),
                     weight: parseFloat(weightVal)
-                });
+                };
+
+                const editing = this.editingExercise && this.editingExercise.index === index ? this.editingExercise : null;
+                if (editing) {
+                    this.state.workoutLog[key][editing.recIndex] = entry;
+                    this.editingExercise = null;
+                } else {
+                    this.state.workoutLog[key].push(entry);
+                }
 
                 this.saveState();
-                document.getElementById(`set-${index}`).value = '';
-                document.getElementById(`reps-${index}`).value = '';
-                document.getElementById(`weight-${index}`).value = '';
+                this.flashExerciseIndex = index;
                 this.renderWorkout();
             }
 
-            loadRecords(exercises) {
-                exercises.forEach((ex, i) => {
-                    const key = `${this.state.selectedProgram}_${ex.name}_${this.state.currentDay}`;
-                    const records = this.state.workoutLog[key] || [];
-                    
-                    if (records.length > 0) {
-                        const container = document.getElementById(`records-${i}`);
-                        if (container) {
-                            container.style.display = 'block';
-                            container.querySelector('#records-list-' + i).innerHTML = records.map((r, ri) => `
-                                <div class="record-item">
-                                    <span><strong>S${r.set}:</strong> ${r.reps}x${r.weight}kg</span>
-                                    <button onclick="app.deleteRecord('${key}', ${ri})" style="background: none; border: none; color: var(--danger); cursor: pointer;">✕</button>
-                                </div>
-                            `).join('');
-                        }
-                    }
-                });
+            editRecord(exIndex, recIndex) {
+                this.editingExercise = { index: exIndex, recIndex };
+                this.renderWorkout();
+            }
+
+            cancelEditRecord() {
+                this.editingExercise = null;
+                this.renderWorkout();
             }
 
             deleteRecord(key, index) {
                 if (this.state.workoutLog[key]) {
                     this.state.workoutLog[key].splice(index, 1);
+                    if (this.editingExercise) this.editingExercise = null;
                     this.saveState();
                     this.renderWorkout();
                 }
+            }
+
+            showToast(message) {
+                const existing = document.querySelector('.toast');
+                if (existing) existing.remove();
+
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.textContent = message;
+                document.body.appendChild(toast);
+
+                requestAnimationFrame(() => toast.classList.add('show'));
+
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 300);
+                }, 2600);
+            }
+
+            openFinishWorkoutModal() {
+                const modal = document.getElementById('finishWorkoutModal');
+                if (modal) modal.classList.add('active');
+            }
+
+            closeFinishWorkoutModal() {
+                const modal = document.getElementById('finishWorkoutModal');
+                if (modal) modal.classList.remove('active');
+            }
+
+            finalizeWorkout() {
+                const program = this.programs.find(p => p.id === this.state.selectedProgram);
+                if (!program) {
+                    this.closeFinishWorkoutModal();
+                    return;
+                }
+
+                const day = this.state.currentDay;
+                const keysToClear = [];
+                const exercisesLog = [];
+
+                program.exercises.forEach(ex => {
+                    const key = `${program.id}_${ex.name}_${day}`;
+                    const records = this.state.workoutLog[key];
+                    if (records && records.length) {
+                        exercisesLog.push({ name: ex.name, sets: records.map(r => ({ ...r })) });
+                        keysToClear.push(key);
+                    }
+                });
+
+                if (!exercisesLog.length) {
+                    this.closeFinishWorkoutModal();
+                    alert('Nenhum registro feito hoje para salvar no histórico.');
+                    return;
+                }
+
+                if (!Array.isArray(this.state.workoutHistory)) this.state.workoutHistory = [];
+
+                this.state.workoutHistory.push({
+                    id: `${day}_${program.id}_${Date.now()}`,
+                    date: day,
+                    programId: program.id,
+                    programName: program.name,
+                    exercises: exercisesLog
+                });
+
+                keysToClear.forEach(key => delete this.state.workoutLog[key]);
+
+                if (!this.state.completedWorkouts) this.state.completedWorkouts = {};
+                this.state.completedWorkouts[program.id] = true;
+
+                this.editingExercise = null;
+                this.saveState();
+                this.closeFinishWorkoutModal();
+                this.renderWorkout();
+                this.renderProgress();
+                this.showToast('Treino finalizado! Bom descanso 💪');
             }
 
             renderProgress() {
@@ -2432,7 +3292,75 @@
                     });
                 }
 
+                html += this.renderWorkoutHistoryHtml();
+
                 document.getElementById('progressContent').innerHTML = html;
+            }
+
+            renderWorkoutHistoryHtml() {
+                const history = Array.isArray(this.state.workoutHistory) ? [...this.state.workoutHistory] : [];
+
+                if (!history.length) {
+                    return `
+                        <h3 style="font-weight: 600; margin: 1.5rem 0 0.75rem;">Histórico de treinos</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.88rem;">Nenhum treino finalizado ainda. Registre suas séries e toque em "Finalizar Treino" para começar seu histórico.</p>
+                    `;
+                }
+
+                history.sort((a, b) => (b.date + b.id).localeCompare(a.date + a.id));
+
+                let totalVolumeAll = 0;
+                const entriesHtml = history.map(entry => {
+                    let entryVolume = 0;
+                    let totalSets = 0;
+
+                    const exercisesHtml = entry.exercises.map(ex => {
+                        const setsLine = ex.sets.map(s => {
+                            entryVolume += (Number(s.reps) || 0) * (Number(s.weight) || 0);
+                            totalSets += 1;
+                            return `<span class="set-badge ${s.set >= 1 && s.set <= 5 ? 's' + s.set : 's0'}">S${s.set} · ${s.reps}x${s.weight}kg</span>`;
+                        }).join('');
+
+                        return `
+                            <div class="history-exercise-row">
+                                <div class="history-exercise-name">${ex.name}</div>
+                                <div class="history-sets-line">${setsLine}</div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    totalVolumeAll += entryVolume;
+
+                    const dateLabel = new Date(entry.date + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' });
+
+                    return `
+                        <details class="history-entry">
+                            <summary>
+                                <div>
+                                    <div class="history-entry-date">${dateLabel}</div>
+                                    <div class="history-entry-meta">${entry.programName} • ${entry.exercises.length} exercícios • ${totalSets} séries • ${entryVolume.toLocaleString('pt-BR')}kg volume</div>
+                                </div>
+                                <svg class="icon history-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg>
+                            </summary>
+                            <div class="history-entry-body">${exercisesHtml}</div>
+                        </details>
+                    `;
+                }).join('');
+
+                return `
+                    <h3 style="font-weight: 600; margin: 1.5rem 0 0.75rem;">Histórico de treinos</h3>
+                    <div class="history-summary-grid">
+                        <div class="stat-card">
+                            <div class="stat-label">Treinos finalizados</div>
+                            <div class="stat-value">${history.length}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Volume total</div>
+                            <div class="stat-value">${totalVolumeAll.toLocaleString('pt-BR')}kg</div>
+                        </div>
+                    </div>
+                    ${entriesHtml}
+                `;
             }
 
             renderTips() {
@@ -2533,12 +3461,17 @@
             toggleSettings() {
                 const settingsModal = document.getElementById('settingsModal');
                 const adminAccountsBtn = document.getElementById('adminAccountsBtn');
+                const adminExercisesBtn = document.getElementById('adminExercisesBtn');
 
                 settingsModal.classList.toggle('active');
                 document.getElementById('notificationsToggle').checked = this.state.notifications;
 
                 if (adminAccountsBtn) {
                     adminAccountsBtn.style.display = this.isAdminUser() ? 'block' : 'none';
+                }
+
+                if (adminExercisesBtn) {
+                    adminExercisesBtn.style.display = this.isAdminUser() ? 'block' : 'none';
                 }
             }
 
