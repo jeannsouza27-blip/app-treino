@@ -3488,10 +3488,11 @@
 
             exportBackup() {
                 const payload = {
-                    version: 1,
+                    version: 2,
                     exportedAt: new Date().toISOString(),
                     users: this.users,
                     state: this.state,
+                    programs: this.programs,
                     currentUser: this.currentUser
                 };
 
@@ -3541,6 +3542,10 @@
 
                         localStorage.setItem('meuTreino_users', JSON.stringify(safeUsers));
                         localStorage.setItem('meuTreino_state', JSON.stringify(data.state));
+
+                        if (Array.isArray(data.programs) && data.programs.length) {
+                            localStorage.setItem('meuTreino_programs', JSON.stringify(data.programs));
+                        }
 
                         if (typeof data.currentUser === 'string' && data.currentUser.trim()) {
                             localStorage.setItem('meuTreino_active_user', data.currentUser.trim());
