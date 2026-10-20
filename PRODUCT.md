@@ -8,7 +8,7 @@ web
 
 ## Users
 
-One person: Jeann, who trains for hypertrophy and body recomposition. They use the app mostly on their phone, at the gym between sets and at home to check nutrition, supplements and progress. The login screen and the `admin` account exist, but the app is personal: all accounts share one saved state, and keeping data separate per account is not a goal.
+One person: Jeann, who trains for hypertrophy and body recomposition. They use the app mostly on their phone, at the gym between sets and at home to check nutrition, supplements and progress. The app is personal, so it has no login. The old local login (including the auto-created `admin` account) was removed, and its account name was migrated into `profile.nome`. Exercise management is available to the user directly in Settings.
 
 ## Product Purpose
 
@@ -27,7 +27,7 @@ A single-user tool built around Jeann's own A/B full-body split, their own exerc
 ## Capabilities and Constraints
 
 - Single static `index.html` with inline CSS and JS. No build step, no backend. Lightweight CDN libraries are allowed only when needed. Inline SVG is preferred.
-- Data lives in `localStorage` under the existing keys `meuTreino_state`, `meuTreino_users`, `meuTreino_active_user` and `meuTreino_programs`. These keys must keep working. Any structural change needs a migration that preserves existing data.
+- Data lives in `localStorage` under `meuTreino_state` and `meuTreino_programs`. These keys must keep working. Any structural change needs a migration that preserves existing data. The legacy login keys `meuTreino_users` and `meuTreino_active_user` are read once, then removed after the account name has been saved into the state.
 - Backup export and import (JSON) must keep round-tripping.
 - Tabs: Início, Treino, Progresso, Nutrição, Suplementos, Coach. An admin panel manages exercises and program days.
 - Streak means consecutive calendar weeks with at least one finished workout.

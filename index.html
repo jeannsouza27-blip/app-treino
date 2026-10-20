@@ -285,32 +285,6 @@
         .form-grid .span-2 { grid-column: 1 / -1; }
         .form-stack { display: grid; gap: var(--sp-4); }
 
-        .pw-wrap { position: relative; }
-        .pw-wrap .input { padding-right: 88px; }
-        .pw-toggle {
-            position: absolute; right: 2px; top: 50%; transform: translateY(-50%);
-            min-height: 44px; padding: 0 var(--sp-3);
-            font-size: var(--fs-sm); font-weight: 600; color: var(--brand-soft-ink);
-            border-radius: var(--r-sm);
-        }
-        .pw-toggle:hover { background: var(--brand-soft); }
-
-        /* =========================================================
-           Auth
-           ========================================================= */
-        .auth {
-            min-height: 100vh; min-height: 100dvh;
-            display: grid; place-items: center;
-            padding: calc(var(--sp-8) + env(safe-area-inset-top)) var(--gutter) calc(var(--sp-8) + env(safe-area-inset-bottom));
-        }
-        .auth-card { width: min(100%, 380px); }
-        .auth-brand { display: flex; align-items: center; gap: var(--sp-3); margin-bottom: var(--sp-8); font-weight: 700; font-size: var(--fs-lg); }
-        .auth-brand .brand-mark { width: 40px; height: 40px; }
-        .auth-title { font-size: var(--fs-2xl); font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; }
-        .auth-text { color: var(--ink-2); margin-top: 6px; }
-        .auth-form { display: grid; gap: var(--sp-4); margin-top: var(--sp-6); }
-        .auth-alt { display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-2); }
-
         /* =========================================================
            App shell
            ========================================================= */
@@ -792,9 +766,6 @@
         .admin-row__name { font-weight: 650; font-size: var(--fs-sm); overflow-wrap: anywhere; }
         .admin-row__meta { font-size: var(--fs-xs); color: var(--ink-3); }
         .admin-row__actions { display: flex; flex-wrap: wrap; justify-content: flex-end; }
-        .admin-user { padding: var(--sp-3) var(--sp-4); border: 1px solid var(--line); border-radius: var(--r-md); }
-        .admin-user + .admin-user { margin-top: var(--sp-2); }
-        .admin-user__head { display: flex; justify-content: space-between; gap: var(--sp-2); align-items: baseline; }
         .admin-preview { width: 100%; height: 140px; object-fit: cover; border-radius: var(--r-md); }
         .divider { border: 0; border-top: 1px solid var(--line); margin: var(--sp-5) 0; }
 
@@ -859,38 +830,6 @@
     </style>
 </head>
 <body>
-    <!-- AUTH -->
-    <div id="authScreen" class="auth" hidden>
-        <div class="auth-card">
-            <div class="auth-brand">
-                <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" style="fill: var(--deep)"/><path d="M9 22v-4M14 22v-8M19 22v-6M24 22V10" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg>
-                Projeto Shape
-            </div>
-            <h1 class="auth-title">Bem-vindo de volta</h1>
-            <p class="auth-text">Entre para continuar seu treino.</p>
-
-            <form class="auth-form" onsubmit="event.preventDefault(); app.login()" novalidate>
-                <div class="field">
-                    <label class="field__label" for="nameInput">Nome</label>
-                    <input id="nameInput" class="input" type="text" autocomplete="username" autocapitalize="words" maxlength="40" required>
-                </div>
-                <div class="field">
-                    <label class="field__label" for="passwordInput">Senha</label>
-                    <div class="pw-wrap">
-                        <input id="passwordInput" class="input" type="password" autocomplete="current-password" maxlength="64" required>
-                        <button type="button" class="pw-toggle" onclick="app.togglePasswordVisibility('passwordInput', this)" aria-controls="passwordInput">Mostrar</button>
-                    </div>
-                </div>
-                <p id="authError" class="form-error" role="alert" hidden></p>
-                <button type="submit" class="btn btn-primary btn-block">Entrar</button>
-                <button type="button" class="btn btn-secondary btn-block" onclick="app.openCreateAccountModal()">Criar conta</button>
-            </form>
-            <div class="auth-alt">
-                <button type="button" class="btn-link" onclick="app.triggerBackupImport()">Importar backup</button>
-            </div>
-        </div>
-    </div>
-
     <!-- APP -->
     <div id="appContainer" class="app" hidden>
         <header class="app-header">
@@ -967,26 +906,14 @@
                 <button class="icon-btn" onclick="app.closeSettings()" aria-label="Fechar"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
             </div>
             <div class="modal-body">
-                <p class="menu-label">Conta</p>
+                <p class="menu-label">Perfil e treinos</p>
                 <div class="menu-group">
                     <button class="menu-item" onclick="app.closeSettings(); app.showProfileSetup()">
                         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Editar perfil e medidas
                     </button>
-                    <button class="menu-item" onclick="app.closeSettings(); app.openChangePasswordModal()">
-                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Trocar senha
+                    <button class="menu-item" onclick="app.closeSettings(); app.openAdminExercisesPanel()">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Gerenciar exercícios
                     </button>
-                </div>
-
-                <div id="adminMenu" hidden>
-                    <p class="menu-label">Administração</p>
-                    <div class="menu-group">
-                        <button class="menu-item" onclick="app.closeSettings(); app.openAdminExercisesPanel()">
-                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Gerenciar exercícios
-                        </button>
-                        <button class="menu-item" onclick="app.closeSettings(); app.openAdminPanel()">
-                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0"/><path d="M19 8v6M22 11h-6"/></svg>Gerenciar contas
-                        </button>
-                    </div>
                 </div>
 
                 <p class="menu-label">Dados</p>
@@ -1001,93 +928,7 @@
                         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>Apagar todos os dados
                     </button>
                 </div>
-
-                <div class="modal-actions modal-actions--stack">
-                    <button class="btn btn-secondary btn-block" onclick="app.logout()">Sair</button>
-                </div>
             </div>
-        </div>
-    </div>
-
-    <!-- CREATE ACCOUNT -->
-    <div id="createAccountModal" class="modal" data-close="closeCreateAccountModal" onclick="if (event.target === this) app.closeCreateAccountModal()">
-        <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="createTitle" tabindex="-1">
-            <h2 id="createTitle" class="modal-title">Criar conta</h2>
-            <p class="modal-text">A conta fica salva só neste aparelho.</p>
-            <form class="modal-body form-stack" onsubmit="event.preventDefault(); app.submitCreateAccount()" novalidate>
-                <div class="field">
-                    <label class="field__label" for="createNameInput">Nome</label>
-                    <input id="createNameInput" class="input" type="text" autocomplete="username" autocapitalize="words" maxlength="40">
-                </div>
-                <div class="field">
-                    <label class="field__label" for="createPasswordInput">Senha</label>
-                    <div class="pw-wrap">
-                        <input id="createPasswordInput" class="input" type="password" autocomplete="new-password" maxlength="64" aria-describedby="createPwHint">
-                        <button type="button" class="pw-toggle" onclick="app.togglePasswordVisibility('createPasswordInput', this)">Mostrar</button>
-                    </div>
-                    <span id="createPwHint" class="field__hint">Pelo menos 4 caracteres.</span>
-                </div>
-                <div class="field">
-                    <label class="field__label" for="createPasswordConfirmInput">Repetir senha</label>
-                    <div class="pw-wrap">
-                        <input id="createPasswordConfirmInput" class="input" type="password" autocomplete="new-password" maxlength="64">
-                        <button type="button" class="pw-toggle" onclick="app.togglePasswordVisibility('createPasswordConfirmInput', this)">Mostrar</button>
-                    </div>
-                </div>
-                <p id="createError" class="form-error" role="alert" hidden></p>
-                <div class="modal-actions">
-                    <button type="button" class="btn btn-secondary" onclick="app.closeCreateAccountModal()">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Criar conta</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- CHANGE PASSWORD -->
-    <div id="changePasswordModal" class="modal" data-close="closeChangePasswordModal" onclick="if (event.target === this) app.closeChangePasswordModal()">
-        <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="pwTitle" tabindex="-1">
-            <h2 id="pwTitle" class="modal-title">Trocar senha</h2>
-            <form class="modal-body form-stack" onsubmit="event.preventDefault(); app.changePassword()" novalidate>
-                <div class="field">
-                    <label class="field__label" for="currentPasswordInput">Senha atual</label>
-                    <div class="pw-wrap">
-                        <input id="currentPasswordInput" class="input" type="password" autocomplete="current-password" maxlength="64">
-                        <button type="button" class="pw-toggle" onclick="app.togglePasswordVisibility('currentPasswordInput', this)">Mostrar</button>
-                    </div>
-                </div>
-                <div class="field">
-                    <label class="field__label" for="newPasswordInput">Nova senha</label>
-                    <div class="pw-wrap">
-                        <input id="newPasswordInput" class="input" type="password" autocomplete="new-password" maxlength="64" aria-describedby="newPwHint">
-                        <button type="button" class="pw-toggle" onclick="app.togglePasswordVisibility('newPasswordInput', this)">Mostrar</button>
-                    </div>
-                    <span id="newPwHint" class="field__hint">Pelo menos 4 caracteres.</span>
-                </div>
-                <div class="field">
-                    <label class="field__label" for="newPasswordConfirmInput">Repetir nova senha</label>
-                    <div class="pw-wrap">
-                        <input id="newPasswordConfirmInput" class="input" type="password" autocomplete="new-password" maxlength="64">
-                        <button type="button" class="pw-toggle" onclick="app.togglePasswordVisibility('newPasswordConfirmInput', this)">Mostrar</button>
-                    </div>
-                </div>
-                <p id="passwordError" class="form-error" role="alert" hidden></p>
-                <div class="modal-actions">
-                    <button type="button" class="btn btn-secondary" onclick="app.closeChangePasswordModal()">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Salvar senha</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- ADMIN: ACCOUNTS -->
-    <div id="adminPanelModal" class="modal" data-close="closeAdminPanel" onclick="if (event.target === this) app.closeAdminPanel()">
-        <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="adminTitle" tabindex="-1">
-            <div class="modal-head">
-                <h2 id="adminTitle" class="modal-title">Gerenciar contas</h2>
-                <button class="icon-btn" onclick="app.closeAdminPanel()" aria-label="Fechar"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
-            </div>
-            <p class="modal-text">Redefina a senha de quem não consegue entrar.</p>
-            <div id="adminUsersList" class="modal-body"></div>
         </div>
     </div>
 
@@ -1178,6 +1019,10 @@
                 </div>
 
                 <div class="form-grid">
+                    <div class="field span-2">
+                        <label class="field__label" for="profileNome">Nome</label>
+                        <input id="profileNome" class="input" type="text" autocomplete="given-name" autocapitalize="words" maxlength="40">
+                    </div>
                     <div class="field">
                         <label class="field__label" for="profilePeso">Peso (kg)</label>
                         <input id="profilePeso" class="input" type="text" inputmode="decimal" autocomplete="off" placeholder="82,0">
@@ -1282,11 +1127,6 @@
             get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
             set(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } },
             remove(k) { try { localStorage.removeItem(k); } catch (e) { /* ignore */ } }
-        };
-        const sessionStore = {
-            get(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } },
-            set(k, v) { try { sessionStorage.setItem(k, v); } catch (e) { /* ignore */ } },
-            remove(k) { try { sessionStorage.removeItem(k); } catch (e) { /* ignore */ } }
         };
 
         const ICONS = {
@@ -1522,10 +1362,6 @@
                     }
                 };
 
-                this.users = this.loadUsers();
-                this.currentUser = store.get('meuTreino_active_user') || '';
-                this.isAuthenticated = sessionStore.get('meuTreino_authenticated') === 'true';
-
                 this.defaultProfile = {
                     nome: 'Jeann',
                     idade: 37,
@@ -1551,18 +1387,37 @@
 
                 this.state = this.createDefaultState();
                 this.loadState();
-                this.ensureAdminUser();
-                this.validateSession();
+                this.migrateLegacyLogin();
                 this.bindGlobalEvents();
-
-                if (this.isAuthenticated) {
-                    this.renderApp();
-                } else {
-                    this.showLogin();
-                }
+                this.renderApp();
             }
 
             /* ---------- Persistence & migration ---------- */
+
+            // v1 had a local login whose accounts stored plain-text passwords. All
+            // training data already lives in the shared meuTreino_state, so only the
+            // account name (used in greetings) is carried over before the login keys go.
+            migrateLegacyLogin() {
+                const rawUsers = store.get('meuTreino_users');
+                const active = store.get('meuTreino_active_user');
+                if (rawUsers === null && active === null) return;
+
+                let names = [];
+                try {
+                    const parsed = JSON.parse(rawUsers || '[]');
+                    if (Array.isArray(parsed)) names = parsed.map(u => (u && typeof u.nome === 'string') ? u.nome.trim() : '');
+                } catch (e) { /* unreadable list: nothing to carry over */ }
+
+                const isPerson = n => typeof n === 'string' && n.trim() && n.trim().toLowerCase() !== 'admin';
+                const name = [active, ...names].find(isPerson);
+                if (name) this.state.profile.nome = name.trim().slice(0, 40);
+
+                // Only drop the old keys once the state (with the name) is safely saved.
+                if (!this.saveState()) return;
+                store.remove('meuTreino_users');
+                store.remove('meuTreino_active_user');
+                try { sessionStorage.removeItem('meuTreino_authenticated'); } catch (e) { /* ignore */ }
+            }
 
             createDefaultState() {
                 const today = todayISO();
@@ -1583,28 +1438,6 @@
                     profile: { ...this.defaultProfile },
                     workoutHistory: []
                 };
-            }
-
-            loadUsers() {
-                try {
-                    const parsed = JSON.parse(store.get('meuTreino_users') || '[]');
-                    return Array.isArray(parsed)
-                        ? parsed
-                            .filter(user => user && typeof user.nome === 'string' && typeof user.senha === 'string')
-                            .map(user => ({ nome: user.nome.trim(), senha: user.senha.trim() }))
-                            .filter(user => user.nome)
-                        : [];
-                } catch (error) {
-                    return [];
-                }
-            }
-
-            saveUsers() {
-                if (!store.set('meuTreino_users', JSON.stringify(this.users))) {
-                    this.toast('Não foi possível salvar as contas neste aparelho.', 'error');
-                    return false;
-                }
-                return true;
             }
 
             loadState() {
@@ -1787,16 +1620,6 @@
                 return true;
             }
 
-            validateSession() {
-                const valid = !!this.currentUser && this.users.some(u => u.nome.toLowerCase() === this.currentUser.toLowerCase());
-                if (this.isAuthenticated && !valid) {
-                    this.isAuthenticated = false;
-                    this.currentUser = '';
-                    sessionStore.remove('meuTreino_authenticated');
-                    store.remove('meuTreino_active_user');
-                }
-            }
-
             bindGlobalEvents() {
                 document.addEventListener('keydown', e => {
                     if (e.key !== 'Escape') return;
@@ -1807,7 +1630,7 @@
                 });
 
                 document.addEventListener('visibilitychange', () => {
-                    if (document.visibilityState !== 'visible' || !this.isAuthenticated) return;
+                    if (document.visibilityState !== 'visible') return;
                     if (this.state.currentDay !== todayISO()) {
                         this.rollDay();
                         this.saveState();
@@ -1826,8 +1649,7 @@
             /* ---------- Derived data ---------- */
 
             displayName() {
-                if (this.currentUser && !this.isAdminUser()) return this.currentUser;
-                return this.state.profile.nome || 'atleta';
+                return (this.state.profile.nome || '').trim() || 'atleta';
             }
 
             getProgram(id) {
@@ -2026,7 +1848,7 @@
             /* ---------- Rendering: shell ---------- */
 
             renderApp() {
-                this.hideLogin();
+                document.getElementById('appContainer').hidden = false;
                 this.state.selectedProgram = this.resolveSelectedProgram();
                 this.saveState();
 
@@ -3238,6 +3060,7 @@
 
             showProfileSetup() {
                 const profile = this.state.profile;
+                document.getElementById('profileNome').value = profile.nome || '';
                 document.getElementById('profilePeso').value = inputValue(Number(profile.peso));
                 document.getElementById('profileAltura').value = inputValue(Number(profile.altura));
                 document.getElementById('profileGordura').value = inputValue(Number(profile.gordura));
@@ -3318,6 +3141,7 @@
             }
 
             saveProfile() {
+                const nome = document.getElementById('profileNome').value.trim().slice(0, 40);
                 const peso = parseNum(document.getElementById('profilePeso').value);
                 const altura = parseNum(document.getElementById('profileAltura').value);
                 const gordura = parseNum(document.getElementById('profileGordura').value);
@@ -3329,6 +3153,7 @@
                     this.showFormError('profileError', msg);
                     document.getElementById(id)?.focus();
                 };
+                if (!nome) return fail('Informe seu nome.', 'profileNome');
                 if (!Number.isFinite(peso) || peso < 30 || peso > 300) return fail('Peso deve estar entre 30 e 300 kg.', 'profilePeso');
                 if (!Number.isFinite(altura) || altura < 100 || altura > 250) return fail('Altura deve estar entre 100 e 250 cm.', 'profileAltura');
                 if (!Number.isFinite(gordura) || gordura < 3 || gordura > 60) return fail('Gordura deve estar entre 3% e 60%.', 'profileGordura');
@@ -3346,6 +3171,7 @@
 
                 this.state.profile = {
                     ...this.state.profile,
+                    nome,
                     peso,
                     altura,
                     gordura,
@@ -3363,144 +3189,6 @@
                 this.closeProfileSetup();
                 this.renderAll();
                 this.toast('Perfil salvo.');
-            }
-
-            /* ---------- Auth ---------- */
-
-            showLogin() {
-                document.getElementById('authScreen').hidden = false;
-                document.getElementById('appContainer').hidden = true;
-                document.body.classList.remove('has-finish');
-                const nameInput = document.getElementById('nameInput');
-                nameInput.value = this.currentUser || '';
-                document.getElementById('passwordInput').value = '';
-                this.showFormError('authError', '');
-                (nameInput.value ? document.getElementById('passwordInput') : nameInput).focus();
-            }
-
-            hideLogin() {
-                document.getElementById('authScreen').hidden = true;
-                document.getElementById('appContainer').hidden = false;
-            }
-
-            togglePasswordVisibility(inputId, button) {
-                const input = document.getElementById(inputId);
-                if (!input || !button) return;
-                const show = input.type === 'password';
-                input.type = show ? 'text' : 'password';
-                button.textContent = show ? 'Ocultar' : 'Mostrar';
-                button.setAttribute('aria-pressed', String(show));
-            }
-
-            login() {
-                const nome = document.getElementById('nameInput').value.trim();
-                const senha = document.getElementById('passwordInput').value.trim();
-                if (!nome || !senha) return this.showFormError('authError', 'Digite seu nome e sua senha.');
-
-                const user = this.users.find(u => u.nome.toLowerCase() === nome.toLowerCase() && u.senha === senha);
-                if (!user) {
-                    return this.showFormError('authError', 'Nome ou senha incorretos. As contas ficam salvas só neste aparelho: se você usa outro, exporte o backup lá e importe aqui.');
-                }
-
-                sessionStore.set('meuTreino_authenticated', 'true');
-                store.set('meuTreino_active_user', user.nome);
-                this.currentUser = user.nome;
-                this.isAuthenticated = true;
-                this.renderApp();
-            }
-
-            logout() {
-                this.closeSettings();
-                sessionStore.remove('meuTreino_authenticated');
-                store.remove('meuTreino_active_user');
-                this.currentUser = '';
-                this.isAuthenticated = false;
-                this.showLogin();
-            }
-
-            openCreateAccountModal() {
-                document.getElementById('createNameInput').value = document.getElementById('nameInput').value.trim();
-                document.getElementById('createPasswordInput').value = '';
-                document.getElementById('createPasswordConfirmInput').value = '';
-                this.showFormError('createError', '');
-                this.openModal('createAccountModal');
-            }
-
-            closeCreateAccountModal() {
-                this.closeModal('createAccountModal');
-            }
-
-            submitCreateAccount() {
-                const nome = document.getElementById('createNameInput').value.trim();
-                const senha = document.getElementById('createPasswordInput').value.trim();
-                const confirmar = document.getElementById('createPasswordConfirmInput').value.trim();
-
-                let msg = '';
-                if (!nome || !senha || !confirmar) msg = 'Preencha nome, senha e confirmação.';
-                else if (nome.length < 2) msg = 'O nome precisa ter pelo menos 2 caracteres.';
-                else if (senha.length < 4) msg = 'A senha precisa ter pelo menos 4 caracteres.';
-                else if (senha !== confirmar) msg = 'As senhas não conferem.';
-                else if (this.users.some(u => u.nome.toLowerCase() === nome.toLowerCase())) msg = 'Esse nome já está em uso. Escolha outro.';
-                if (msg) return this.showFormError('createError', msg);
-
-                this.users.push({ nome, senha });
-                if (!this.saveUsers()) {
-                    this.users.pop();
-                    return this.showFormError('createError', 'Não foi possível salvar a conta neste aparelho.');
-                }
-
-                this.closeCreateAccountModal();
-                sessionStore.set('meuTreino_authenticated', 'true');
-                store.set('meuTreino_active_user', nome);
-                this.currentUser = nome;
-                this.isAuthenticated = true;
-                this.renderApp();
-                this.toast('Conta criada.');
-            }
-
-            openChangePasswordModal() {
-                ['currentPasswordInput', 'newPasswordInput', 'newPasswordConfirmInput'].forEach(id => { document.getElementById(id).value = ''; });
-                this.showFormError('passwordError', '');
-                this.openModal('changePasswordModal');
-            }
-
-            closeChangePasswordModal() {
-                this.closeModal('changePasswordModal');
-            }
-
-            changePassword() {
-                const atual = document.getElementById('currentPasswordInput').value.trim();
-                const nova = document.getElementById('newPasswordInput').value.trim();
-                const confirmar = document.getElementById('newPasswordConfirmInput').value.trim();
-                const user = this.users.find(u => u.nome.toLowerCase() === (this.currentUser || '').toLowerCase());
-
-                let msg = '';
-                if (!user) msg = 'Entre de novo para trocar a senha.';
-                else if (!atual || !nova || !confirmar) msg = 'Preencha os três campos.';
-                else if (user.senha !== atual) msg = 'A senha atual está incorreta.';
-                else if (nova.length < 4) msg = 'A nova senha precisa ter pelo menos 4 caracteres.';
-                else if (nova !== confirmar) msg = 'A nova senha e a confirmação não conferem.';
-                if (msg) return this.showFormError('passwordError', msg);
-
-                const old = user.senha;
-                user.senha = nova;
-                if (!this.saveUsers()) {
-                    user.senha = old;
-                    return;
-                }
-                this.closeChangePasswordModal();
-                this.toast('Senha alterada.');
-            }
-
-            ensureAdminUser() {
-                if (!this.users.some(u => u.nome.toLowerCase() === 'admin')) {
-                    this.users.unshift({ nome: 'admin', senha: 'admin123' });
-                    this.saveUsers();
-                }
-            }
-
-            isAdminUser() {
-                return (this.currentUser || '').toLowerCase() === 'admin';
             }
 
             /* ---------- Settings & modals ---------- */
@@ -3525,7 +3213,6 @@
             }
 
             openSettings() {
-                document.getElementById('adminMenu').hidden = !this.isAdminUser();
                 this.openModal('settingsModal');
             }
 
@@ -3533,50 +3220,9 @@
                 this.closeModal('settingsModal');
             }
 
-            /* ---------- Admin: accounts ---------- */
-
-            openAdminPanel() {
-                if (!this.isAdminUser()) return this.toast('Acesso restrito ao administrador.', 'error');
-                this.renderAdminUsersList();
-                this.openModal('adminPanelModal');
-            }
-
-            closeAdminPanel() {
-                this.closeModal('adminPanelModal');
-            }
-
-            renderAdminUsersList() {
-                const list = document.getElementById('adminUsersList');
-                if (!list) return;
-                list.innerHTML = this.users.map((user, i) => `
-                    <div class="admin-user">
-                        <div class="admin-user__head">
-                            <strong style="overflow-wrap:anywhere">${esc(user.nome)}</strong>
-                            <span class="section-meta">${user.nome.toLowerCase() === 'admin' ? 'Administrador' : 'Usuário'}</span>
-                        </div>
-                        <p class="card-text">Senha atual: <strong>${esc(user.senha)}</strong></p>
-                        <button class="btn btn-secondary btn-block" style="margin-top: var(--sp-2);" onclick="app.resetUserPassword(${i})">Redefinir senha</button>
-                    </div>`).join('');
-            }
-
-            resetUserPassword(index) {
-                if (!this.isAdminUser()) return this.toast('Acesso restrito ao administrador.', 'error');
-                const target = this.users[index];
-                if (!target) return;
-                const nova = prompt(`Nova senha para ${target.nome} (mínimo 4 caracteres):`, '');
-                if (nova === null) return;
-                const senha = nova.trim();
-                if (senha.length < 4) return this.toast('A senha precisa ter pelo menos 4 caracteres.', 'error');
-                target.senha = senha;
-                if (!this.saveUsers()) return;
-                this.renderAdminUsersList();
-                this.toast(`Senha de ${target.nome} redefinida.`);
-            }
-
             /* ---------- Admin: exercises ---------- */
 
             openAdminExercisesPanel() {
-                if (!this.isAdminUser()) return this.toast('Acesso restrito ao administrador.', 'error');
                 this.populateAdminDaySelect();
                 this.resetExerciseForm();
                 this.renderAdminExercisesPanel();
@@ -3771,12 +3417,10 @@
 
             exportBackup() {
                 const payload = {
-                    version: 2,
+                    version: 3,
                     exportedAt: new Date().toISOString(),
-                    users: this.users,
                     state: this.state,
-                    programs: this.programs,
-                    currentUser: this.currentUser
+                    programs: this.programs
                 };
                 try {
                     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
@@ -3811,28 +3455,23 @@
                     } catch (e) {
                         return this.toast('Arquivo inválido. Use um backup exportado por este app.', 'error', 4500);
                     }
-                    if (!data || !Array.isArray(data.users) || !data.state || typeof data.state !== 'object') {
+                    if (!data || !data.state || typeof data.state !== 'object' || Array.isArray(data.state)) {
                         return this.toast('Arquivo inválido. Use um backup exportado por este app.', 'error', 4500);
                     }
-                    const users = data.users
-                        .filter(u => u && typeof u.nome === 'string' && typeof u.senha === 'string')
-                        .map(u => ({ nome: u.nome.trim(), senha: u.senha.trim() }))
-                        .filter(u => u.nome && u.senha);
-                    if (!users.length) return this.toast('O backup não tem nenhuma conta válida.', 'error', 4500);
                     if (!confirm('Importar este backup substitui os dados deste aparelho. Continuar?')) return;
 
-                    const ok = store.set('meuTreino_users', JSON.stringify(users))
-                        && store.set('meuTreino_state', JSON.stringify(data.state))
+                    // Backups from the old login version carry the account name; keep it, drop the passwords.
+                    const state = { ...data.state };
+                    const legacyName = typeof data.currentUser === 'string' ? data.currentUser.trim() : '';
+                    if (legacyName && legacyName.toLowerCase() !== 'admin') {
+                        state.profile = { ...(state.profile || {}), nome: legacyName.slice(0, 40) };
+                    }
+
+                    const ok = store.set('meuTreino_state', JSON.stringify(state))
                         && (!Array.isArray(data.programs) || !data.programs.length || store.set('meuTreino_programs', JSON.stringify(data.programs)));
                     if (!ok) return this.toast('Não houve espaço para importar o backup neste aparelho.', 'error', 5000);
-
-                    if (typeof data.currentUser === 'string' && data.currentUser.trim()) {
-                        store.set('meuTreino_active_user', data.currentUser.trim());
-                        sessionStore.set('meuTreino_authenticated', 'true');
-                    } else {
-                        store.remove('meuTreino_active_user');
-                        sessionStore.remove('meuTreino_authenticated');
-                    }
+                    store.remove('meuTreino_users');
+                    store.remove('meuTreino_active_user');
                     location.reload();
                 };
                 reader.readAsText(file);
@@ -3841,7 +3480,6 @@
             resetData() {
                 if (!confirm('Apagar todos os dados deste aparelho? Treinos, medidas e contas serão perdidos. Exporte um backup antes se quiser guardá-los.')) return;
                 try { localStorage.clear(); } catch (e) { /* ignore */ }
-                sessionStore.remove('meuTreino_authenticated');
                 location.reload();
             }
 
