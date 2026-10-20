@@ -10,6 +10,12 @@
     <title>Projeto Shape</title>
 
     <link rel="manifest" href="./manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Shape">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&display=swap" rel="stylesheet">
@@ -3511,23 +3517,12 @@
                 }, ms);
             }
 
-            async registerServiceWorker() {
-                if (!('serviceWorker' in navigator)) return;
-                try {
-                    const sw = `
-                        self.addEventListener('install', () => self.skipWaiting());
-                        self.addEventListener('activate', () => self.clients.claim());
-                        self.addEventListener('fetch', (e) => {
-                            e.respondWith(
-                                caches.match(e.request).then(r => r || fetch(e.request)).catch(() => new Response('Offline'))
-                            );
-                        });
-                    `;
-                    const blob = new Blob([sw], { type: 'application/javascript' });
-                    await navigator.serviceWorker.register(URL.createObjectURL(blob));
-                } catch (e) {
-                    // Blob-URL service workers are rejected by most browsers; see pending notes.
-                }
+            registerServiceWorker() {
+                // Service workers need http(s); opening index.html from disk just skips it.
+                if (!('serviceWorker' in navigator) || !/^https?:$/.test(location.protocol)) return;
+                navigator.serviceWorker.register('./sw.js').catch(error => {
+                    console.warn('Service worker não registrado:', error);
+                });
             }
         }
 
