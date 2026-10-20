@@ -737,6 +737,7 @@
         .menu-item:hover { background: var(--surface-2); }
         .menu-item .icon { width: 20px; height: 20px; color: var(--ink-3); }
         .menu-item--danger, .menu-item--danger .icon { color: var(--danger); }
+        .goals-form { display: grid; gap: var(--sp-3); box-shadow: none; }
 
         .photo-editor { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: var(--sp-3); align-items: center; }
         .photo-editor__actions { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
@@ -921,6 +922,22 @@
                         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Gerenciar exercícios
                     </button>
                 </div>
+
+                <p class="menu-label">Metas diárias</p>
+                <form class="card goals-form" onsubmit="event.preventDefault(); app.saveGoals()" novalidate>
+                    <div class="form-grid">
+                        <div class="field">
+                            <label class="field__label" for="goalProteina">Proteína (g)</label>
+                            <input id="goalProteina" class="input" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" maxlength="3">
+                        </div>
+                        <div class="field">
+                            <label class="field__label" for="goalAgua">Água (L)</label>
+                            <input id="goalAgua" class="input" type="text" inputmode="decimal" autocomplete="off" maxlength="4">
+                        </div>
+                    </div>
+                    <p id="goalsError" class="form-error" role="alert" hidden></p>
+                    <button type="submit" class="btn btn-secondary btn-block">Salvar metas</button>
+                </form>
 
                 <p class="menu-label">Dados</p>
                 <div class="menu-group">
@@ -3219,7 +3236,34 @@
             }
 
             openSettings() {
+                const profile = this.state.profile;
+                document.getElementById('goalProteina').value = inputValue(Number(profile.metaProteina));
+                document.getElementById('goalAgua').value = inputValue(Number(profile.metaAgua));
+                this.showFormError('goalsError', '');
                 this.openModal('settingsModal');
+            }
+
+            saveGoals() {
+                const proteina = parseNum(document.getElementById('goalProteina').value);
+                const agua = parseNum(document.getElementById('goalAgua').value);
+                const fail = (msg, id) => {
+                    this.showFormError('goalsError', msg);
+                    document.getElementById(id)?.focus();
+                };
+                if (!Number.isInteger(proteina) || proteina < 30 || proteina > 400) return fail('Proteína deve ser um número inteiro entre 30 e 400 g.', 'goalProteina');
+                if (!Number.isFinite(agua) || agua < 0.5 || agua > 10) return fail('Água deve estar entre 0,5 e 10 L.', 'goalAgua');
+                this.showFormError('goalsError', '');
+
+                const previous = { metaProteina: this.state.profile.metaProteina, metaAgua: this.state.profile.metaAgua };
+                this.state.profile.metaProteina = proteina;
+                this.state.profile.metaAgua = Math.round(agua * 10) / 10;
+                if (!this.saveState()) {
+                    Object.assign(this.state.profile, previous);
+                    return;
+                }
+                this.renderNutrition();
+                this.renderCoach();
+                this.toast('Metas salvas.');
             }
 
             closeSettings() {
