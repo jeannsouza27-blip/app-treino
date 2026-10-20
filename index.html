@@ -1019,6 +1019,51 @@
         </div>
     </div>
 
+    <!-- NEW PROGRAM DAY -->
+    <div id="newDayModal" class="modal" data-close="closeNewDayModal" onclick="if (event.target === this) app.closeNewDayModal()">
+        <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="newDayTitle" tabindex="-1">
+            <h2 id="newDayTitle" class="modal-title">Novo dia de treino</h2>
+            <p class="modal-text">Depois de criar, adicione os exercícios.</p>
+            <form class="modal-body form-stack" onsubmit="event.preventDefault(); app.saveNewProgramDay()" novalidate>
+                <div class="field">
+                    <label class="field__label" for="newDayName">Nome</label>
+                    <input id="newDayName" class="input" type="text" maxlength="60" placeholder="Treino C" autocapitalize="sentences" aria-describedby="newDayError" oninput="app.showFormError('newDayError', '')">
+                </div>
+                <div class="field">
+                    <label class="field__label" for="newDayDesc">Descrição <span class="field__hint">(opcional)</span></label>
+                    <input id="newDayDesc" class="input" type="text" maxlength="80" placeholder="Pernas e ombros">
+                </div>
+                <div class="form-grid">
+                    <div class="field">
+                        <label class="field__label" for="newDayFreq">Vezes por semana</label>
+                        <select id="newDayFreq" class="input">
+                            <option value="1">1×</option>
+                            <option value="2">2×</option>
+                            <option value="3" selected>3×</option>
+                            <option value="4">4×</option>
+                            <option value="5">5×</option>
+                            <option value="6">6×</option>
+                            <option value="7">7×</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label class="field__label" for="newDayLevel">Nível</label>
+                        <select id="newDayLevel" class="input">
+                            <option value="Iniciante">Iniciante</option>
+                            <option value="Intermediário" selected>Intermediário</option>
+                            <option value="Avançado">Avançado</option>
+                        </select>
+                    </div>
+                </div>
+                <p id="newDayError" class="form-error" role="alert" hidden></p>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="app.closeNewDayModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Criar dia</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- PROFILE -->
     <div id="profileModal" class="modal" data-close="closeProfileSetup" onclick="if (event.target === this) app.closeProfileSetup()">
         <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="profileTitle" tabindex="-1">
@@ -3322,23 +3367,47 @@
             }
 
             promptNewProgramDay() {
-                const name = prompt('Nome do novo dia de treino (ex.: Treino C):');
-                if (!name || !name.trim()) return;
-                const desc = prompt('Descrição curta (ex.: Pernas e ombros):', '') || '';
-                const days = Math.min(7, Math.max(1, parseInt(prompt('Quantas vezes por semana?', '3'), 10) || 3));
-                const difficulty = prompt('Nível (Iniciante, Intermediário, Avançado):', 'Intermediário') || 'Intermediário';
+                document.getElementById('newDayName').value = '';
+                document.getElementById('newDayDesc').value = '';
+                document.getElementById('newDayFreq').value = '3';
+                document.getElementById('newDayLevel').value = 'Intermediário';
+                this.showFormError('newDayError', '');
+                this.openModal('newDayModal');
+                requestAnimationFrame(() => document.getElementById('newDayName').focus());
+            }
+
+            closeNewDayModal() {
+                this.closeModal('newDayModal');
+            }
+
+            saveNewProgramDay() {
+                const name = document.getElementById('newDayName').value.trim().slice(0, 60);
+                const desc = document.getElementById('newDayDesc').value.trim().slice(0, 80);
+                const days = Math.min(7, Math.max(1, parseInt(document.getElementById('newDayFreq').value, 10) || 3));
+                const difficulty = document.getElementById('newDayLevel').value || 'Intermediário';
+
+                if (!name) {
+                    this.showFormError('newDayError', 'Dê um nome ao dia de treino.');
+                    return document.getElementById('newDayName').focus();
+                }
+                if (this.programs.some(p => p.name.toLowerCase() === name.toLowerCase())) {
+                    this.showFormError('newDayError', 'Já existe um dia com esse nome.');
+                    return document.getElementById('newDayName').focus();
+                }
 
                 const id = `custom_${Date.now()}`;
-                this.programs.push({ id, name: name.trim().slice(0, 60), desc: desc.trim().slice(0, 80), days, difficulty: difficulty.trim().slice(0, 20), exercises: [] });
+                this.programs.push({ id, name, desc, days, difficulty, exercises: [] });
                 if (!this.savePrograms()) {
                     this.programs.pop();
                     return;
                 }
+                this.closeNewDayModal();
                 this.populateAdminDaySelect();
                 document.getElementById('adminDaySelect').value = id;
                 this.resetExerciseForm();
                 this.renderAdminExercisesPanel();
                 this.renderPrograms();
+                this.toast(`${name} criado. Adicione os exercícios.`);
             }
 
             deleteProgramDay() {
