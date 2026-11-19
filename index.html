@@ -25,7 +25,7 @@
             --accent: #2563eb;
             --accent-2: #0ea5e9;
             --accent-3: #10b981;
-            --danger: #ef4444;
+            --danger: #dc2626;
             --success: #16a34a;
             --warning: #f59e0b;
             --surface-0: #dce8f5;
@@ -35,34 +35,41 @@
             --text-primary: #0f172a;
             --text-secondary: #334155;
             --text-muted: #52657d;
-            --shadow-soft: 0 16px 36px rgba(37, 99, 235, 0.12);
-            --shadow-card: 0 10px 24px rgba(15, 23, 42, 0.08);
+            --shadow-soft: 0 2px 8px rgba(15, 23, 42, 0.06);
+            --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.05), 0 2px 6px rgba(15, 23, 42, 0.04);
+            --accent-strong: #1d4ed8;
+            /* Escala de tipos (base 19px no celular): legenda 13 · pequeno 15 · corpo 17 · título 20 · seção 25 · destaque 32 */
+            --fs-caption: 0.7rem;
+            --fs-small: 0.8rem;
+            --fs-body: 0.9rem;
+            --fs-title: 1.05rem;
+            --fs-heading: 1.3rem;
+            --fs-display: 1.7rem;
+            --success-strong: #047857;
         }
 
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --primary: #f8fafc;
-                --secondary: #cbd5e1;
-                --accent: #8b5cf6;
-                --accent-2: #34d399;
-                --accent-3: #22d3ee;
-                --surface-0: #0b1120;
-                --surface-1: #111c31;
-                --surface-2: #16243e;
-                --border: #273754;
-                --text-primary: #f8fafc;
-                --text-secondary: #cbd5e1;
-                --text-muted: #94a3b8;
-                --shadow-soft: 0 10px 30px rgba(8, 15, 30, 0.45);
-                --shadow-card: 0 8px 18px rgba(8, 15, 30, 0.3);
-            }
+        /* App só em tema claro: o antigo modo escuro trocava o texto para claro
+           mas cards e modais têm fundo branco fixo (texto invisível, 1:1). */
+        :root {
+            color-scheme: light;
+        }
+
+        /* Foco visível para quem navega por teclado (botões, cards, links) */
+        :focus-visible {
+            outline: 3px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        html {
+            font-size: 118.75%;
         }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background:
-                radial-gradient(circle at top, rgba(37, 99, 235, 0.18), transparent 28%),
-                linear-gradient(180deg, #edf4ff 0%, #e4eefc 35%, #eef8f6 100%);
+            font-size: var(--fs-body);
+            line-height: 1.5;
+            text-rendering: optimizeLegibility;
+            background: var(--surface-1);
             color: var(--text-primary);
             overflow-x: hidden;
             min-height: 100vh;
@@ -74,9 +81,7 @@
             align-items: center;
             justify-content: center;
             padding: 1.5rem;
-            background:
-                radial-gradient(circle at top, rgba(37, 99, 235, 0.22), transparent 26%),
-                linear-gradient(180deg, #edf4ff 0%, #e7f0fb 38%, #effaf7 100%);
+            background: var(--surface-1);
         }
 
         .auth-card {
@@ -90,7 +95,7 @@
         }
 
         .auth-card h2 {
-            font-size: 2rem;
+            font-size: var(--fs-display);
             margin-bottom: 0.45rem;
             color: #ffffff;
             line-height: 1.1;
@@ -100,10 +105,10 @@
         .auth-card p {
             color: rgba(255,255,255,0.76);
             margin-bottom: 0.95rem;
-            font-size: 0.92rem;
+            font-size: var(--fs-body);
         }
 
-        .auth-card input {
+        .auth-screen .auth-card input {
             width: 100%;
             min-height: 46px;
             border-radius: 12px;
@@ -112,11 +117,11 @@
             color: #ffffff;
             padding: 0.8rem 0.9rem;
             margin-bottom: 0.8rem;
-            font-size: 1rem;
+            font-size: var(--fs-body);
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .auth-card input:focus {
+        .auth-screen .auth-card input:focus {
             border-color: rgba(14, 165, 233, 0.9);
             box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.18);
             outline: none;
@@ -129,15 +134,15 @@
             align-items: center;
         }
 
-        .password-input-wrap input {
+        .auth-screen .password-input-wrap input {
             margin-bottom: 0;
             padding-right: 4.8rem;
             box-sizing: border-box;
             width: 100%;
         }
 
-        .auth-card input::placeholder {
-            color: rgba(255,255,255,0.45);
+        .auth-screen .auth-card input::placeholder {
+            color: rgba(255,255,255,0.62);
         }
 
         .auth-card button {
@@ -145,33 +150,35 @@
             min-height: 50px;
             border: none;
             border-radius: 12px;
-            background: linear-gradient(135deg, #2563eb, #10b981);
+            background: var(--accent);
             color: white;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: var(--fs-body);
             cursor: pointer;
-            box-shadow: 0 14px 24px rgba(37, 99, 235, 0.26);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: background 0.2s ease;
         }
 
         .auth-card button:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 16px 30px rgba(37, 99, 235, 0.32);
+            background: var(--accent-strong);
         }
 
+        /* "Mostrar" fica dentro do campo de senha, à direita */
         .auth-card .password-toggle-btn {
-            display: block;
-            width: 100%;
-            min-height: 42px;
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: auto;
+            min-height: 34px;
             border: none;
-            border-radius: 12px;
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.9), rgba(16, 185, 129, 0.95));
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
             color: #ffffff;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: var(--fs-small);
             cursor: pointer;
-            padding: 0.75rem 0.9rem;
-            margin: 0 0 0.9rem;
+            padding: 0 0.75rem;
+            margin: 0;
             box-shadow: none;
             line-height: 1.2;
         }
@@ -180,15 +187,13 @@
             max-width: 100%;
             width: min(100%, 640px);
             margin: 0 auto;
-            background: linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.08));
             min-height: 100vh;
             padding-bottom: 100px;
             position: relative;
-            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1), 0 20px 40px rgba(15, 23, 42, 0.12);
         }
 
         header {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(30, 64, 175, 0.94), rgba(6, 182, 212, 0.8));
+            background: #0f172a;
             border-bottom: 1px solid rgba(255,255,255,0.12);
             padding: 0.85rem 1rem calc(0.9rem + env(safe-area-inset-top, 0px));
             display: flex;
@@ -197,8 +202,6 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 12px 26px rgba(15, 23, 42, 0.25);
-            backdrop-filter: blur(8px);
         }
 
         h1 {
@@ -230,41 +233,6 @@
 
         .icon-btn:hover {
             background: rgba(255,255,255,0.28);
-            transform: translateY(-1px);
-        }
-
-        .nav-tabs {
-            display: flex;
-            gap: 0;
-            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
-            background: rgba(15, 23, 42, 0.78);
-            padding: 0.4rem 0.75rem 0;
-            backdrop-filter: blur(10px);
-            position: sticky;
-            top: 72px;
-            z-index: 90;
-        }
-
-        .nav-tab {
-            flex: 1;
-            padding: 12px 8px 11px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 700;
-            color: rgba(255,255,255,0.7);
-            border-bottom: 2px solid transparent;
-            transition: all 0.2s ease;
-            letter-spacing: 0.01em;
-        }
-
-        .nav-tab.active {
-            color: #ffffff;
-            border-bottom-color: #ffffff;
-            background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.02));
-            border-radius: 10px 10px 0 0;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
         }
 
         .content {
@@ -293,43 +261,24 @@
         }
 
         .program-card {
-            background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(239, 246, 255, 0.96) 100%);
-            border: 1px solid rgba(148, 163, 184, 0.25);
+            background: var(--surface-2);
+            border: 1px solid rgba(148, 163, 184, 0.35);
             border-radius: 20px;
             padding: 1.05rem 1rem;
             cursor: pointer;
-            transition: all 0.25s ease;
-            box-shadow: 0 12px 26px rgba(15, 23, 42, 0.07);
+            transition: border-color 0.2s ease, background 0.2s ease;
+            box-shadow: var(--shadow-card);
             position: relative;
             overflow: hidden;
         }
 
-        .program-card::before {
-            content: "";
-            position: absolute;
-            inset: 0 auto auto 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--accent), var(--accent-2));
-            opacity: 0;
-            transition: opacity 0.25s ease;
-        }
-
         .program-card:hover {
             border-color: rgba(37, 99, 235, 0.45);
-            transform: translateY(-2px);
-            box-shadow: 0 16px 32px rgba(37, 99, 235, 0.12);
-        }
-
-        .program-card:hover::before,
-        .program-card.active::before {
-            opacity: 1;
         }
 
         .program-card.active {
-            border-color: rgba(37, 99, 235, 0.7);
-            background: linear-gradient(180deg, rgba(37, 99, 235, 0.08), rgba(14, 165, 233, 0.06));
-            box-shadow: 0 18px 34px rgba(37, 99, 235, 0.14);
+            border-color: var(--accent);
+            background: rgba(37, 99, 235, 0.06);
         }
 
         .program-title {
@@ -339,7 +288,7 @@
         }
 
         .program-desc {
-            font-size: 12px;
+            font-size: var(--fs-caption);
             color: var(--text-secondary);
             margin-bottom: 8px;
         }
@@ -347,35 +296,37 @@
         .program-meta {
             display: flex;
             gap: 12px;
-            font-size: 12px;
+            font-size: var(--fs-caption);
             color: var(--text-muted);
         }
 
         .workout-card {
-            background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(239, 246, 255, 0.96) 100%);
-            border: 1px solid rgba(148, 163, 184, 0.25);
+            background: var(--surface-2);
+            border: 1px solid rgba(148, 163, 184, 0.35);
             border-radius: 20px;
             padding: 1.2rem 1rem 1rem;
             margin-bottom: 14px;
-            box-shadow: 0 12px 26px rgba(15, 23, 42, 0.06);
+            box-shadow: var(--shadow-card);
             min-height: 128px;
             position: relative;
             overflow: hidden;
         }
 
-        .workout-card::before {
-            content: "";
-            position: absolute;
-            inset: 0 auto 0 0;
-            width: 4px;
-            background: linear-gradient(180deg, var(--accent), var(--accent-2));
+        .exercise-title,
+        .modal-title,
+        .today-title {
+            text-wrap: balance;
+        }
+
+        p {
+            text-wrap: pretty;
         }
 
         .exercise-title {
             font-weight: 800;
             color: #102a43;
             margin-bottom: 6px;
-            font-size: 1.14rem;
+            font-size: var(--fs-title);
             line-height: 1.2;
             letter-spacing: -0.01em;
             overflow-wrap: anywhere;
@@ -389,29 +340,46 @@
             border-radius: 999px;
             background: rgba(37, 99, 235, 0.08);
             border: 1px solid rgba(37, 99, 235, 0.16);
-            font-size: 0.76rem;
+            font-size: var(--fs-caption);
             font-weight: 700;
             color: var(--accent);
             margin-bottom: 0.5rem;
             letter-spacing: 0.02em;
         }
 
+        /* Card de exercício compacto: foto pequena + nome na mesma linha,
+           para os campos Série/Reps/Peso aparecerem sem rolar no celular */
         .exercise-head {
             display: grid;
-            grid-template-columns: 122px 1fr;
-            gap: 0.9rem;
+            grid-template-columns: 72px 1fr;
+            gap: 0.8rem;
             align-items: center;
-            margin-bottom: 1rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .exercise-heading {
+            min-width: 0;
+        }
+
+        .exercise-heading .exercise-meta {
+            margin: 0.3rem 0 0;
+        }
+
+        .exercise-note {
+            font-size: var(--fs-small);
+            line-height: 1.45;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.4rem;
         }
 
         .exercise-thumb {
-            width: 122px;
-            height: 122px;
-            border-radius: 18px;
+            width: 72px;
+            height: 72px;
+            border-radius: 14px;
             overflow: hidden;
             border: 1px solid rgba(148, 163, 184, 0.26);
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(14, 165, 233, 0.06));
-            box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06);
+            background: var(--surface-1);
         }
 
         .exercise-image {
@@ -421,25 +389,15 @@
             display: block;
         }
 
-        .exercise-body {
-            min-width: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            background: linear-gradient(180deg, rgba(255,255,255,0.54), rgba(239,246,255,0.72));
-            border: 1px solid rgba(148, 163, 184, 0.18);
-            border-radius: 16px;
-            padding: 0.72rem 0.8rem;
-            box-shadow: inset 3px 0 0 rgba(37, 99, 235, 0.12);
-        }
-
         .exercise-description {
-            font-size: 0.8rem;
+            font-size: var(--fs-small);
             line-height: 1.45;
             color: var(--text-secondary);
-            background: rgba(255,255,255,0.5);
-            border-radius: 10px;
-            padding: 0.52rem 0.6rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .exercise-card details {
+            margin-bottom: 0.8rem;
         }
 
         .input-group {
@@ -455,7 +413,7 @@
             padding: 10px 9px;
             border: 1px solid var(--border);
             border-radius: 8px;
-            font-size: 15px;
+            font-size: var(--fs-body);
             background: var(--surface-1);
             color: var(--text-primary);
             min-height: 42px;
@@ -471,34 +429,29 @@
             padding: 12px 14px;
             border: 1px solid var(--border);
             border-radius: 10px;
-            background: linear-gradient(180deg, var(--surface-1) 0%, rgba(255,255,255,0.8) 100%);
+            background: var(--surface-2);
             color: var(--text-primary);
             cursor: pointer;
-            font-size: 15px;
+            font-size: var(--fs-body);
             font-weight: 600;
-            transition: all 0.2s ease;
+            transition: background 0.2s ease, border-color 0.2s ease;
             width: 100%;
             min-height: 46px;
-            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.05);
         }
 
         .btn:hover {
-            background: linear-gradient(180deg, var(--border) 0%, rgba(255,255,255,0.8) 100%);
-            transform: translateY(-1px);
+            background: var(--surface-1);
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+            background: var(--accent);
             color: white;
             border-color: transparent;
-            box-shadow: 0 12px 22px rgba(37, 99, 235, 0.24);
             border-radius: 12px;
         }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
-            opacity: 0.96;
-            transform: translateY(-1px);
+            background: var(--accent-strong);
         }
 
         .btn-danger {
@@ -537,7 +490,7 @@
         }
 
         .today-records-title {
-            font-size: 12px;
+            font-size: var(--fs-caption);
             color: var(--text-muted);
             margin-bottom: 0.5rem;
             font-weight: 500;
@@ -548,7 +501,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 6px 0;
-            font-size: 13px;
+            font-size: var(--fs-small);
             color: var(--text-secondary);
             border-bottom: 1px solid var(--border);
         }
@@ -558,22 +511,21 @@
         }
 
         .tip-card {
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.96), rgba(14, 165, 233, 0.9), rgba(16, 185, 129, 0.82));
+            background: #1e40af;
             border-radius: 16px;
             padding: 1.25rem;
             margin-bottom: 1rem;
             color: white;
-            box-shadow: 0 16px 28px rgba(37, 99, 235, 0.18);
         }
 
         .tip-title {
             font-weight: 500;
             margin-bottom: 0.5rem;
-            font-size: 15px;
+            font-size: var(--fs-body);
         }
 
         .tip-text {
-            font-size: 13px;
+            font-size: var(--fs-small);
             line-height: 1.5;
             opacity: 0.95;
         }
@@ -586,24 +538,63 @@
         }
 
         .stat-card {
-            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(233, 242, 255, 0.94));
-            border: 1px solid rgba(148, 163, 184, 0.24);
+            background: var(--surface-1);
+            border: 1px solid rgba(148, 163, 184, 0.28);
             border-radius: 16px;
             padding: 1rem;
             text-align: center;
-            box-shadow: 0 10px 22px rgba(15, 23, 42, 0.04);
         }
 
         .stat-label {
-            font-size: 12px;
+            font-size: var(--fs-caption);
+            font-weight: 600;
             color: var(--text-secondary);
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
         .stat-value {
-            font-size: 28px;
-            font-weight: 500;
+            font-size: var(--fs-heading);
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.01em;
             color: var(--text-primary);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .stat-unit {
+            font-size: var(--fs-small);
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-left: 2px;
+        }
+
+        /* Card principal do resumo: gordura atual vs meta, ocupa a linha toda */
+        .stat-card--lead {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem;
+            text-align: left;
+        }
+
+        .stat-card--lead .stat-value {
+            font-size: var(--fs-display);
+            font-weight: 800;
+        }
+
+        .stat-goal {
+            font-size: var(--fs-small);
+            color: var(--text-secondary);
+            text-align: right;
+            line-height: 1.35;
+        }
+
+        .stat-goal strong {
+            display: block;
+            font-size: var(--fs-title);
+            color: var(--success-strong);
+            font-variant-numeric: tabular-nums;
         }
 
         .progress-bar {
@@ -621,12 +612,41 @@
         }
 
         .alert {
-            background: var(--warning);
-            border: 1px solid var(--warning);
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.45);
             border-radius: 12px;
             padding: 1rem;
             margin-bottom: 1rem;
-            color: white;
+            color: var(--text-primary);
+        }
+
+        /* Cabeçalho compacto da tela de Treino: o 1º exercício precisa aparecer sem rolar */
+        .today-head {
+            margin-bottom: 1rem;
+        }
+
+        .today-meta {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.75rem;
+            font-size: var(--fs-small);
+            font-weight: 600;
+            color: var(--text-muted);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .container > .content .today-head h2.today-title {
+            margin-top: 0.2rem;
+            font-size: var(--fs-heading);
+            font-weight: 800;
+            line-height: 1.2;
+            color: var(--text-primary);
+        }
+
+        .today-desc {
+            margin-top: 0.2rem;
+            font-size: var(--fs-small);
+            color: var(--text-secondary);
         }
 
         .alert-title {
@@ -635,7 +655,7 @@
         }
 
         .alert-text {
-            font-size: 13px;
+            font-size: var(--fs-small);
             line-height: 1.5;
         }
 
@@ -666,17 +686,16 @@
             flex-direction: column;
             align-items: center;
             gap: 4px;
-            font-size: 11px;
-            color: var(--text-secondary);
+            font-size: var(--fs-caption);
+            color: #cbd5e1;
             transition: all 0.2s;
             min-height: 68px;
         }
 
         .nav-btn.active {
             color: #ffffff;
-            background: linear-gradient(180deg, rgba(79, 70, 229, 0.22), rgba(255,255,255,0.04));
+            background: rgba(255, 255, 255, 0.08);
             border-radius: 14px 14px 0 0;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
         }
 
         .nav-btn-icon {
@@ -702,7 +721,7 @@
         }
 
         .modal-content {
-            background: linear-gradient(180deg, #ffffff 0%, #edf5ff 100%);
+            background: #ffffff;
             border-radius: 22px;
             border: 1px solid rgba(148, 163, 184, 0.22);
             width: 100%;
@@ -710,7 +729,7 @@
             padding: 1.2rem;
             max-height: calc(100vh - 2rem);
             overflow-y: auto;
-            box-shadow: 0 24px 50px rgba(15, 23, 42, 0.22);
+            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.2);
         }
 
         .modal-content input,
@@ -726,7 +745,7 @@
         }
 
         .modal-title {
-            font-size: 1.2rem;
+            font-size: var(--fs-heading);
             font-weight: 700;
             margin-bottom: 0.35rem;
             color: var(--text-primary);
@@ -736,7 +755,7 @@
         .modal-subtitle {
             margin-bottom: 1rem;
             color: var(--text-secondary);
-            font-size: 0.92rem;
+            font-size: var(--fs-body);
             line-height: 1.45;
         }
 
@@ -769,7 +788,7 @@
         .profile-photo-actions .btn {
             min-height: 40px;
             padding: 0.55rem 0.7rem;
-            font-size: 0.82rem;
+            font-size: var(--fs-small);
         }
 
         .profile-progress-card {
@@ -804,18 +823,11 @@
         .profile-progress-copy p {
             margin: 0 0 0.65rem;
             color: var(--text-secondary);
-            font-size: 0.86rem;
+            font-size: var(--fs-small);
             line-height: 1.4;
         }
 
         @media (max-width: 480px) {
-            html {
-                font-size: 19px;
-            }
-
-            body {
-                font-size: 0.98rem;
-            }
 
             .container {
                 width: 100vw;
@@ -825,16 +837,6 @@
 
             .content {
                 padding: 1rem;
-            }
-
-            .nav-tabs {
-                top: 68px;
-                padding: 0 0.45rem;
-            }
-
-            .nav-tab {
-                font-size: 0.8rem;
-                padding: 11px 6px;
             }
 
             .program-card,
@@ -860,7 +862,7 @@
             }
 
             .program-title {
-                font-size: 1.18rem;
+                font-size: var(--fs-title);
             }
 
             .program-desc,
@@ -868,22 +870,22 @@
             .exercise-meta,
             .tip-text,
             .alert-text {
-                font-size: 0.82rem;
+                font-size: var(--fs-small);
             }
 
             .container > .content h2 {
-                font-size: 1rem;
+                font-size: var(--fs-body);
             }
 
             .btn {
                 padding: 10px 11px;
-                font-size: 0.95rem;
+                font-size: var(--fs-body);
                 min-height: 46px;
             }
 
             .nav-btn {
                 min-height: 78px;
-                font-size: 0.75rem;
+                font-size: var(--fs-caption);
             }
 
             .nav-btn-icon {
@@ -896,32 +898,24 @@
             }
 
             .exercise-head {
-                grid-template-columns: 96px 1fr;
+                grid-template-columns: 64px 1fr;
                 gap: 0.7rem;
             }
 
             .exercise-thumb {
-                width: 96px;
-                height: 96px;
+                width: 64px;
+                height: 64px;
             }
 
             .exercise-title {
-                font-size: 1.04rem;
+                font-size: var(--fs-title);
                 line-height: 1.22;
-            }
-
-            .exercise-body {
-                padding: 0.65rem 0.7rem;
-            }
-
-            .exercise-description {
-                font-size: 0.8rem;
             }
 
             input[type="number"],
             input[type="text"] {
                 min-height: 43px;
-                font-size: 0.92rem;
+                font-size: var(--fs-body);
             }
 
             .modal-content {
@@ -930,22 +924,13 @@
         }
 
         @media (max-width: 360px) {
-            .exercise-head {
-                grid-template-columns: 1fr;
-            }
-
-            .exercise-thumb {
-                width: 100%;
-                height: 180px;
-            }
-
             .exercise-title {
-                font-size: 1.02rem;
+                font-size: var(--fs-title);
                 line-height: 1.2;
             }
 
             .input-group {
-                grid-template-columns: 1fr;
+                gap: 6px;
             }
 
             .stats-grid {
@@ -1003,7 +988,7 @@
         }
 
         .input-field label {
-            font-size: 11px;
+            font-size: var(--fs-caption);
             font-weight: 700;
             color: var(--text-muted);
             text-transform: uppercase;
@@ -1028,13 +1013,13 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+            background: var(--accent);
         }
 
         .btn-record .icon { width: 18px; height: 18px; }
 
         .btn-record:hover {
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+            background: var(--accent-strong);
         }
 
         .btn-edit-cancel {
@@ -1057,7 +1042,7 @@
         }
 
         .today-records-title {
-            font-size: 11px;
+            font-size: var(--fs-caption);
             color: var(--text-muted);
             margin-bottom: 0.55rem;
             font-weight: 700;
@@ -1071,7 +1056,7 @@
             align-items: center;
             gap: 8px;
             padding: 8px 2px;
-            font-size: 13px;
+            font-size: var(--fs-small);
             color: var(--text-secondary);
             border-bottom: 1px dashed rgba(148, 163, 184, 0.28);
             cursor: pointer;
@@ -1104,18 +1089,18 @@
             height: 22px;
             padding: 0 6px;
             border-radius: 999px;
-            font-size: 11px;
+            font-size: var(--fs-caption);
             font-weight: 800;
             color: #ffffff;
             letter-spacing: 0.02em;
         }
 
-        .set-badge.s1 { background: linear-gradient(135deg, #2563eb, #3b82f6); }
-        .set-badge.s2 { background: linear-gradient(135deg, #0ea5e9, #22d3ee); }
-        .set-badge.s3 { background: linear-gradient(135deg, #10b981, #34d399); }
-        .set-badge.s4 { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
-        .set-badge.s5 { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
-        .set-badge.s0 { background: linear-gradient(135deg, #64748b, #94a3b8); }
+        .set-badge.s1 { background: #1d4ed8; }
+        .set-badge.s2 { background: #0369a1; }
+        .set-badge.s3 { background: #047857; }
+        .set-badge.s4 { background: #b45309; }
+        .set-badge.s5 { background: #be123c; }
+        .set-badge.s0 { background: #475569; }
 
         .record-delete {
             background: none;
@@ -1162,18 +1147,17 @@
             min-height: 54px;
             border: none;
             border-radius: 14px;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: var(--success-strong);
             color: #ffffff;
-            font-size: 1rem;
+            font-size: var(--fs-body);
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 16px 30px rgba(5, 150, 105, 0.3);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.18);
+            transition: background 0.2s ease;
         }
 
         .btn-finish:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 20px 36px rgba(5, 150, 105, 0.36);
+            background: #065f46;
         }
 
         .btn-finish .icon { width: 20px; height: 20px; }
@@ -1184,13 +1168,13 @@
             left: 50%;
             bottom: calc(env(safe-area-inset-bottom, 0px) + 96px);
             transform: translateX(-50%) translateY(20px);
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: var(--success-strong);
             color: #fff;
             padding: 0.85rem 1.25rem;
             border-radius: 14px;
-            font-size: 0.9rem;
+            font-size: var(--fs-body);
             font-weight: 600;
-            box-shadow: 0 16px 32px rgba(5, 150, 105, 0.35);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.18);
             z-index: 2000;
             opacity: 0;
             transition: opacity 0.25s ease, transform 0.25s ease;
@@ -1212,12 +1196,12 @@
         }
 
         .history-entry {
-            background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(239, 246, 255, 0.96) 100%);
-            border: 1px solid rgba(148, 163, 184, 0.25);
+            background: var(--surface-2);
+            border: 1px solid rgba(148, 163, 184, 0.35);
             border-radius: 16px;
             margin-bottom: 12px;
             overflow: hidden;
-            box-shadow: 0 10px 22px rgba(15, 23, 42, 0.05);
+            box-shadow: var(--shadow-card);
         }
 
         .history-entry summary {
@@ -1235,11 +1219,11 @@
         .history-entry-date {
             font-weight: 800;
             color: var(--text-primary);
-            font-size: 0.95rem;
+            font-size: var(--fs-body);
         }
 
         .history-entry-meta {
-            font-size: 0.78rem;
+            font-size: var(--fs-caption);
             color: var(--text-secondary);
             margin-top: 2px;
         }
@@ -1268,13 +1252,13 @@
 
         .history-exercise-name {
             font-weight: 700;
-            font-size: 0.86rem;
+            font-size: var(--fs-small);
             color: var(--text-primary);
             margin-bottom: 4px;
         }
 
         .history-sets-line {
-            font-size: 0.78rem;
+            font-size: var(--fs-caption);
             color: var(--text-secondary);
             display: flex;
             flex-wrap: wrap;
@@ -1352,7 +1336,7 @@
             color: var(--text-primary);
             padding: 0.6rem 0.7rem;
             font-family: inherit;
-            font-size: 0.9rem;
+            font-size: var(--fs-body);
         }
 
         .admin-form-grid textarea { resize: vertical; min-height: 60px; }
@@ -1375,7 +1359,7 @@
                 <button type="button" class="password-toggle-btn" onclick="app.togglePasswordVisibility('passwordInput', this)" style="width:auto; min-height:auto; height:auto; margin:0; padding:0.35rem 0.6rem; min-width:54px; line-height:1.2;">Mostrar</button>
             </div>
             <button onclick="app.login()">Entrar</button>
-            <button onclick="app.openCreateAccountModal()" style="margin-top: 0.75rem; background: linear-gradient(135deg, #0ea5e9, #10b981);">Criar conta</button>
+            <button onclick="app.openCreateAccountModal()" style="margin-top: 0.75rem; background: transparent; border: 1px solid rgba(255,255,255,0.3);">Criar conta</button>
         </div>
     </div>
 
@@ -1423,15 +1407,6 @@
             </div>
         </header>
 
-        <div class="nav-tabs">
-            <button class="nav-tab active" onclick="app.switchTab('programs')">Início</button>
-            <button class="nav-tab" onclick="app.switchTab('workout')">Treino</button>
-            <button class="nav-tab" onclick="app.switchTab('progress')">Progresso</button>
-            <button class="nav-tab" onclick="app.switchTab('nutrition')">Nutrição</button>
-            <button class="nav-tab" onclick="app.switchTab('supplements')">Suplementos</button>
-            <button class="nav-tab" onclick="app.switchTab('coach')">Coach</button>
-        </div>
-
         <div class="content">
             <!-- PROGRAMS VIEW -->
             <div id="programs" class="view active">
@@ -1451,11 +1426,8 @@
             <!-- NUTRITION VIEW -->
             <div id="nutrition" class="view">
                 <div id="nutritionContent"></div>
-            </div>
-
-            <!-- SUPPLEMENTS VIEW -->
-            <div id="supplements" class="view">
-                <div id="supplementsContent"></div>
+                <!-- Suplementos ficam dentro de Nutrição (barra inferior com 5 destinos) -->
+                <div id="supplementsContent" style="margin-top: 1rem;"></div>
             </div>
 
             <!-- COACH VIEW -->
@@ -1481,10 +1453,6 @@
             <button class="nav-btn" onclick="app.switchTab('nutrition')">
                 <span class="nav-btn-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 4 13V9a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v4a7 7 0 0 1-7 7z"></path><path d="M11 8V4a2 2 0 0 1 4 0"></path><path d="M4 13h14"></path></svg></span>
                 <span>Nutrição</span>
-            </button>
-            <button class="nav-btn" onclick="app.switchTab('supplements')">
-                <span class="nav-btn-icon"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="6" rx="3" transform="rotate(-45 12 12)"></rect><line x1="8.5" y1="15.5" x2="12" y2="12"></line></svg></span>
-                <span>Supl.</span>
             </button>
             <button class="nav-btn" onclick="app.switchTab('coach')">
                 <span class="nav-btn-icon"><svg class="icon" viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="12" rx="3"></rect><path d="M12 8V4"></path><circle cx="12" cy="3" r="1"></circle><line x1="9" y1="13" x2="9" y2="15"></line><line x1="15" y1="13" x2="15" y2="15"></line><line x1="4" y1="13" x2="2" y2="13"></line><line x1="22" y1="13" x2="20" y2="13"></line></svg></span>
@@ -1516,12 +1484,12 @@
     </div>
 
     <div id="changePasswordModal" class="modal" onclick="if(event.target === this) app.closeChangePasswordModal()">
-        <div class="modal-content" style="border-top: 4px solid #4f46e5;">
+        <div class="modal-content">
             <h2 class="modal-title">Trocar senha</h2>
             <p class="modal-subtitle">Digite sua senha atual e escolha uma nova senha.</p>
 
             <div style="margin-bottom: 0.8rem;">
-                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: 0.9rem;">Senha atual</label>
+                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: var(--fs-body);">Senha atual</label>
                 <div class="password-input-wrap" style="margin-bottom: 0;">
                     <input id="currentPasswordInput" type="password" placeholder="Senha atual" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.85); color: var(--text-primary); padding: 0.7rem 0.8rem;" />
                 </div>
@@ -1529,7 +1497,7 @@
             </div>
 
             <div style="margin-bottom: 0.8rem;">
-                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: 0.9rem;">Nova senha</label>
+                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: var(--fs-body);">Nova senha</label>
                 <div class="password-input-wrap" style="margin-bottom: 0;">
                     <input id="newPasswordInput" type="password" placeholder="Nova senha" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.85); color: var(--text-primary); padding: 0.7rem 0.8rem;" />
                 </div>
@@ -1537,7 +1505,7 @@
             </div>
 
             <div style="margin-bottom: 1rem;">
-                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: 0.9rem;">Repetir nova senha</label>
+                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: var(--fs-body);">Repetir nova senha</label>
                 <div class="password-input-wrap" style="margin-bottom: 0;">
                     <input id="newPasswordConfirmInput" type="password" placeholder="Repita a nova senha" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.85); color: var(--text-primary); padding: 0.7rem 0.8rem; padding-right: 3rem;" />
                     <button type="button" class="password-toggle-btn" onclick="app.togglePasswordVisibility('newPasswordConfirmInput', this)" style="width:auto; min-height:auto; height:auto; margin:0; padding:0.35rem 0.6rem; min-width:54px; line-height:1.2; color: var(--text-secondary);">Mostrar</button>
@@ -1550,7 +1518,7 @@
     </div>
 
     <div id="adminPanelModal" class="modal" onclick="if(event.target === this) app.closeAdminPanel()">
-        <div class="modal-content" style="border-top: 4px solid #16a34a;">
+        <div class="modal-content">
             <h2 class="modal-title">Gerenciar contas</h2>
             <p class="modal-subtitle">Veja as contas cadastradas e redefina a senha de qualquer usuário que não conseguir entrar.</p>
             <div id="adminUsersList" style="display: grid; gap: 0.75rem;"></div>
@@ -1559,7 +1527,7 @@
     </div>
 
     <div id="finishWorkoutModal" class="modal" onclick="if(event.target === this) app.closeFinishWorkoutModal()">
-        <div class="modal-content" style="border-top: 4px solid #10b981;">
+        <div class="modal-content">
             <h2 class="modal-title">Finalizar treino</h2>
             <p class="modal-subtitle">Deseja finalizar o treino de hoje? Os registros serão salvos no histórico e a área "Registros de hoje" será limpa para o próximo treino.</p>
             <button class="btn btn-finish" onclick="app.finalizeWorkout()">
@@ -1571,23 +1539,23 @@
     </div>
 
     <div id="adminExercisesModal" class="modal" onclick="if(event.target === this) app.closeAdminExercisesPanel()">
-        <div class="modal-content" style="border-top: 4px solid #16a34a; max-width: 480px;">
+        <div class="modal-content" style="max-width: 480px;">
             <h2 class="modal-title">Gerenciar exercícios</h2>
             <p class="modal-subtitle">Adicione, edite ou remova exercícios, defina fotos de demonstração e organize a ordem de cada dia de treino.</p>
 
-            <label style="display:block; margin-bottom:0.35rem; color: var(--text-secondary); font-size:0.85rem;">Dia de treino</label>
+            <label style="display:block; margin-bottom:0.35rem; color: var(--text-secondary); font-size: var(--fs-small);">Dia de treino</label>
             <select id="adminDaySelect" class="admin-day-select" onchange="app.resetExerciseForm(); app.renderAdminExercisesPanel()"></select>
 
             <div style="display:flex; gap:8px; margin-bottom: 1rem;">
-                <button class="btn" onclick="app.promptNewProgramDay()" style="font-size:0.82rem; min-height:38px;">+ Novo dia</button>
-                <button class="btn btn-danger" onclick="app.deleteProgramDay()" style="font-size:0.82rem; min-height:38px;">Excluir dia</button>
+                <button class="btn" onclick="app.promptNewProgramDay()" style="font-size: var(--fs-small); min-height:38px;">+ Novo dia</button>
+                <button class="btn btn-danger" onclick="app.deleteProgramDay()" style="font-size: var(--fs-small); min-height:38px;">Excluir dia</button>
             </div>
 
             <div id="adminExercisesList"></div>
 
             <hr class="section-divider" />
 
-            <h3 id="adminExerciseFormTitle" style="font-size:0.95rem; font-weight:700; margin-bottom:0.6rem;">Adicionar exercício</h3>
+            <h3 id="adminExerciseFormTitle" style="font-size: var(--fs-body); font-weight:700; margin-bottom:0.6rem;">Adicionar exercício</h3>
             <div class="admin-form-grid">
                 <input id="adminExName" type="text" placeholder="Nome do exercício" class="full" />
                 <input id="adminExSets" type="number" min="1" placeholder="Séries" />
@@ -1611,7 +1579,7 @@
     </div>
 
     <div id="profileModal" class="modal" onclick="if(event.target === this) app.closeProfileSetup()">
-        <div class="modal-content" style="border-top: 4px solid #4f46e5;">
+        <div class="modal-content">
             <h2 class="modal-title">Ficha de cadastro</h2>
             <p class="modal-subtitle">Complete seus dados para receber um treino mais adequado ao seu perfil.</p>
 
@@ -1625,17 +1593,17 @@
             </div>
 
             <div style="margin-bottom: 0.8rem;">
-                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: 0.9rem;">Peso (kg)</label>
+                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: var(--fs-body);">Peso (kg)</label>
                 <input id="profilePeso" type="number" min="30" max="250" step="0.5" placeholder="Ex: 72,5" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.85); color: var(--text-primary); padding: 0.7rem 0.8rem;" />
             </div>
 
             <div style="margin-bottom: 0.8rem;">
-                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: 0.9rem;">Altura (cm)</label>
+                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: var(--fs-body);">Altura (cm)</label>
                 <input id="profileAltura" type="number" min="120" max="240" step="1" placeholder="Ex: 175" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.85); color: var(--text-primary); padding: 0.7rem 0.8rem;" />
             </div>
 
             <div style="margin-bottom: 0.8rem;">
-                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: 0.9rem;">Sexo</label>
+                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: var(--fs-body);">Sexo</label>
                 <select id="profileSexo" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.85); color: var(--text-primary); padding: 0.7rem 0.8rem;">
                     <option value="">Selecione</option>
                     <option value="Masculino">Masculino</option>
@@ -1645,7 +1613,7 @@
             </div>
 
             <div style="margin-bottom: 1rem;">
-                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: 0.9rem;">Objetivo</label>
+                <label style="display: block; margin-bottom: 0.35rem; color: var(--text-secondary); font-size: var(--fs-body);">Objetivo</label>
                 <select id="profileObjetivo" style="width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.85); color: var(--text-primary); padding: 0.7rem 0.8rem;">
                     <option value="">Selecione</option>
                     <option value="emagrecimento">Emagrecimento</option>
@@ -1659,12 +1627,132 @@
         </div>
     </div>
 
+    <div id="assessmentModal" class="modal" onclick="if(event.target === this) app.closeAssessmentForm()">
+        <div class="modal-content">
+            <h2 class="modal-title">Nova avaliação InBody</h2>
+            <p class="modal-subtitle">Copie os valores do laudo. Os campos vazios ficam como "—".</p>
+            <div id="assessmentFormFields"></div>
+            <button class="btn btn-primary" onclick="app.saveAssessment()">Salvar avaliação</button>
+            <button class="btn" onclick="app.closeAssessmentForm()" style="margin-top: 8px;">Cancelar</button>
+        </div>
+    </div>
+
     <input id="backupImportInput" type="file" accept=".json" style="display: none;" onchange="app.importBackup(this.files && this.files[0])" />
 
     <script>
         class TreinoApp {
             constructor() {
                 this.defaultPrograms = [
+                    {
+                        id: 'def_push',
+                        name: 'Segunda • Empurrar',
+                        desc: 'Peito, ombro e tríceps • Força pesada • Cardio moderado 25-30min',
+                        days: 6,
+                        difficulty: 'Definição 40 dias',
+                        exercises: [
+                            { name: 'Supino Reto', sets: 4, reps: '6-8', rest: '2-3 min' },
+                            { name: 'Desenvolvimento', sets: 4, reps: '6-8', rest: '2 min', note: 'Desenvolvimento militar' },
+                            { name: 'Supino Inclinado', sets: 3, reps: '8-10', rest: '90s', note: 'Com halteres' },
+                            { name: 'Elevação Lateral', sets: 3, reps: '12-15', rest: '45s', note: 'Última série: tire peso e continue sem parar' },
+                            { name: 'Tríceps Testa', sets: 3, reps: '8-10', rest: '75s' },
+                            { name: 'Tríceps Corda', sets: 2, reps: '12-15', rest: '45s' },
+                            { name: 'Cardio Moderado', sets: 1, reps: '25-30min', note: 'Frequência cardíaca entre 110 e 130 bpm' }
+                        ]
+                    },
+                    {
+                        id: 'def_pull',
+                        name: 'Terça • Puxar',
+                        desc: 'Costas e bíceps • Força pesada • Cardio moderado 25-30min',
+                        days: 6,
+                        difficulty: 'Definição 40 dias',
+                        exercises: [
+                            { name: 'Puxada Frontal', sets: 4, reps: '6-8', rest: '2-3 min', note: 'Ou barra fixa (com peso, se conseguir)' },
+                            { name: 'Remada Curvada', sets: 4, reps: '6-8', rest: '2 min' },
+                            { name: 'Remada Unilateral', sets: 3, reps: '8-10', rest: '90s', note: 'Com halter' },
+                            { name: 'Pulldown', sets: 2, reps: '12-15', rest: '60s', note: 'Com braço reto' },
+                            { name: 'Face Pull', sets: 3, reps: '15', rest: '45s' },
+                            { name: 'Rosca Direta', sets: 3, reps: '8-10', rest: '75s' },
+                            { name: 'Rosca Martelo', sets: 2, reps: '12', rest: '45s' },
+                            { name: 'Cardio Moderado', sets: 1, reps: '25-30min', note: 'Frequência cardíaca entre 110 e 130 bpm' }
+                        ]
+                    },
+                    {
+                        id: 'def_pernas',
+                        name: 'Quarta • Pernas',
+                        desc: 'Pernas • Força pesada',
+                        days: 6,
+                        difficulty: 'Definição 40 dias',
+                        exercises: [
+                            { name: 'Agachamento Livre', sets: 4, reps: '5-8', rest: '3 min' },
+                            { name: 'Terra Romeno', sets: 4, reps: '6-8', rest: '2-3 min' },
+                            { name: 'Leg Press', sets: 3, reps: '10', rest: '90s' },
+                            { name: 'Mesa Flexora', sets: 3, reps: '10-12', rest: '60s' },
+                            { name: 'Panturrilha em Pé', sets: 4, reps: '8-12', rest: '60s' },
+                            { name: 'Abdominal na Polia', sets: 3, reps: '10-12', rest: '60s' }
+                        ]
+                    },
+                    {
+                        id: 'def_core',
+                        name: 'Quinta • Abdominal + Aeróbico',
+                        desc: 'Circuito de abdominal + cardio moderado 40-45min',
+                        days: 6,
+                        difficulty: 'Definição 40 dias',
+                        exercises: [
+                            { name: 'Abdominal na Polia', sets: 3, reps: '12-15', note: 'Circuito: faça os exercícios em sequência e descanse 60s ao fim de cada volta. 4 voltas a partir da semana 3' },
+                            { name: 'Elevação de Pernas', sets: 3, reps: '10-15', note: 'Na barra ou no banco' },
+                            { name: 'Prancha', sets: 3, reps: '45-60s' },
+                            { name: 'Prancha Lateral', sets: 3, reps: '30-40s cada lado' },
+                            { name: 'Roda Abdominal', sets: 3, reps: '8-12', note: 'Ou abdominal com bola' },
+                            { name: 'Russian Twist', sets: 3, reps: '20', rest: '60s (fim da volta)', note: 'Com anilha, 10 para cada lado' },
+                            { name: 'Cardio Moderado', sets: 1, reps: '40-45min', note: 'Esteira inclinada, elíptico ou bike • Frequência cardíaca entre 110 e 130 bpm' }
+                        ]
+                    },
+                    {
+                        id: 'def_inf_metab',
+                        name: 'Sexta • Inferior Metabólico',
+                        desc: 'Circuito de pernas • Cardio moderado 20min',
+                        days: 6,
+                        difficulty: 'Definição 40 dias',
+                        exercises: [
+                            { name: 'Agachamento Goblet', sets: 3, reps: '12', rest: 'até 15s', note: 'Circuito: no máximo 15s entre os exercícios. Sem 1: 3 voltas, 75s de descanso • Sem 2: 3 voltas, 60s • Sem 3: 4 voltas, 60s • Sem 4-5: 4 voltas, 45s' },
+                            { name: 'Afundo Andando', sets: 3, reps: '10 por perna', rest: 'até 15s' },
+                            { name: 'Stiff com Halteres', sets: 3, reps: '12', rest: 'até 15s' },
+                            { name: 'Cadeira Extensora', sets: 3, reps: '15', rest: 'até 15s' },
+                            { name: 'Mesa Flexora', sets: 3, reps: '15', rest: 'até 15s' },
+                            { name: 'Elevação Pélvica', sets: 3, reps: '12', rest: 'até 15s' },
+                            { name: 'Kettlebell Swing', sets: 3, reps: '15', rest: 'até 15s' },
+                            { name: 'Prancha', sets: 3, reps: '40s', note: 'Fim da volta: descanse conforme a semana' },
+                            { name: 'Cardio Moderado', sets: 1, reps: '20min', note: 'Frequência cardíaca entre 110 e 130 bpm' }
+                        ]
+                    },
+                    {
+                        id: 'def_sup_metab',
+                        name: 'Sábado • Superior Metabólico',
+                        desc: 'Exercícios em dupla • HIIT 15-20min no final',
+                        days: 6,
+                        difficulty: 'Definição 40 dias',
+                        exercises: [
+                            { name: 'Supino Inclinado', sets: 3, reps: '12', note: 'Par A (na máquina): emende com a Remada Baixa, sem pausa' },
+                            { name: 'Remada Baixa', sets: 3, reps: '12', rest: '60s após o par' },
+                            { name: 'Desenvolvimento', sets: 3, reps: '12', note: 'Par B (com halteres): emende com a Puxada Neutra' },
+                            { name: 'Puxada Neutra', sets: 3, reps: '12', rest: '60s após o par' },
+                            { name: 'Crucifixo', sets: 3, reps: '15', note: 'Par C (no cabo): emende com o Crucifixo Inverso' },
+                            { name: 'Crucifixo Inverso', sets: 3, reps: '15', rest: '45s após o par' },
+                            { name: 'Rosca W', sets: 3, reps: '12-15', note: 'Par D: emende com o Tríceps no Banco' },
+                            { name: 'Tríceps no Banco', sets: 3, reps: 'até a falha', rest: '45s após o par' },
+                            { name: 'HIIT', sets: 1, reps: '15-20min', note: '5 min de aquecimento • 30s forte / 90s leve, 8 a 10 vezes • 5 min leve' }
+                        ]
+                    },
+                    {
+                        id: 'def_descanso',
+                        name: 'Domingo • Descanso',
+                        desc: 'Recuperação • Caminhada leve opcional',
+                        days: 6,
+                        difficulty: 'Definição 40 dias',
+                        exercises: [
+                            { name: 'Caminhada Leve', sets: 1, reps: '30-40min', note: 'Opcional. Dia de descanso: capriche no sono e na alimentação' }
+                        ]
+                    },
                     {
                         id: 'fullbody',
                         name: 'Full Body A',
@@ -1855,6 +1943,321 @@
                     }
                 };
 
+                // Passo a passo de cada exercício (seção "Como fazer" no card do treino)
+                this.exerciseHowTo = {
+                    'Supino Reto': {
+                        musculos: 'Peitoral, tríceps e parte da frente do ombro',
+                        posicao: 'Deitado no banco, olhos embaixo da barra, pés firmes no chão. Junte as escápulas (ombros para trás e para baixo) e mantenha uma leve curva na lombar.',
+                        passos: ['Pegue a barra um pouco mais aberta que a largura dos ombros.', 'Tire a barra do suporte e posicione acima do peito, braços esticados.', 'Desça controlando (2 segundos) até encostar de leve no meio do peito, cotovelos a uns 45° do corpo.', 'Empurre para cima com força até esticar os braços, sem tirar os ombros do banco.'],
+                        respiracao: 'Puxe o ar na descida e solte ao empurrar.',
+                        erros: ['Abrir os cotovelos a 90° (machuca o ombro).', 'Quicar a barra no peito ou tirar o quadril do banco.']
+                    },
+                    'Desenvolvimento': {
+                        musculos: 'Ombros (principalmente a parte da frente) e tríceps',
+                        posicao: 'Em pé (barra) ou sentado com encosto (halteres). Abdômen e glúteos contraídos, sem arquear a lombar.',
+                        passos: ['Comece com a barra/halteres na altura do queixo, cotovelos um pouco à frente do corpo.', 'Empurre para cima até quase esticar os braços acima da cabeça.', 'Na barra, passe a cabeça levemente para trás na subida e volte para "dentro" no topo.', 'Desça devagar até a altura do queixo.'],
+                        respiracao: 'Puxe o ar embaixo, solte ao subir.',
+                        erros: ['Arquear muito a lombar para conseguir subir o peso.', 'Descer só até a metade.']
+                    },
+                    'Supino Inclinado': {
+                        musculos: 'Parte de cima do peitoral, ombro e tríceps',
+                        posicao: 'Banco inclinado a 30-45°. Escápulas juntas e pés firmes no chão. Na máquina, ajuste o banco para a pegada ficar na linha do meio do peito.',
+                        passos: ['Halteres ao lado do peito, cotovelos a uns 45° do corpo.', 'Empurre para cima e um pouco para dentro, até os halteres quase se encostarem.', 'Desça devagar até sentir o peito alongar.', 'Mantenha os ombros colados no banco o tempo todo.'],
+                        respiracao: 'Puxe o ar na descida, solte ao empurrar.',
+                        erros: ['Banco muito inclinado (vira exercício de ombro).', 'Bater os halteres em cima e perder a tensão.']
+                    },
+                    'Elevação Lateral': {
+                        musculos: 'Lateral do ombro (deixa o ombro mais largo)',
+                        posicao: 'Em pé, halteres ao lado do corpo, cotovelos levemente dobrados e tronco um pouco inclinado à frente.',
+                        passos: ['Suba os braços para os lados, puxando com os cotovelos.', 'Pare na altura dos ombros, com as mãos na linha dos cotovelos.', 'Segure 1 segundo em cima.', 'Desça devagar (2-3 segundos).'],
+                        respiracao: 'Solte o ar ao subir, puxe ao descer.',
+                        erros: ['Dar impulso com o corpo.', 'Subir os ombros em direção às orelhas (trabalha o trapézio em vez do ombro).']
+                    },
+                    'Tríceps Testa': {
+                        musculos: 'Tríceps (principalmente a parte longa)',
+                        posicao: 'Deitado no banco, barra W ou halteres com os braços esticados acima do peito.',
+                        passos: ['Incline levemente os braços para trás, na direção da cabeça.', 'Dobre só os cotovelos, descendo a barra até perto da testa.', 'Os cotovelos ficam apontando para cima e não abrem.', 'Estique os braços voltando à posição inicial.'],
+                        respiracao: 'Puxe o ar na descida, solte ao estender.',
+                        erros: ['Abrir os cotovelos para os lados.', 'Mexer os ombros (o movimento é só do cotovelo).']
+                    },
+                    'Tríceps Corda': {
+                        musculos: 'Tríceps',
+                        posicao: 'De frente para a polia alta, corda nas mãos, cotovelos colados ao corpo e tronco levemente inclinado.',
+                        passos: ['Comece com os cotovelos dobrados a 90°.', 'Empurre a corda para baixo até esticar os braços.', 'No final, afaste as pontas da corda para os lados.', 'Volte devagar até 90°, sem deixar os cotovelos subirem.'],
+                        respiracao: 'Solte o ar ao empurrar.',
+                        erros: ['Cotovelos saindo do lugar.', 'Jogar o corpo por cima da corda para usar mais peso.']
+                    },
+                    'Tríceps Francês': {
+                        musculos: 'Tríceps (parte longa)',
+                        posicao: 'Sentado com encosto, um halter seguro com as duas mãos acima da cabeça.',
+                        passos: ['Dobre os cotovelos descendo o halter atrás da cabeça.', 'Desça até sentir o tríceps alongar.', 'Estique os braços de volta.', 'Cotovelos apontando para a frente/cima o tempo todo.'],
+                        respiracao: 'Puxe o ar ao descer, solte ao subir.',
+                        erros: ['Abrir muito os cotovelos.', 'Arquear a lombar.']
+                    },
+                    'Puxada Frontal': {
+                        musculos: 'Costas (dorsal, que deixa as costas largas) e bíceps',
+                        posicao: 'Sentado, coxas presas no apoio, pegada um pouco mais aberta que os ombros, peito estufado.',
+                        passos: ['Comece com os braços esticados e os ombros "puxados para baixo".', 'Puxe a barra até a parte de cima do peito, levando os cotovelos para baixo e para trás.', 'Aperte as costas 1 segundo embaixo.', 'Volte devagar até esticar os braços.'],
+                        respiracao: 'Solte o ar ao puxar, puxe o ar ao subir.',
+                        erros: ['Jogar o tronco muito para trás.', 'Puxar a barra atrás da nuca.'],
+                        dica: 'Barra fixa: mesma execução, mas você puxa o corpo até o queixo passar da barra.'
+                    },
+                    'Puxada Frente': {
+                        musculos: 'Costas (dorsal) e bíceps',
+                        posicao: 'Sentado, coxas presas, pegada aberta, peito estufado.',
+                        passos: ['Braços esticados e ombros para baixo.', 'Puxe a barra até o peito levando os cotovelos para baixo.', 'Aperte as costas embaixo.', 'Volte devagar.'],
+                        respiracao: 'Solte o ar ao puxar.',
+                        erros: ['Balançar o tronco.', 'Puxar só com os braços.']
+                    },
+                    'Puxada Neutra': {
+                        musculos: 'Costas (dorsal e meio das costas) e bíceps',
+                        posicao: 'Na puxada, use o triângulo ou a barra com pegada neutra (palmas uma de frente para a outra). Coxas presas, peito estufado.',
+                        passos: ['Braços esticados e ombros para baixo.', 'Puxe até a parte de cima do peito, cotovelos rentes ao corpo.', 'Aperte as costas 1 segundo.', 'Volte devagar.'],
+                        respiracao: 'Solte o ar ao puxar.',
+                        erros: ['Jogar o tronco para trás.', 'Encolher os ombros.']
+                    },
+                    'Remada Curvada': {
+                        musculos: 'Meio das costas, dorsal, parte de trás do ombro e bíceps',
+                        posicao: 'Em pé, barra na mão (pegada na largura dos ombros), joelhos levemente dobrados. Incline o tronco a uns 45° com a coluna reta.',
+                        passos: ['Deixe a barra pendurada com os braços esticados.', 'Puxe a barra até o umbigo, levando os cotovelos para trás.', 'Junte as escápulas no final.', 'Desça devagar sem mudar a inclinação do tronco.'],
+                        respiracao: 'Solte o ar ao puxar.',
+                        erros: ['Arredondar a coluna (risco de lesão na lombar).', 'Levantar o tronco a cada repetição para dar impulso.']
+                    },
+                    'Remada Unilateral': {
+                        musculos: 'Dorsal e meio das costas',
+                        posicao: 'Um joelho e uma mão apoiados no banco, outro pé no chão, coluna reta e paralela ao chão. Halter na mão livre.',
+                        passos: ['Braço esticado, halter pendurado embaixo do ombro.', 'Puxe o halter em direção ao quadril (não ao peito).', 'Cotovelo passa rente ao corpo.', 'Desça devagar até esticar e alongar as costas.'],
+                        respiracao: 'Solte o ar ao puxar.',
+                        erros: ['Girar o tronco para subir mais.', 'Puxar com o bíceps em vez das costas.']
+                    },
+                    'Pulldown': {
+                        musculos: 'Dorsal',
+                        posicao: 'Em pé, de frente para a polia alta, barra reta ou corda. Braços esticados, tronco inclinado à frente uns 30°.',
+                        passos: ['Comece com as mãos na altura da cabeça e os braços quase esticados.', 'Leve a barra até as coxas, num arco, sem dobrar os cotovelos.', 'Aperte as costas embaixo.', 'Volte devagar.'],
+                        respiracao: 'Solte o ar ao descer a barra.',
+                        erros: ['Dobrar os cotovelos (vira tríceps).', 'Mexer o tronco para ajudar.']
+                    },
+                    'Face Pull': {
+                        musculos: 'Parte de trás do ombro e meio das costas. Ajuda a postura e a saúde do ombro',
+                        posicao: 'Polia na altura do rosto, corda nas mãos com as palmas para baixo. Dê um passo para trás.',
+                        passos: ['Braços esticados à frente.', 'Puxe a corda em direção ao rosto, abrindo as mãos para os lados das orelhas.', 'Cotovelos ficam altos, na linha dos ombros.', 'Segure 1 segundo e volte devagar.'],
+                        respiracao: 'Solte o ar ao puxar.',
+                        erros: ['Usar peso demais e jogar o corpo para trás.', 'Cotovelos baixos (vira uma remada comum).']
+                    },
+                    'Rosca Direta': {
+                        musculos: 'Bíceps',
+                        posicao: 'Em pé, barra com as palmas para frente, mãos na largura dos ombros, cotovelos colados ao corpo.',
+                        passos: ['Braços esticados.', 'Dobre os cotovelos subindo a barra até perto dos ombros.', 'Aperte o bíceps em cima.', 'Desça devagar (2-3 segundos) até esticar.'],
+                        respiracao: 'Solte o ar ao subir.',
+                        erros: ['Balançar o corpo.', 'Cotovelos indo para a frente.']
+                    },
+                    'Rosca W': {
+                        musculos: 'Bíceps e antebraço',
+                        posicao: 'Em pé, barra W (a barra "ondulada"), pegada nas curvas, cotovelos colados ao corpo.',
+                        passos: ['Braços esticados.', 'Suba a barra dobrando só os cotovelos.', 'Aperte o bíceps em cima.', 'Desça devagar.'],
+                        respiracao: 'Solte o ar ao subir.',
+                        erros: ['Dar impulso com o quadril.', 'Não esticar o braço embaixo.']
+                    },
+                    'Rosca Martelo': {
+                        musculos: 'Bíceps, braquial (deixa o braço mais grosso) e antebraço',
+                        posicao: 'Em pé, halteres com pegada neutra (palmas viradas para o corpo).',
+                        passos: ['Braços esticados ao lado do corpo.', 'Suba os halteres sem girar o punho, como se fosse martelar.', 'Pare perto do ombro.', 'Desça devagar.'],
+                        respiracao: 'Solte o ar ao subir.',
+                        erros: ['Balançar o corpo.', 'Cotovelos indo para a frente.']
+                    },
+                    'Rosca Scott': {
+                        musculos: 'Bíceps (parte de baixo)',
+                        posicao: 'Sentado no banco Scott, axilas encostadas no topo do apoio, braços apoiados.',
+                        passos: ['Comece com o braço quase esticado.', 'Suba a barra até perto do queixo.', 'Aperte o bíceps em cima.', 'Desça devagar, sem travar o cotovelo embaixo.'],
+                        respiracao: 'Solte o ar ao subir.',
+                        erros: ['Tirar o braço do apoio.', 'Soltar o peso na descida.']
+                    },
+                    'Agachamento Livre': {
+                        musculos: 'Quadríceps, glúteos e posterior de coxa. Também trabalha o abdômen',
+                        posicao: 'Barra apoiada no trapézio (não no pescoço), pés na largura dos ombros com as pontas um pouco para fora. Peito aberto, olhar à frente.',
+                        passos: ['Puxe o ar e trave o abdômen, como se fosse levar um soco.', 'Desça empurrando o quadril para trás e dobrando os joelhos ao mesmo tempo.', 'Desça até a coxa ficar paralela ao chão ou um pouco abaixo, joelhos na direção das pontas dos pés.', 'Suba empurrando o chão com o pé inteiro.'],
+                        respiracao: 'Segure o ar na descida e solte no final da subida.',
+                        erros: ['Joelhos entrando para dentro.', 'Calcanhar saindo do chão ou coluna arredondando embaixo.']
+                    },
+                    'Agachamento': {
+                        musculos: 'Quadríceps, glúteos e posterior de coxa',
+                        posicao: 'Pés na largura dos ombros, pontas um pouco para fora, peito aberto.',
+                        passos: ['Trave o abdômen.', 'Desça levando o quadril para trás e dobrando os joelhos.', 'Coxas paralelas ao chão.', 'Suba empurrando o chão.'],
+                        respiracao: 'Puxe o ar na descida, solte na subida.',
+                        erros: ['Joelhos para dentro.', 'Tirar o calcanhar do chão.']
+                    },
+                    'Agachamento Goblet': {
+                        musculos: 'Quadríceps, glúteos e abdômen',
+                        posicao: 'Segure um halter (ou kettlebell) em pé, colado ao peito, com as duas mãos. Pés um pouco mais abertos que os ombros.',
+                        passos: ['Peito aberto e cotovelos apontando para baixo.', 'Desça entre as pernas, mantendo o tronco o mais reto possível.', 'Os cotovelos passam por dentro dos joelhos embaixo.', 'Suba empurrando o chão.'],
+                        respiracao: 'Puxe o ar ao descer, solte ao subir.',
+                        erros: ['Deixar o peso afastar do peito.', 'Inclinar muito o tronco à frente.']
+                    },
+                    'Terra Romeno': {
+                        musculos: 'Posterior de coxa, glúteos e lombar',
+                        posicao: 'Em pé, barra na frente das coxas, pegada na largura dos ombros, joelhos levemente dobrados (e eles ficam assim o tempo todo).',
+                        passos: ['Empurre o quadril para trás, como se fosse fechar uma porta com o bumbum.', 'A barra desce raspando nas coxas, com a coluna sempre reta.', 'Desça até sentir a parte de trás da coxa esticar bem (geralmente até um pouco abaixo do joelho).', 'Suba levando o quadril à frente e apertando os glúteos.'],
+                        respiracao: 'Puxe o ar e trave o abdômen antes de descer, solte ao subir.',
+                        erros: ['Arredondar a coluna (risco de lesão).', 'Dobrar muito os joelhos (vira um agachamento).']
+                    },
+                    'Stiff com Halteres': {
+                        musculos: 'Posterior de coxa e glúteos',
+                        posicao: 'Em pé, um halter em cada mão na frente das coxas, joelhos levemente dobrados.',
+                        passos: ['Empurre o quadril para trás com a coluna reta.', 'Halteres descem rente às pernas.', 'Desça até sentir a parte de trás da coxa esticar.', 'Suba apertando os glúteos.'],
+                        respiracao: 'Puxe o ar ao descer, solte ao subir.',
+                        erros: ['Coluna arredondada.', 'Halteres longe do corpo.']
+                    },
+                    'Leg Press': {
+                        musculos: 'Quadríceps e glúteos',
+                        posicao: 'Costas e quadril bem encostados no banco. Pés na plataforma na largura dos ombros, no meio dela.',
+                        passos: ['Destrave a máquina com as pernas quase esticadas.', 'Desça a plataforma dobrando os joelhos até uns 90°, ou até onde o quadril não desencosta.', 'Os joelhos acompanham a direção dos pés.', 'Empurre de volta sem travar os joelhos no final.'],
+                        respiracao: 'Puxe o ar na descida, solte ao empurrar.',
+                        erros: ['Descer tanto que o quadril sai do banco (machuca a lombar).', 'Travar os joelhos esticados.']
+                    },
+                    'Mesa Flexora': {
+                        musculos: 'Posterior de coxa',
+                        posicao: 'Deitado de bruços, joelhos logo após a ponta do banco, rolo apoiado acima do calcanhar. Segure nas alças.',
+                        passos: ['Dobre os joelhos puxando o rolo em direção ao bumbum.', 'Mantenha o quadril colado no banco.', 'Aperte em cima por 1 segundo.', 'Desça devagar até quase esticar.'],
+                        respiracao: 'Solte o ar ao subir.',
+                        erros: ['Levantar o quadril.', 'Soltar o peso na volta.']
+                    },
+                    'Cadeira Extensora': {
+                        musculos: 'Quadríceps (frente da coxa)',
+                        posicao: 'Sentado, costas encostadas, joelho alinhado com o eixo da máquina, rolo na parte de baixo da canela.',
+                        passos: ['Estique as pernas até ficarem retas.', 'Aperte a coxa 1 segundo em cima.', 'Desça devagar (2-3 segundos).', 'Segure nas alças para o quadril não sair do banco.'],
+                        respiracao: 'Solte o ar ao subir.',
+                        erros: ['Chutar o peso.', 'Descer rápido demais.']
+                    },
+                    'Panturrilha em Pé': {
+                        musculos: 'Panturrilha',
+                        posicao: 'Na máquina ou num degrau, só a ponta dos pés apoiada, calcanhares para fora.',
+                        passos: ['Desça os calcanhares o máximo que conseguir (alongando).', 'Segure 1 segundo embaixo.', 'Suba na ponta dos pés o mais alto possível.', 'Segure 1 segundo em cima.'],
+                        respiracao: 'Respire normalmente.',
+                        erros: ['Fazer curto e rápido, quicando.', 'Dobrar os joelhos para ajudar.']
+                    },
+                    'Afundo Andando': {
+                        musculos: 'Glúteos e quadríceps',
+                        posicao: 'Em pé, um halter em cada mão (ou sem peso), tronco reto.',
+                        passos: ['Dê um passo grande à frente.', 'Desça até o joelho de trás quase encostar no chão. Os dois joelhos ficam a uns 90°.', 'Empurre com o pé da frente e já dê o próximo passo com a outra perna.', 'Conte as repetições de cada perna.'],
+                        respiracao: 'Puxe o ar ao descer, solte ao subir.',
+                        erros: ['Passo curto (o joelho da frente passa muito da ponta do pé).', 'Tronco caindo para a frente.']
+                    },
+                    'Elevação Pélvica': {
+                        musculos: 'Glúteos',
+                        posicao: 'Costas (na altura das escápulas) apoiadas num banco, barra ou halter sobre o quadril (use uma proteção), pés no chão na largura do quadril.',
+                        passos: ['Comece com o quadril perto do chão.', 'Suba o quadril empurrando com os calcanhares até o tronco ficar reto, alinhado com as coxas.', 'Aperte forte os glúteos 1-2 segundos em cima.', 'Desça devagar.'],
+                        respiracao: 'Solte o ar ao subir.',
+                        erros: ['Arquear a lombar em cima em vez de apertar o glúteo.', 'Pés longe demais (trabalha mais a parte de trás da coxa).']
+                    },
+                    'Kettlebell Swing': {
+                        musculos: 'Glúteos, posterior de coxa e abdômen. Também acelera o coração (bom para queimar calorias)',
+                        posicao: 'Pés um pouco mais abertos que os ombros, kettlebell no chão à frente. Segure com as duas mãos e coluna reta.',
+                        passos: ['Leve o kettlebell para trás, entre as pernas, empurrando o quadril para trás (é uma dobradiça, não um agachamento).', 'Leve o quadril à frente com força e aperte os glúteos. Isso faz o peso subir até a altura do peito.', 'Os braços só guiam, não levantam o peso.', 'Deixe o peso descer e emende na próxima repetição.'],
+                        respiracao: 'Solte o ar com força no topo.',
+                        erros: ['Levantar o peso com os braços ou ombros.', 'Agachar em vez de jogar o quadril para trás.']
+                    },
+                    'Abdominal na Polia': {
+                        musculos: 'Abdômen (reto abdominal)',
+                        posicao: 'Ajoelhado de frente para a polia alta, corda segura ao lado da cabeça.',
+                        passos: ['Quadril parado, não sente nos calcanhares.', 'Enrole o tronco levando o cotovelo em direção aos joelhos, "fechando" o abdômen.', 'Aperte 1 segundo embaixo.', 'Volte devagar até alongar.'],
+                        respiracao: 'Solte todo o ar ao descer.',
+                        erros: ['Puxar com os braços.', 'Mexer o quadril em vez de enrolar a coluna.']
+                    },
+                    'Elevação de Pernas': {
+                        musculos: 'Abdômen (principalmente a parte de baixo)',
+                        posicao: 'Pendurado na barra ou deitado no banco, segurando atrás da cabeça.',
+                        passos: ['Pernas esticadas ou levemente dobradas.', 'Suba as pernas até formar 90° com o tronco.', 'No final, tire um pouco o quadril do apoio (enrolando).', 'Desça devagar sem balançar.'],
+                        respiracao: 'Solte o ar ao subir.',
+                        erros: ['Balançar o corpo (na barra).', 'Arquear a lombar ao descer (no banco).']
+                    },
+                    'Prancha': {
+                        musculos: 'Abdômen inteiro e lombar',
+                        posicao: 'Apoiado nos antebraços e na ponta dos pés, cotovelos embaixo dos ombros.',
+                        passos: ['Corpo reto como uma tábua, da cabeça aos calcanhares.', 'Contraia o abdômen e os glúteos.', 'Olhe para o chão, pescoço alinhado.', 'Segure o tempo todo sem deixar o quadril cair.'],
+                        respiracao: 'Respire curto e contínuo, sem prender o ar.',
+                        erros: ['Quadril caindo (dói a lombar).', 'Quadril muito alto.']
+                    },
+                    'Prancha Lateral': {
+                        musculos: 'Oblíquos (lateral da barriga) e abdômen',
+                        posicao: 'Deitado de lado, apoiado em um antebraço (cotovelo embaixo do ombro) e na lateral do pé, um pé sobre o outro.',
+                        passos: ['Suba o quadril até o corpo ficar reto.', 'Não deixe o quadril cair ou ir para trás.', 'Segure o tempo.', 'Troque de lado.'],
+                        respiracao: 'Respire normalmente.',
+                        erros: ['Quadril caindo.', 'Ombro subindo até a orelha.']
+                    },
+                    'Roda Abdominal': {
+                        musculos: 'Abdômen inteiro (exercício avançado)',
+                        posicao: 'Ajoelhado (use um colchonete), roda nas mãos embaixo dos ombros.',
+                        passos: ['Trave o abdômen e encaixe o quadril (bumbum para dentro).', 'Role a roda à frente devagar, até onde conseguir sem arquear a lombar.', 'Volte puxando com o abdômen.', 'Comece com uma distância curta e aumente com o tempo.'],
+                        respiracao: 'Puxe o ar ao ir, solte ao voltar.',
+                        erros: ['Arquear a lombar (é o principal risco).', 'Ir longe demais no começo.'],
+                        dica: 'Sem roda: use a bola suíça. Antebraços na bola, role à frente e volte.'
+                    },
+                    'Russian Twist': {
+                        musculos: 'Oblíquos (lateral da barriga)',
+                        posicao: 'Sentado, joelhos dobrados, tronco inclinado para trás uns 45°, anilha nas mãos na frente do peito. Pés no chão ou elevados (mais difícil).',
+                        passos: ['Gire o tronco levando a anilha para um lado.', 'Gire para o outro lado.', 'O movimento vem do tronco, não só dos braços.', 'Cada lado conta 1 repetição.'],
+                        respiracao: 'Solte o ar a cada giro.',
+                        erros: ['Arredondar as costas.', 'Mexer só os braços.']
+                    },
+                    'Remada Baixa': {
+                        musculos: 'Meio das costas, dorsal e bíceps',
+                        posicao: 'Sentado na máquina/polia baixa, pés apoiados, joelhos levemente dobrados, tronco reto. Triângulo ou barra nas mãos.',
+                        passos: ['Braços esticados à frente, sem curvar as costas.', 'Puxe até o umbigo, levando os cotovelos para trás e rentes ao corpo.', 'Junte as escápulas e estufe o peito.', 'Volte devagar até esticar os braços.'],
+                        respiracao: 'Solte o ar ao puxar.',
+                        erros: ['Balançar o tronco para frente e para trás.', 'Encolher os ombros.']
+                    },
+                    'Remada Cavalinho': {
+                        musculos: 'Meio das costas e dorsal',
+                        posicao: 'Em pé sobre a barra (T-bar), tronco inclinado a uns 45°, coluna reta, joelhos levemente dobrados.',
+                        passos: ['Braços esticados.', 'Puxe a barra até o abdômen.', 'Junte as escápulas.', 'Desça devagar.'],
+                        respiracao: 'Solte o ar ao puxar.',
+                        erros: ['Coluna arredondada.', 'Levantar o tronco para dar impulso.']
+                    },
+                    'Crucifixo': {
+                        musculos: 'Peitoral',
+                        posicao: 'No cabo (crossover): fique no meio, uma alça em cada mão, um pé à frente, tronco levemente inclinado. Com halteres: deitado no banco.',
+                        passos: ['Braços abertos, cotovelos levemente dobrados (e eles ficam assim).', 'Junte as mãos à frente do peito, num movimento de "abraço".', 'Aperte o peito 1 segundo.', 'Abra devagar até sentir o peito alongar.'],
+                        respiracao: 'Solte o ar ao fechar.',
+                        erros: ['Dobrar e esticar o cotovelo (vira supino).', 'Abrir demais e forçar o ombro.']
+                    },
+                    'Crucifixo Inverso': {
+                        musculos: 'Parte de trás do ombro e meio das costas',
+                        posicao: 'No peck deck de frente para o encosto, ou em pé com o tronco inclinado e halteres, ou no cabo cruzado.',
+                        passos: ['Braços à frente, cotovelos levemente dobrados.', 'Abra os braços para os lados e para trás.', 'Pare quando os braços ficarem na linha do corpo.', 'Volte devagar.'],
+                        respiracao: 'Solte o ar ao abrir.',
+                        erros: ['Usar peso demais e dar tranco.', 'Encolher os ombros.']
+                    },
+                    'Tríceps no Banco': {
+                        musculos: 'Tríceps e peito',
+                        posicao: 'Mãos apoiadas na beirada de um banco atrás de você, dedos para frente. Pernas esticadas (mais difícil) ou dobradas (mais fácil).',
+                        passos: ['Comece com os braços esticados e o bumbum perto do banco.', 'Desça dobrando os cotovelos até uns 90°.', 'Cotovelos apontam para trás, não para os lados.', 'Empurre de volta até esticar os braços.'],
+                        respiracao: 'Puxe o ar ao descer, solte ao subir.',
+                        erros: ['Descer demais (força o ombro).', 'Afastar o corpo do banco.'],
+                        dica: 'Se sentir dor no ombro, troque por mergulho na paralela assistido ou tríceps corda.'
+                    },
+                    'Cardio Moderado': {
+                        musculos: 'Coração e pulmão. Queima gordura sem atrapalhar a recuperação',
+                        posicao: 'Esteira inclinada (8-12% de inclinação, caminhada rápida), elíptico ou bike.',
+                        passos: ['Aqueça 3 minutos em ritmo leve.', 'Ajuste a velocidade e a inclinação até a frequência cardíaca ficar entre 110 e 130 bpm.', 'Mantenha esse ritmo constante pelo tempo do treino.', 'Teste da fala: você consegue conversar, mas com um pouco de esforço.'],
+                        respiracao: 'Respiração acelerada, mas controlada.',
+                        erros: ['Segurar no corrimão da esteira inclinada (diminui muito o gasto).', 'Ir forte demais e virar um treino intenso.']
+                    },
+                    'HIIT': {
+                        musculos: 'Condicionamento. Gasta muitas calorias em pouco tempo',
+                        posicao: 'Bike ergométrica (é a mais segura) ou esteira.',
+                        passos: ['5 minutos de aquecimento em ritmo leve.', 'Tiro: 30 segundos no máximo (nota 9 de 10 de esforço).', 'Recuperação: 90 segundos bem leve.', 'Repita o tiro e a recuperação 8 a 10 vezes e termine com 5 minutos leves.'],
+                        respiracao: 'No tiro você não consegue falar. Na recuperação, o fôlego volta.',
+                        erros: ['Tiro "mais ou menos": tem que ser forte de verdade.', 'Recuperação curta demais logo no começo.']
+                    },
+                    'Caminhada Leve': {
+                        musculos: 'Recuperação ativa. Ajuda a completar os passos do dia',
+                        posicao: 'Na rua ou na esteira, tênis confortável.',
+                        passos: ['Caminhe em ritmo confortável por 30-40 minutos.', 'Você deve conseguir conversar normalmente.', 'Aproveite para completar os 8-10 mil passos.'],
+                        respiracao: 'Respiração tranquila.',
+                        erros: ['Transformar em treino intenso: domingo é dia de descanso.']
+                    }
+                };
+
                 try {
                     const parsedUsers = JSON.parse(localStorage.getItem('meuTreino_users') || '[]');
                     this.users = Array.isArray(parsedUsers)
@@ -1871,19 +2274,47 @@
                 }
 
                 this.currentUser = localStorage.getItem('meuTreino_active_user') || '';
-                this.isAuthenticated = sessionStorage.getItem('meuTreino_authenticated') === 'true';
+                this.isAuthenticated = localStorage.getItem('meuTreino_authenticated') === 'true' || sessionStorage.getItem('meuTreino_authenticated') === 'true';
 
                 this.defaultProfile = {
                     nome: 'Jeann',
                     idade: 37,
-                    peso: 82,
+                    peso: 81.2,
                     altura: 179,
-                    gordura: 20.2,
+                    gordura: 16.1,
                     sexo: 'Masculino',
                     objetivo: 'hipertrofia',
                     photo: '',
                     completed: true
                 };
+
+                // Avaliação InBody de 18/11/2026 (ponto de partida do plano de definição de 40 dias)
+                this.baselineAssessment = {
+                    date: '2026-11-18',
+                    peso: 81.2,
+                    musculo: 38.8,
+                    gordura: 13.1,
+                    pgc: 16.1,
+                    visceral: 5,
+                    tronco: 7.1,
+                    rcq: 0.91,
+                    cintura: null,
+                    score: 87
+                };
+
+                // Campos da avaliação: rótulo, unidade, meta em 40 dias e se "menor é melhor"
+                this.assessmentFields = [
+                    { key: 'peso', label: 'Peso', unit: 'kg', step: 0.1, target: '77,5–78,5', lowerIsBetter: true },
+                    { key: 'musculo', label: 'Massa muscular', unit: 'kg', step: 0.1, target: '38,3–38,8', lowerIsBetter: false },
+                    { key: 'gordura', label: 'Massa de gordura', unit: 'kg', step: 0.1, target: '10–10,8', lowerIsBetter: true },
+                    { key: 'pgc', label: '% de gordura', unit: '%', step: 0.1, target: '13–13,8', lowerIsBetter: true },
+                    { key: 'visceral', label: 'Gordura visceral', unit: '', step: 1, target: '4', lowerIsBetter: true },
+                    { key: 'tronco', label: 'Gordura no tronco', unit: 'kg', step: 0.1, target: '5,8–6,2', lowerIsBetter: true },
+                    { key: 'rcq', label: 'Cintura-quadril', unit: '', step: 0.01, target: '0,88–0,89', lowerIsBetter: true },
+                    { key: 'cintura', label: 'Cintura', unit: 'cm', step: 0.5, target: '−3 a −4 cm', lowerIsBetter: true },
+                    { key: 'score', label: 'Pontuação InBody', unit: '', step: 1, target: '—', lowerIsBetter: false }
+                ];
+                this.gorduraMeta = 13.5;
 
                 this.pendingProfilePhoto = null;
                 this.editingExercise = null;
@@ -1918,10 +2349,13 @@
 
                 this.loadState();
                 this.state.profile = { ...this.defaultProfile, ...(this.state.profile || {}) };
+                this.applyInbodyBaseline();
                 this.ensureAdminUser();
                 this.validateSession();
 
                 if (this.isAuthenticated) {
+                    // Sessão salva: esconde o login (antes ele ficava por cima do app ao recarregar)
+                    this.hideLogin();
                     this.renderApp();
                 } else {
                     this.showLogin();
@@ -1975,13 +2409,269 @@
                 }
             }
 
+            // Executa uma única vez: registra o InBody de 18/11 e inicia o ciclo de 40 dias em 19/11
+            applyInbodyBaseline() {
+                if (!Array.isArray(this.state.assessments) || !this.state.assessments.length) {
+                    this.state.assessments = [{ ...this.baselineAssessment }];
+                }
+                if (this.state.inbodyBaselineApplied) return;
+
+                const b = this.baselineAssessment;
+                this.state.profile = { ...this.state.profile, peso: b.peso, gordura: b.pgc };
+                const history = Array.isArray(this.state.weightHistory) ? this.state.weightHistory : [];
+                if (!history.some(h => h.date === b.date)) {
+                    history.push({ date: b.date, peso: b.peso });
+                    history.sort((x, y) => new Date(x.date) - new Date(y.date));
+                }
+                this.state.weightHistory = history;
+                this.state.startDate = '2026-11-19';
+                localStorage.setItem('meuTreino_startDate', this.state.startDate);
+                this.state.inbodyBaselineApplied = true;
+                this.saveState();
+            }
+
+            getAssessments() {
+                return (Array.isArray(this.state.assessments) ? [...this.state.assessments] : [])
+                    .sort((a, b) => new Date(a.date) - new Date(b.date));
+            }
+
+            formatAssessmentValue(value, field) {
+                if (value === null || value === undefined || value === '' || isNaN(Number(value))) return '—';
+                const decimals = field.step >= 1 ? 0 : (field.step < 0.1 ? 2 : 1);
+                return `${Number(value).toFixed(decimals).replace('.', ',')}${field.unit ? (field.unit === '%' ? '%' : ' ' + field.unit) : ''}`;
+            }
+
+            renderAssessmentsHtml() {
+                const list = this.getAssessments();
+                if (!list.length) return '';
+                const first = list[0];
+                const last = list[list.length - 1];
+                const hasNew = list.length > 1;
+                const fmtDate = d => new Date(d + 'T12:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' });
+                const cell = 'padding: 0.45rem 0.3rem; border-bottom: 1px solid var(--border); font-size: var(--fs-small);';
+
+                const rows = this.assessmentFields.map(f => {
+                    const a = first[f.key];
+                    const z = last[f.key];
+                    let delta = '';
+                    if (hasNew && a !== null && a !== undefined && a !== '' && z !== null && z !== undefined && z !== '') {
+                        const diff = Number(z) - Number(a);
+                        const good = diff === 0 ? null : (f.lowerIsBetter ? diff < 0 : diff > 0);
+                        const color = good === null ? 'var(--text-secondary)' : (good ? '#047857' : '#dc2626');
+                        const decimals = f.step >= 1 ? 0 : (f.step < 0.1 ? 2 : 1);
+                        delta = `<span style="color:${color}; font-weight:700;">${diff > 0 ? '+' : ''}${diff.toFixed(decimals).replace('.', ',')}</span>`;
+                    }
+                    return `
+                        <tr>
+                            <td style="${cell} color: var(--text-primary); font-weight:600;">${f.label}</td>
+                            <td style="${cell} text-align:right;">${this.formatAssessmentValue(a, f)}</td>
+                            ${hasNew ? `<td style="${cell} text-align:right;">${this.formatAssessmentValue(z, f)}</td><td style="${cell} text-align:right;">${delta}</td>` : ''}
+                            <td style="${cell} text-align:right; color: var(--text-secondary);">${f.target}</td>
+                        </tr>
+                    `;
+                }).join('');
+
+                const history = list.map((item, idx) => `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding: 0.4rem 0; border-bottom: 1px solid var(--border); font-size: var(--fs-small);">
+                        <span>${fmtDate(item.date)} • ${this.formatAssessmentValue(item.peso, this.assessmentFields[0])} • ${this.formatAssessmentValue(item.pgc, this.assessmentFields[3])}</span>
+                        ${idx === 0 ? '<span style="color: var(--text-secondary); font-size: var(--fs-caption);">Ponto de partida</span>' : `<button class="record-delete" onclick="app.deleteAssessment('${item.date}')" aria-label="Excluir avaliação">✕</button>`}
+                    </div>
+                `).join('');
+
+                const nextDate = new Date('2026-11-19T12:00:00');
+                nextDate.setDate(nextDate.getDate() + 40);
+
+                return `
+                    <div class="workout-card" style="margin-top: 1rem;">
+                        <div class="exercise-title">🧬 Avaliações InBody</div>
+                        <p style="margin-top: 0.35rem; color: var(--text-secondary); font-size: var(--fs-small);">Próxima reavaliação: ${nextDate.toLocaleDateString('pt-BR')} • em jejum, mesmo horário e mesmo aparelho</p>
+                        <div style="overflow-x:auto; margin-top: 0.75rem;">
+                            <table style="width:100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="color: var(--text-secondary); font-size: var(--fs-caption);">
+                                        <th style="text-align:left; padding-bottom: 0.4rem;">Indicador</th>
+                                        <th style="text-align:right;">${fmtDate(first.date)}</th>
+                                        ${hasNew ? `<th style="text-align:right;">${fmtDate(last.date)}</th><th style="text-align:right;">Diferença</th>` : ''}
+                                        <th style="text-align:right;">Meta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>${rows}</tbody>
+                            </table>
+                        </div>
+                        <div style="margin-top: 0.9rem;">${history}</div>
+                        ${this.renderAssessmentPhotosHtml(list, fmtDate)}
+                        <button class="btn btn-primary" onclick="app.openAssessmentForm()" style="margin-top: 0.9rem;">+ Nova avaliação</button>
+                    </div>
+                `;
+            }
+
+            // Fotos de evolução: ficam salvas só no aparelho (localStorage), nunca no repositório/site
+            renderAssessmentPhotosHtml(list, fmtDate) {
+                const poses = [
+                    { key: 'frente', label: 'Frente' },
+                    { key: 'esquerdo', label: 'Lado esquerdo' },
+                    { key: 'direito', label: 'Lado direito' }
+                ];
+                const shown = list.length > 1 ? [list[0], list[list.length - 1]] : [list[0]];
+
+                const rows = shown.map(item => `
+                    <div style="margin-top: 0.75rem;">
+                        <div style="font-size: var(--fs-small); color: var(--text-secondary); margin-bottom: 0.35rem;">${fmtDate(item.date)}</div>
+                        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 6px;">
+                            ${poses.map(p => {
+                                const src = item.photos?.[p.key];
+                                return `
+                                    <label style="position:relative; display:flex; align-items:center; justify-content:center; aspect-ratio: 3 / 4; border-radius: 10px; border: 1px dashed var(--border); background: rgba(148,163,184,0.12); overflow:hidden; cursor:pointer; font-size: var(--fs-caption); color: var(--text-secondary); text-align:center;">
+                                        ${src ? `<img src="${src}" alt="${p.label}" style="width:100%; height:100%; object-fit:cover;" />` : `<span>📸<br>${p.label}</span>`}
+                                        <input type="file" accept="image/*" style="display:none;" onchange="app.uploadAssessmentPhoto('${item.date}', '${p.key}', this)" />
+                                        ${src ? `<span style="position:absolute; left:0; right:0; bottom:0; background: rgba(0,0,0,0.5); color:#fff; font-size: var(--fs-caption); padding: 2px 0;">${p.label}</span>` : ''}
+                                    </label>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `).join('');
+
+                return `
+                    <div style="margin-top: 1rem;">
+                        <div class="exercise-title" style="font-size: var(--fs-body);">📸 Fotos de evolução</div>
+                        <p style="margin-top: 0.25rem; color: var(--text-secondary); font-size: var(--fs-caption);">Toque em um quadro para adicionar ou trocar a foto. As fotos ficam salvas só neste aparelho.</p>
+                        ${rows}
+                    </div>
+                `;
+            }
+
+            compressImage(file, maxSide = 900, quality = 0.72) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onerror = reject;
+                    reader.onload = () => {
+                        const img = new Image();
+                        img.onerror = reject;
+                        img.onload = () => {
+                            const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+                            const canvas = document.createElement('canvas');
+                            canvas.width = Math.round(img.width * scale);
+                            canvas.height = Math.round(img.height * scale);
+                            canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                            resolve(canvas.toDataURL('image/jpeg', quality));
+                        };
+                        img.src = reader.result;
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            async uploadAssessmentPhoto(date, pose, input) {
+                const file = input?.files?.[0];
+                if (!file) return;
+                const assessment = (this.state.assessments || []).find(a => a.date === date);
+                if (!assessment) return;
+
+                let dataUrl;
+                try {
+                    dataUrl = await this.compressImage(file);
+                } catch (error) {
+                    alert('Não foi possível ler essa imagem. Tente outra foto.');
+                    return;
+                }
+
+                const previous = assessment.photos?.[pose];
+                assessment.photos = { ...(assessment.photos || {}), [pose]: dataUrl };
+                try {
+                    this.saveState();
+                } catch (error) {
+                    assessment.photos[pose] = previous;
+                    alert('Sem espaço para salvar a foto neste aparelho. Exporte um backup e remova fotos antigas.');
+                    return;
+                }
+                this.renderProgress();
+            }
+
+            openAssessmentForm() {
+                const inputStyle = 'width: 100%; min-height: 42px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.85); color: var(--text-primary); padding: 0.55rem 0.7rem;';
+                const labelStyle = 'display: block; margin-bottom: 0.25rem; color: var(--text-secondary); font-size: var(--fs-small);';
+                const today = new Date().toISOString().split('T')[0];
+                const fields = this.assessmentFields.map(f => `
+                    <div style="margin-bottom: 0.6rem;">
+                        <label style="${labelStyle}">${f.label}${f.unit ? ` (${f.unit})` : ''}</label>
+                        <input id="assess-${f.key}" type="number" step="${f.step}" inputmode="decimal" style="${inputStyle}" />
+                    </div>
+                `).join('');
+                document.getElementById('assessmentFormFields').innerHTML = `
+                    <div style="margin-bottom: 0.6rem;">
+                        <label style="${labelStyle}">Data da avaliação</label>
+                        <input id="assess-date" type="date" value="${today}" style="${inputStyle}" />
+                    </div>
+                    ${fields}
+                `;
+                document.getElementById('assessmentModal').classList.add('active');
+            }
+
+            closeAssessmentForm() {
+                document.getElementById('assessmentModal').classList.remove('active');
+            }
+
+            saveAssessment() {
+                const date = document.getElementById('assess-date').value;
+                if (!date) {
+                    alert('Informe a data da avaliação.');
+                    return;
+                }
+                const entry = { date };
+                this.assessmentFields.forEach(f => {
+                    const raw = document.getElementById(`assess-${f.key}`).value.trim().replace(',', '.');
+                    entry[f.key] = raw === '' ? null : Number(raw);
+                });
+                if (entry.peso === null || entry.pgc === null) {
+                    alert('Preencha pelo menos o peso e o % de gordura.');
+                    return;
+                }
+
+                const existing = (this.state.assessments || []).find(a => a.date === date);
+                if (existing?.photos) entry.photos = existing.photos;
+                const others = (this.state.assessments || []).filter(a => a.date !== date);
+                this.state.assessments = [...others, entry];
+
+                const latest = this.getAssessments().slice(-1)[0];
+                if (latest.date === date) {
+                    this.state.profile = { ...this.state.profile, peso: entry.peso, gordura: entry.pgc };
+                }
+                const history = (this.state.weightHistory || []).filter(h => h.date !== date);
+                history.push({ date, peso: entry.peso });
+                history.sort((x, y) => new Date(x.date) - new Date(y.date));
+                this.state.weightHistory = history;
+
+                this.saveState();
+                this.closeAssessmentForm();
+                this.renderPrograms();
+                this.renderProgress();
+                this.renderCoach();
+            }
+
+            deleteAssessment(date) {
+                if (date === this.baselineAssessment.date) return;
+                if (!confirm('Excluir esta avaliação?')) return;
+                this.state.assessments = (this.state.assessments || []).filter(a => a.date !== date);
+                const latest = this.getAssessments().slice(-1)[0];
+                if (latest) {
+                    this.state.profile = { ...this.state.profile, peso: latest.peso, gordura: latest.pgc };
+                }
+                this.saveState();
+                this.renderPrograms();
+                this.renderProgress();
+                this.renderCoach();
+            }
+
             loadPrograms() {
                 try {
                     const saved = localStorage.getItem('meuTreino_programs');
                     if (!saved) return this.defaultPrograms;
                     const parsed = JSON.parse(saved);
                     if (!Array.isArray(parsed) || !parsed.length) return this.defaultPrograms;
-                    return parsed;
+                    // Plano de definição: adiciona os dias que ainda não existem nos programas salvos
+                    const missing = this.defaultPrograms.filter(p => !parsed.some(m => m.id === p.id));
+                    return [...missing.filter(p => p.id.startsWith('def_')), ...parsed, ...missing.filter(p => !p.id.startsWith('def_'))];
                 } catch (error) {
                     return this.defaultPrograms;
                 }
@@ -1997,7 +2687,7 @@
                 if (this.isAuthenticated && !hasValidCurrentUser) {
                     this.isAuthenticated = false;
                     this.currentUser = '';
-                    sessionStorage.removeItem('meuTreino_authenticated');
+                    localStorage.removeItem('meuTreino_authenticated');
                     localStorage.removeItem('meuTreino_active_user');
                 }
             }
@@ -2308,7 +2998,7 @@
                     return;
                 }
 
-                sessionStorage.setItem('meuTreino_authenticated', 'true');
+                localStorage.setItem('meuTreino_authenticated', 'true');
                 localStorage.setItem('meuTreino_active_user', user.nome);
                 this.currentUser = user.nome;
                 this.isAuthenticated = true;
@@ -2317,7 +3007,7 @@
             }
 
             logout() {
-                sessionStorage.removeItem('meuTreino_authenticated');
+                localStorage.removeItem('meuTreino_authenticated');
                 localStorage.removeItem('meuTreino_active_user');
                 this.currentUser = '';
                 this.isAuthenticated = false;
@@ -2431,13 +3121,13 @@
                 list.innerHTML = this.users.map(user => `
                     <div style="border: 1px solid var(--border); border-radius: 12px; padding: 0.75rem; background: rgba(255,255,255,0.7);">
                         <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; margin-bottom: 0.4rem;">
-                            <strong style="font-size: 0.96rem; color: var(--text-primary);">${user.nome}</strong>
-                            <span style="font-size: 0.75rem; color: var(--text-secondary);">${user.nome.toLowerCase() === 'admin' ? 'Administrador' : 'Usuário'}</span>
+                            <strong style="font-size: var(--fs-body); color: var(--text-primary);">${user.nome}</strong>
+                            <span style="font-size: var(--fs-caption); color: var(--text-secondary);">${user.nome.toLowerCase() === 'admin' ? 'Administrador' : 'Usuário'}</span>
                         </div>
-                        <div style="margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.85rem;">
+                        <div style="margin-bottom: 0.5rem; color: var(--text-secondary); font-size: var(--fs-small);">
                             Senha atual: <strong style="color: var(--text-primary);">${user.senha}</strong>
                         </div>
-                        <button class="btn btn-primary" onclick="app.resetUserPassword('${user.nome}')" style="min-height: 40px; font-size: 0.85rem;">Redefinir senha</button>
+                        <button class="btn btn-primary" onclick="app.resetUserPassword('${user.nome}')" style="min-height: 40px; font-size: var(--fs-small);">Redefinir senha</button>
                     </div>
                 `).join('');
             }
@@ -2517,7 +3207,7 @@
                 if (!list || !program) return;
 
                 if (!program.exercises.length) {
-                    list.innerHTML = '<p style="color: var(--text-secondary); font-size: 0.85rem; padding: 0.5rem 0;">Nenhum exercício neste dia ainda.</p>';
+                    list.innerHTML = '<p style="color: var(--text-secondary); font-size: var(--fs-small); padding: 0.5rem 0;">Nenhum exercício neste dia ainda.</p>';
                     return;
                 }
 
@@ -2528,8 +3218,8 @@
                         <div class="admin-exercise-row">
                             <img class="admin-exercise-thumb" src="${image}" alt="${ex.name}" />
                             <div style="min-width:0;">
-                                <div style="font-weight:700; font-size:0.88rem; color: var(--text-primary); overflow-wrap:anywhere;">${ex.name}</div>
-                                <div style="font-size:0.76rem; color: var(--text-secondary);">${ex.sets} séries × ${ex.reps} reps</div>
+                                <div style="font-weight:700; font-size: var(--fs-small); color: var(--text-primary); overflow-wrap:anywhere;">${ex.name}</div>
+                                <div style="font-size: var(--fs-caption); color: var(--text-secondary);">${ex.sets} séries × ${ex.reps} reps</div>
                             </div>
                             <div class="admin-exercise-actions">
                                 <button class="admin-icon-btn" onclick="app.moveExercise(${i}, -1)" aria-label="Mover para cima" ${i === 0 ? 'disabled' : ''}>
@@ -2723,10 +3413,10 @@
                 const profile = this.state.profile || {};
                 const currentProgram = this.getCurrentWorkoutProgramId();
                 const currentProgramData = this.programs.find(p => p.id === currentProgram) || this.programs[0];
-                const currentWorkoutLabel = currentProgram === 'fullbody' ? 'Treino Full Body A' : 'Treino Full Body B';
+                const currentWorkoutLabel = currentProgramData ? currentProgramData.name : 'Treino do dia';
                 const streak = Math.max(1, Math.min(30, this.getDaysSinceStart() + 1));
-                const gorduraMeta = 15;
-                const gorduraAtual = Number(profile.gordura || 20.2);
+                const gorduraMeta = this.gorduraMeta;
+                const gorduraAtual = Number(profile.gordura || this.baselineAssessment.pgc);
                 const objetivoTexto = profile.objetivo === 'hipertrofia' ? 'ganho de massa e definição' : 'recomposição corporal';
                 const motivation = this.getMotivationalMessage();
                 const profilePhoto = profile.photo || '';
@@ -2745,40 +3435,39 @@
                     <div class="workout-card">
                         <div class="exercise-title">Resumo diário</div>
                         <div class="stats-grid" style="margin-top: 1rem;">
+                            <div class="stat-card stat-card--lead">
+                                <div>
+                                    <div class="stat-label">Gordura corporal</div>
+                                    <div class="stat-value">${this.fmt(gorduraAtual, 1, 1)}<span class="stat-unit">%</span></div>
+                                </div>
+                                <div class="stat-goal">meta<strong>${this.fmt(gorduraMeta, 1, 1)}%</strong></div>
+                            </div>
                             <div class="stat-card">
                                 <div class="stat-label">Peso atual</div>
-                                <div class="stat-value">${profile.peso || 82}kg</div>
+                                <div class="stat-value">${this.fmt(profile.peso || this.baselineAssessment.peso, 1, 1)}<span class="stat-unit">kg</span></div>
                             </div>
                             <div class="stat-card">
-                                <div class="stat-label">Gordura</div>
-                                <div class="stat-value">${gorduraAtual.toFixed(1)}%</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-label">Meta</div>
-                                <div class="stat-value">${gorduraMeta}%</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-label">Streak</div>
-                                <div class="stat-value">${streak} dias</div>
+                                <div class="stat-label">Sequência</div>
+                                <div class="stat-value">${streak}<span class="stat-unit">${streak === 1 ? 'dia' : 'dias'}</span></div>
                             </div>
                         </div>
                     </div>
 
                     <div class="workout-card" style="margin-top: 1rem;">
                         <div class="exercise-title">Frase motivacional</div>
-                        <p style="margin-top: 0.75rem; color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5;">${motivation}</p>
+                        <p style="margin-top: 0.75rem; color: var(--text-secondary); font-size: var(--fs-body); line-height: 1.5;">${motivation}</p>
                     </div>
 
                     <div class="workout-card" style="margin-top: 1rem;">
                         <div class="exercise-title">Treino do dia</div>
-                        <div style="margin-top: 0.75rem; font-size: 1rem; font-weight: 700; color: var(--text-primary);">${currentWorkoutLabel}</div>
-                        <div style="margin-top: 0.35rem; color: var(--text-secondary); font-size: 0.88rem;">Objetivo: ${objetivoTexto}</div>
+                        <div style="margin-top: 0.75rem; font-size: var(--fs-body); font-weight: 700; color: var(--text-primary);">${currentWorkoutLabel}</div>
+                        <div style="margin-top: 0.35rem; color: var(--text-secondary); font-size: var(--fs-small);">Objetivo: ${objetivoTexto}</div>
                         <button class="btn btn-primary" onclick="app.switchTab('workout')" style="margin-top: 0.9rem;">Abrir treino</button>
                     </div>
                 `;
 
                 const cardsHtml = this.programs.map(p => `
-                    <div class="program-card ${this.state.selectedProgram === p.id ? 'active' : ''}" onclick="app.selectProgram('${p.id}')">
+                    <div class="program-card ${this.state.selectedProgram === p.id ? 'active' : ''}" role="button" tabindex="0" aria-pressed="${this.state.selectedProgram === p.id}" onclick="app.selectProgram('${p.id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}">
                         <div class="program-title">${p.name}</div>
                         <div class="program-desc">${p.desc}</div>
                         <div class="program-meta">
@@ -2793,12 +3482,15 @@
 
             getCurrentWorkoutProgramId() {
                 const daysSince = this.getDaysSinceStart();
-                return daysSince % 2 === 0 ? 'fullbody' : 'fullbodyB';
+                // Plano de definição 40 dias: treino definido pelo dia da semana (0 = domingo)
+                const byWeekday = ['def_descanso', 'def_push', 'def_pull', 'def_pernas', 'def_core', 'def_inf_metab', 'def_sup_metab'];
+                const id = byWeekday[new Date().getDay()];
+                return this.programs.some(p => p.id === id) ? id : (daysSince % 2 === 0 ? 'fullbody' : 'fullbodyB');
             }
 
             getMotivationalMessage() {
                 const profile = this.state.profile || {};
-                const gorduraAtual = Number(profile.gordura || 20.2);
+                const gorduraAtual = Number(profile.gordura || this.baselineAssessment.pgc);
                 const objetivo = profile.objetivo === 'hipertrofia' ? 'músculo' : 'definição';
                 const fase = gorduraAtual > 18 ? 'Mantenha o foco e avance de forma inteligente.' : 'Você está no caminho certo para a sua melhor versão.';
                 return `Jeann, seu foco agora é ${objetivo} e sua evolução está no caminho certo. ${fase}`;
@@ -2840,24 +3532,47 @@
                         <button class="workout-card" onclick="app.toggleMeal('${meal.key}')" style="display:flex; align-items:center; justify-content:space-between; width:100%; background:${checked ? 'rgba(16,185,129,0.09)' : 'rgba(255,255,255,0.7)'}; border:${checked ? '1px solid rgba(16,185,129,0.6)' : '1px solid var(--border)'}; text-align:left; padding: 0.9rem 1rem; margin-bottom: 0.65rem; cursor:pointer;">
                             <div>
                                 <div style="font-weight:700; color: var(--text-primary);">${meal.label}</div>
-                                <div style="font-size:0.82rem; color: var(--text-secondary); margin-top:0.2rem;">${meal.detail}</div>
+                                <div style="font-size: var(--fs-small); color: var(--text-secondary); margin-top:0.2rem;">${meal.detail}</div>
                             </div>
                             <span style="font-size: 1.2rem;">${checked ? '✓' : '○'}</span>
                         </button>
                     `;
                 }).join('');
 
+                // Quinta (4) e domingo (0) = dias leves; os demais = dias de treino
+                const weekday = new Date().getDay();
+                const isLightDay = weekday === 0 || weekday === 4;
+                const macros = isLightDay
+                    ? { label: 'Dia leve (sem musculação)', kcal: '2.100', prot: '185g', carb: '180g', gord: '70g' }
+                    : { label: 'Dia de treino', kcal: '2.350-2.400', prot: '185g', carb: '255g', gord: '65g' };
+
                 content.innerHTML = `
                     <div class="workout-card">
-                        <div class="exercise-title">Meta diária</div>
+                        <div class="exercise-title">Meta diária • ${macros.label}</div>
                         <div class="stats-grid" style="margin-top: 1rem;">
                             <div class="stat-card">
+                                <div class="stat-label">Calorias</div>
+                                <div class="stat-value">${macros.kcal}</div>
+                            </div>
+                            <div class="stat-card">
                                 <div class="stat-label">Proteína</div>
-                                <div class="stat-value">160g</div>
+                                <div class="stat-value">${macros.prot}</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Carboidrato</div>
+                                <div class="stat-value">${macros.carb}</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Gordura</div>
+                                <div class="stat-value">${macros.gord}</div>
                             </div>
                             <div class="stat-card">
                                 <div class="stat-label">Água</div>
-                                <div class="stat-value">3L</div>
+                                <div class="stat-value">3-3,5L</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Passos</div>
+                                <div class="stat-value">8-10 mil</div>
                             </div>
                         </div>
                     </div>
@@ -2883,7 +3598,7 @@
                         <button class="workout-card" onclick="app.toggleSupplement('${item.key}')" style="display:flex; align-items:center; justify-content:space-between; width:100%; background:${checked ? 'rgba(37,99,235,0.08)' : 'rgba(255,255,255,0.7)'}; border:${checked ? '1px solid rgba(37,99,235,0.6)' : '1px solid var(--border)'}; text-align:left; padding:0.85rem 1rem; margin-bottom:0.7rem;">
                             <div>
                                 <div style="font-weight:700; color: var(--text-primary);">${item.label}</div>
-                                <div style="font-size:0.82rem; color: var(--text-secondary); margin-top:0.2rem;">${item.time} • ${item.text}</div>
+                                <div style="font-size: var(--fs-small); color: var(--text-secondary); margin-top:0.2rem;">${item.time} • ${item.text}</div>
                             </div>
                             <span style="font-size: 1.1rem;">${checked ? '✓' : '○'}</span>
                         </button>
@@ -2901,23 +3616,23 @@
             renderCoach() {
                 const content = document.getElementById('coachContent');
                 const profile = this.state.profile || {};
-                const gorduraAtual = Number(profile.gordura || 20.2);
-                const gorduraAnterior = 20.2;
+                const gorduraAtual = Number(profile.gordura || this.baselineAssessment.pgc);
+                const gorduraAnterior = Number(this.getAssessments()[0]?.pgc || this.baselineAssessment.pgc);
                 const evolucao = gorduraAnterior - gorduraAtual;
                 const coachText = evolucao > 0
-                    ? `Jeann, sua gordura caiu de ${gorduraAnterior.toFixed(1)}% para ${gorduraAtual.toFixed(1)}%. Excelente evolução. Continue mantendo 160g de proteína por dia.`
-                    : `Jeann, seu processo continua em evolução. Mantenha consistência, hidratação e foco em 160g de proteína por dia.`;
+                    ? `Jeann, sua gordura caiu de ${this.fmt(gorduraAnterior, 1, 1)}% para ${this.fmt(gorduraAtual, 1, 1)}%. Excelente evolução. Continue mantendo 185g de proteína por dia.`
+                    : `Jeann, seu processo continua em evolução. Mantenha consistência, hidratação e foco em 185g de proteína por dia.`;
 
                 const achievements = [
-                    '🥇 Meta de gordura: 15%',
-                    '🔥 Streak de treino atual: ' + Math.max(1, Math.min(30, this.getDaysSinceStart() + 1)) + ' dias',
-                    '💪 Foco em hipertrofia e recomposição corporal'
+                    '🥇 Meta de gordura: 13,5% na reavaliação de 29/12 (InBody)',
+                    (() => { const d = Math.max(1, Math.min(30, this.getDaysSinceStart() + 1)); return '🔥 Sequência de treino: ' + d + (d === 1 ? ' dia' : ' dias'); })(),
+                    '💪 Foco em definição: perder gordura mantendo os 38,8kg de músculo'
                 ];
 
                 content.innerHTML = `
                     <div class="workout-card">
                         <div class="exercise-title">Coach Shape</div>
-                        <p style="margin-top: 0.85rem; color: var(--text-secondary); line-height:1.5; font-size:0.95rem;">${coachText}</p>
+                        <p style="margin-top: 0.85rem; color: var(--text-secondary); line-height:1.5; font-size: var(--fs-body);">${coachText}</p>
                     </div>
 
                     <div class="workout-card" style="margin-top: 1rem;">
@@ -2931,7 +3646,7 @@
 
             selectProgram(id) {
                 this.state.selectedProgram = id;
-                this.state.startDate = new Date().toISOString().split('T')[0];
+                if (!String(id).startsWith('def_')) this.state.startDate = new Date().toISOString().split('T')[0];
                 this.saveState();
                 this.renderPrograms();
                 this.renderWorkout();
@@ -2947,13 +3662,12 @@
 
                 const daysSince = this.getDaysSinceStart();
                 const shouldChange = daysSince >= 40;
-                const summary = this.getProfileSummary();
-                const pesoAtual = this.state.profile?.peso ? `${Number(this.state.profile.peso).toFixed(1)}kg` : 'Sem peso cadastrado';
-                const imc = summary.bmi ? summary.bmi.toFixed(1) : '—';
+                // Dia 1 = data de início; 40 dias ≈ 6 semanas
+                const cycleDay = Math.min(Math.max(daysSince + 1, 1), 40);
+                const cycleWeek = Math.min(Math.floor((cycleDay - 1) / 7) + 1, 6);
+                const [dayName, workoutName] = program.name.includes(' • ') ? program.name.split(' • ') : ['', program.name];
                 const isCompleted = this.state.completedWorkouts?.[program.id];
-                const completionTitle = program.id === 'fullbody'
-                    ? 'Parabéns Jeann! Treino A concluído.'
-                    : 'Excelente trabalho Jeann! Amanhã é dia do Treino A.';
+                const completionTitle = `Parabéns Jeann! ${program.name} concluído.`;
 
                 let html = '';
 
@@ -2967,21 +3681,15 @@
                 }
 
                 html += `
-                    <div class="alert" style="margin-bottom: 1rem;">
-                        <div class="alert-title">📈 Treino recomendado</div>
-                        <div class="alert-text">
-                            ${program.name} • Objetivo: ${summary.objetivoLabel} • Peso atual: ${pesoAtual} • IMC: ${imc}
-                            <br>
-                            ${summary.recommendation}
-                            <br>
-                            Sugestão de progresso: aumente cerca de ${summary.incremento}kg por semana quando conseguir completar as repetições com boa forma.
+                    <div class="today-head">
+                        <div class="today-meta">
+                            <span>${dayName ? dayName + ' · ' : ''}Semana ${cycleWeek} de 6</span>
+                            <span>Dia ${cycleDay}/40</span>
                         </div>
-                    </div>
-                    <div style="margin-bottom: 1.5rem;">
-                        <h2 style="font-size: 18px; font-weight: 500; margin-bottom: 0.5rem;">Programa: ${program.name}</h2>
-                        <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 1rem;">Dias: ${daysSince} / 40</p>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${Math.min((daysSince/40)*100, 100)}%"></div>
+                        <h2 class="today-title">${workoutName}</h2>
+                        ${program.desc ? `<p class="today-desc">${program.desc}</p>` : ''}
+                        <div class="progress-bar" role="progressbar" aria-label="Progresso do ciclo de 40 dias" aria-valuemin="1" aria-valuemax="40" aria-valuenow="${cycleDay}">
+                            <div class="progress-fill" style="width: ${(cycleDay / 40) * 100}%"></div>
                         </div>
                     </div>
                 `;
@@ -2990,7 +3698,7 @@
                     html += `
                         <div class="alert" style="margin-bottom: 1rem; background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.4);">
                             <div class="alert-title">✅ ${completionTitle}</div>
-                            <div class="alert-text">${program.id === 'fullbody' ? 'Inicie o Treino B amanhã para continuar a sequência.' : 'Hoje é o dia do Treino A. Volte amanhã para repetir a rotina.'}</div>
+                            <div class="alert-text">Amanhã o app mostra automaticamente o treino do próximo dia.</div>
                         </div>
                     `;
                 }
@@ -3007,7 +3715,25 @@
                         description: 'Faça com controle, mantendo a técnica correta e o movimento estável.'
                     };
                     const image = ex.image || guide.image;
-                    const description = ex.description || guide.description;
+                    const howTo = this.exerciseHowTo?.[ex.name];
+                    const description = ex.description || (this.exerciseGuide?.[ex.name] ? guide.description : (howTo ? `Trabalha: ${howTo.musculos}.` : guide.description));
+                    // "Trabalha: X" repete os músculos já listados em "Como fazer"; só mostra quando há algo novo
+                    const showDescription = !!ex.description || !!this.exerciseGuide?.[ex.name] || !howTo;
+                    const howToHtml = howTo ? `
+                        <details style="margin-top: 0.6rem; border: 1px solid var(--border); border-radius: 10px; padding: 0.55rem 0.75rem; background: rgba(79,70,229,0.05);">
+                            <summary style="cursor: pointer; font-weight: 700; color: var(--text-primary); font-size: var(--fs-body);">📖 Como fazer</summary>
+                            <div style="margin-top: 0.6rem; font-size: var(--fs-small); line-height: 1.5; color: var(--text-secondary);">
+                                <div><strong style="color: var(--text-primary);">🎯 Músculos:</strong> ${howTo.musculos}</div>
+                                <div style="margin-top: 0.45rem;"><strong style="color: var(--text-primary);">📍 Posição inicial:</strong> ${howTo.posicao}</div>
+                                <div style="margin-top: 0.45rem;"><strong style="color: var(--text-primary);">▶️ Execução:</strong></div>
+                                <ol style="margin: 0.25rem 0 0; padding-left: 1.2rem;">${howTo.passos.map(p => `<li>${p}</li>`).join('')}</ol>
+                                <div style="margin-top: 0.45rem;"><strong style="color: var(--text-primary);">💨 Respiração:</strong> ${howTo.respiracao}</div>
+                                <div style="margin-top: 0.45rem;"><strong style="color: var(--danger);">⚠️ Evite:</strong></div>
+                                <ul style="margin: 0.25rem 0 0; padding-left: 1.2rem;">${howTo.erros.map(e => `<li>${e}</li>`).join('')}</ul>
+                                ${howTo.dica ? `<div style="margin-top: 0.45rem;"><strong style="color: var(--text-primary);">💡 Dica:</strong> ${howTo.dica}</div>` : ''}
+                            </div>
+                        </details>
+                    ` : '';
 
                     const key = `${this.state.selectedProgram}_${ex.name}_${this.state.currentDay}`;
                     const records = this.state.workoutLog[key] || [];
@@ -3022,9 +3748,9 @@
                         const badgeClass = r.set >= 1 && r.set <= 5 ? `s${r.set}` : 's0';
                         return `
                             <div class="record-item">
-                                <div class="record-main" onclick="app.editRecord(${i}, ${ri})">
+                                <div class="record-main" role="button" tabindex="0" aria-label="Editar série ${r.set}: ${r.reps} reps com ${r.weight} kg" onclick="app.editRecord(${i}, ${ri})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}">
                                     <span class="set-badge ${badgeClass}">S${r.set}</span>
-                                    <span>${r.reps} reps × ${r.weight}kg</span>
+                                    <span>${r.reps} reps × ${this.fmt(r.weight)} kg</span>
                                 </div>
                                 <button class="record-delete" onclick="event.stopPropagation(); app.deleteRecord('${key}', ${ri})" aria-label="Excluir registro">
                                     <svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>
@@ -3039,12 +3765,14 @@
                                 <div class="exercise-thumb">
                                     <img class="exercise-image" src="${image}" alt="${ex.name}" />
                                 </div>
-                                <div class="exercise-body">
+                                <div class="exercise-heading">
                                     <div class="exercise-title">${ex.name}</div>
-                                    <div class="exercise-meta">${ex.sets} séries × ${ex.reps} reps</div>
-                                    <div class="exercise-description">${description}</div>
+                                    <div class="exercise-meta">${ex.sets} ${ex.sets > 1 ? 'séries' : 'série'} × ${ex.reps}${/^[\d-]+$/.test(String(ex.reps)) ? ' reps' : ''}${ex.rest ? ` · descanso ${ex.rest}` : ''}</div>
                                 </div>
                             </div>
+                            ${ex.note ? `<p class="exercise-note">${ex.note}</p>` : ''}
+                            ${showDescription ? `<p class="exercise-description">${description}</p>` : ''}
+                            ${howToHtml}
                             <div class="input-group">
                                 <div class="input-field">
                                     <label for="set-${i}">Série</label>
@@ -3219,7 +3947,7 @@
             renderProgress() {
                 const program = this.programs.find(p => p.id === this.state.selectedProgram);
                 const daysSince = this.getDaysSinceStart();
-                const pesoAtual = this.state.profile?.peso ? `${Number(this.state.profile.peso).toFixed(1)}kg` : 'Sem peso';
+                const pesoAtual = this.state.profile?.peso ? `${this.fmt(this.state.profile.peso, 1, 1)} kg` : 'Sem peso';
                 const summary = this.getProfileSummary();
                 const weeklyData = this.getWeeklyEvolutionData();
                 const maxPeso = weeklyData.length > 0 ? Math.max(...weeklyData.map(item => item.peso), 1) : 1;
@@ -3230,12 +3958,12 @@
                 let html = `
                     <div class="stats-grid">
                         <div class="stat-card">
-                            <div class="stat-label">Dias no ciclo</div>
-                            <div class="stat-value">${daysSince}</div>
+                            <div class="stat-label">Dia do ciclo</div>
+                            <div class="stat-value">${Math.min(daysSince + 1, 40)}<span class="stat-unit">/40</span></div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-label">Dias restantes</div>
-                            <div class="stat-value">${Math.max(0, 40 - daysSince)}</div>
+                            <div class="stat-value">${Math.max(0, 40 - Math.min(daysSince + 1, 40))}</div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-label">Peso atual</div>
@@ -3243,7 +3971,7 @@
                         </div>
                         <div class="stat-card">
                             <div class="stat-label">IMC</div>
-                            <div class="stat-value">${summary.bmi ? summary.bmi.toFixed(1) : '--'}</div>
+                            <div class="stat-value">${summary.bmi ? this.fmt(summary.bmi, 1, 1) : '—'}</div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-label">Objetivo</div>
@@ -3251,7 +3979,7 @@
                         </div>
                         <div class="stat-card">
                             <div class="stat-label">Evolução</div>
-                            <div class="stat-value">${variacao >= 0 ? '+' : ''}${variacao.toFixed(1)}kg</div>
+                            <div class="stat-value">${variacao >= 0 ? '+' : ''}${this.fmt(variacao, 1, 1)} kg</div>
                         </div>
                     </div>
                 `;
@@ -3264,11 +3992,11 @@
                                 ${weeklyData.map(item => `
                                     <div style="margin-bottom: 0.75rem;">
                                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-                                            <span style="font-size: 12px; color: var(--text-secondary);">${item.label}</span>
-                                            <strong style="font-size: 12px; color: var(--text-primary);">${item.peso.toFixed(1)}kg</strong>
+                                            <span style="font-size: var(--fs-caption); color: var(--text-secondary);">${item.label}</span>
+                                            <strong style="font-size: var(--fs-caption); color: var(--text-primary);">${this.fmt(item.peso, 1, 1)} kg</strong>
                                         </div>
                                         <div style="height: 8px; border-radius: 999px; background: rgba(148, 163, 184, 0.2); overflow: hidden;">
-                                            <div style="height: 100%; width: ${(item.peso / maxPeso) * 100}%; border-radius: 999px; background: linear-gradient(135deg, var(--accent), var(--accent-2));"></div>
+                                            <div style="height: 100%; width: ${(item.peso / maxPeso) * 100}%; border-radius: 999px; background: var(--accent);"></div>
                                         </div>
                                     </div>
                                 `).join('')}
@@ -3276,6 +4004,8 @@
                         </div>
                     `;
                 }
+
+                html += this.renderAssessmentsHtml();
 
                 if (program) {
                     html += '<h3 style="font-weight: 500; margin-bottom: 1rem; margin-top: 1.5rem;">Seus melhores pesos</h3>';
@@ -3290,7 +4020,7 @@
                         html += `
                             <div class="workout-card">
                                 <div class="exercise-title">${ex.name}</div>
-                                <div style="font-size: 24px; font-weight: 500; color: var(--accent);">${maxWeight.toFixed(1)}kg</div>
+                                <div class="stat-value" style="color: var(--accent);">${this.fmt(maxWeight)}<span class="stat-unit">kg</span></div>
                             </div>
                         `;
                     });
@@ -3307,7 +4037,7 @@
                 if (!history.length) {
                     return `
                         <h3 style="font-weight: 600; margin: 1.5rem 0 0.75rem;">Histórico de treinos</h3>
-                        <p style="color: var(--text-secondary); font-size: 0.88rem;">Nenhum treino finalizado ainda. Registre suas séries e toque em "Finalizar Treino" para começar seu histórico.</p>
+                        <p style="color: var(--text-secondary); font-size: var(--fs-small);">Nenhum treino finalizado ainda. Registre suas séries e toque em "Finalizar Treino" para começar seu histórico.</p>
                     `;
                 }
 
@@ -3322,7 +4052,7 @@
                         const setsLine = ex.sets.map(s => {
                             entryVolume += (Number(s.reps) || 0) * (Number(s.weight) || 0);
                             totalSets += 1;
-                            return `<span class="set-badge ${s.set >= 1 && s.set <= 5 ? 's' + s.set : 's0'}">S${s.set} · ${s.reps}x${s.weight}kg</span>`;
+                            return `<span class="set-badge ${s.set >= 1 && s.set <= 5 ? 's' + s.set : 's0'}">S${s.set} · ${s.reps}×${this.fmt(s.weight)} kg</span>`;
                         }).join('');
 
                         return `
@@ -3360,7 +4090,7 @@
                         </div>
                         <div class="stat-card">
                             <div class="stat-label">Volume total</div>
-                            <div class="stat-value">${totalVolumeAll.toLocaleString('pt-BR')}kg</div>
+                            <div class="stat-value">${totalVolumeAll.toLocaleString('pt-BR')}<span class="stat-unit">kg</span></div>
                         </div>
                     </div>
                     ${entriesHtml}
@@ -3413,24 +4143,31 @@
                     <div class="workout-card">
                         <div style="margin-bottom: 1rem;">
                             <strong style="color: var(--text-primary);">📊 Progressão</strong>
-                            <p style="color: var(--text-secondary); font-size: 13px; margin-top: 0.5rem;">Aumente peso ou reps a cada treino. Pequenos aumentos geram grandes resultados!</p>
+                            <p style="color: var(--text-secondary); font-size: var(--fs-small); margin-top: 0.5rem;">Aumente peso ou reps a cada treino. Pequenos aumentos geram grandes resultados!</p>
                         </div>
                     </div>
                     <div class="workout-card">
                         <div style="margin-bottom: 1rem;">
                             <strong style="color: var(--text-primary);">🍗 Nutrição</strong>
-                            <p style="color: var(--text-secondary); font-size: 13px; margin-top: 0.5rem;">Proteína: 1.6-2.2g por kg. Carbos antes/depois do treino. Gordura: 25-30%.</p>
+                            <p style="color: var(--text-secondary); font-size: var(--fs-small); margin-top: 0.5rem;">Proteína: 1.6-2.2g por kg. Carbos antes/depois do treino. Gordura: 25-30%.</p>
                         </div>
                     </div>
                     <div class="workout-card">
                         <div style="margin-bottom: 1rem;">
                             <strong style="color: var(--text-primary);">😴 Recuperação</strong>
-                            <p style="color: var(--text-secondary); font-size: 13px; margin-top: 0.5rem;">Durma 7-9 horas. O músculo cresce durante o descanso, não no treino!</p>
+                            <p style="color: var(--text-secondary); font-size: var(--fs-small); margin-top: 0.5rem;">Durma 7-9 horas. O músculo cresce durante o descanso, não no treino!</p>
                         </div>
                     </div>
                 `;
 
                 document.getElementById('tipsContent').innerHTML = html;
+            }
+
+            // Número no padrão brasileiro: 81,2 · 40 · 42,5
+            fmt(value, maxDecimals = 1, minDecimals = 0) {
+                const n = Number(value);
+                if (!Number.isFinite(n)) return '—';
+                return n.toLocaleString('pt-BR', { minimumFractionDigits: minDecimals, maximumFractionDigits: maxDecimals });
             }
 
             getDaysSinceStart() {
@@ -3440,13 +4177,10 @@
             }
 
             switchTab(tab) {
+                // Suplementos agora é uma seção de Nutrição
+                if (tab === 'supplements') tab = 'nutrition';
                 document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
                 document.getElementById(tab).classList.add('active');
-
-                document.querySelectorAll('.nav-tab').forEach(t => {
-                    const tabName = t.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
-                    t.classList.toggle('active', tabName === tab);
-                });
 
                 document.querySelectorAll('.nav-btn').forEach(b => {
                     const tabName = b.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
@@ -3456,8 +4190,10 @@
                 if (tab === 'progress') this.renderProgress();
                 if (tab === 'tips') this.renderTips();
                 if (tab === 'workout') this.renderWorkout();
-                if (tab === 'nutrition') this.renderNutrition();
-                if (tab === 'supplements') this.renderSupplements();
+                if (tab === 'nutrition') {
+                    this.renderNutrition();
+                    this.renderSupplements();
+                }
                 if (tab === 'coach') this.renderCoach();
                 if (tab === 'programs') this.renderPrograms();
             }
@@ -3553,10 +4289,10 @@
 
                         if (typeof data.currentUser === 'string' && data.currentUser.trim()) {
                             localStorage.setItem('meuTreino_active_user', data.currentUser.trim());
-                            sessionStorage.setItem('meuTreino_authenticated', 'true');
+                            localStorage.setItem('meuTreino_authenticated', 'true');
                         } else {
                             localStorage.removeItem('meuTreino_active_user');
-                            sessionStorage.removeItem('meuTreino_authenticated');
+                            localStorage.removeItem('meuTreino_authenticated');
                         }
 
                         alert('Backup importado com sucesso. Recarregando a página...');
