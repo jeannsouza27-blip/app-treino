@@ -643,6 +643,39 @@
             color: var(--text-primary);
         }
 
+        .today-tip,
+        .today-deload {
+            margin-top: 0.6rem;
+            padding: 0.5rem 0.7rem;
+            border-radius: 10px;
+            font-size: var(--fs-small);
+            line-height: 1.4;
+        }
+
+        .today-tip {
+            background: rgba(37, 99, 235, 0.07);
+            color: var(--text-secondary);
+        }
+
+        .today-deload {
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.45);
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .weight-hint {
+            margin-top: 4px;
+            font-size: var(--fs-caption);
+            font-weight: 600;
+            color: var(--text-muted);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .weight-hint--up {
+            color: var(--success-strong);
+        }
+
         .today-desc {
             margin-top: 0.2rem;
             font-size: var(--fs-small);
@@ -1692,19 +1725,21 @@
                         ]
                     },
                     {
-                        id: 'def_core',
-                        name: 'Quinta • Abdominal + Aeróbico',
-                        desc: 'Circuito de abdominal + cardio moderado 40-45min',
+                        id: 'def_sup_forca',
+                        name: 'Quinta • Superior Força + Core',
+                        desc: 'Superior completo • Força • Core + cardio',
                         days: 6,
                         difficulty: 'Definição 40 dias',
                         exercises: [
-                            { name: 'Abdominal na Polia', sets: 3, reps: '12-15', note: 'Circuito: faça os exercícios em sequência e descanse 60s ao fim de cada volta. 4 voltas a partir da semana 3' },
-                            { name: 'Elevação de Pernas', sets: 3, reps: '10-15', note: 'Na barra ou no banco' },
-                            { name: 'Prancha', sets: 3, reps: '45-60s' },
-                            { name: 'Prancha Lateral', sets: 3, reps: '30-40s cada lado' },
-                            { name: 'Roda Abdominal', sets: 3, reps: '8-12', note: 'Ou abdominal com bola' },
+                            { name: 'Supino com Halteres', sets: 4, reps: '6-8', rest: '2 min' },
+                            { name: 'Barra Fixa ou Puxada Neutra', sets: 4, reps: '6-8', rest: '2 min', note: 'Na barra sem lastro, registre peso 0' },
+                            { name: 'Desenvolvimento com Halteres', sets: 3, reps: '8-10', rest: '90s' },
+                            { name: 'Remada Baixa no Cabo', sets: 3, reps: '8-10', rest: '90s' },
+                            { name: 'Bi-set: Rosca Alternada + Tríceps Francês', sets: 2, reps: '10-12 cada', rest: '60s', note: 'Faça a rosca e emende o tríceps, sem pausa' },
+                            { name: 'Abdominal Infra', sets: 3, reps: '12-15', rest: '0', note: 'Circuito de core: faça os 3 em sequência. 3 voltas, 60s no fim da volta' },
+                            { name: 'Prancha', sets: 3, reps: '45-60s', rest: '0' },
                             { name: 'Russian Twist', sets: 3, reps: '20', rest: '60s (fim da volta)', note: 'Com anilha, 10 para cada lado' },
-                            { name: 'Cardio Moderado', sets: 1, reps: '40-45min', note: 'Esteira inclinada, elíptico ou bike • Frequência cardíaca entre 110 e 130 bpm' }
+                            { name: 'Cardio Moderado', sets: 1, reps: '20-25min', note: 'Frequência cardíaca entre 110 e 130 bpm. Sem HIIT de perna: sexta já é inferior' }
                         ]
                     },
                     {
@@ -1845,6 +1880,11 @@
                 this.programs = this.loadPrograms();
 
                 this.exerciseGuide = {
+                    'Supino com Halteres': { image: './imagem treino/Supino Inclinado.webp', description: '' },
+                    'Barra Fixa ou Puxada Neutra': { image: './imagem treino/Puxada Frente.webp', description: '' },
+                    'Desenvolvimento com Halteres': { image: './imagem treino/Desenvolvimento.webp', description: '' },
+                    'Remada Baixa no Cabo': { image: './imagem treino/Remada Baixa.webp', description: '' },
+                    'Bi-set: Rosca Alternada + Tríceps Francês': { image: './imagem treino/Rosca Direta.jpg', description: '' },
                     'Agachamento Livre': {
                         image: './imagem treino/Agachamento Livre.webp',
                         description: 'Desça com os joelhos alinhados aos pés e mantenha o tronco firme, controlando a descida e subida.'
@@ -1945,6 +1985,50 @@
 
                 // Passo a passo de cada exercício (seção "Como fazer" no card do treino)
                 this.exerciseHowTo = {
+                    'Supino com Halteres': {
+                        musculos: 'Peitoral, tríceps e parte da frente do ombro',
+                        posicao: 'Deitado no banco reto, halteres ao lado do peito. Escápulas juntas e pés firmes no chão.',
+                        passos: ['Cotovelos a uns 45° do corpo, punhos firmes.', 'Empurre os halteres para cima e um pouco para dentro.', 'Pare antes de bater um no outro, braços quase esticados.', 'Desça devagar (2 segundos) até sentir o peito alongar.'],
+                        respiracao: 'Puxe o ar na descida e solte ao empurrar.',
+                        erros: ['Abrir os cotovelos a 90°.', 'Descer rápido e quicar no fundo.'],
+                        dica: 'Para subir e descer do banco, apoie os halteres nas coxas.'
+                    },
+                    'Barra Fixa ou Puxada Neutra': {
+                        musculos: 'Costas (dorsais), bíceps e antebraço',
+                        posicao: 'Na barra: pegada um pouco mais aberta que os ombros, braços esticados. Na puxada: pegada neutra (palmas uma de frente para a outra), coxas presas no apoio.',
+                        passos: ['Comece puxando os ombros para baixo, longe das orelhas.', 'Puxe levando o peito em direção à barra (ou a barra até o peito).', 'Cotovelos descem rente ao corpo.', 'Volte devagar até esticar os braços.'],
+                        respiracao: 'Solte o ar ao puxar e puxe o ar na volta.',
+                        erros: ['Balançar o corpo para subir.', 'Fazer meia repetição.'],
+                        dica: 'Se não fechar as reps na barra, faça na puxada.'
+                    },
+                    'Desenvolvimento com Halteres': {
+                        musculos: 'Ombros (principalmente a parte da frente) e tríceps',
+                        posicao: 'Sentado com encosto, halteres na altura das orelhas, palmas para a frente. Abdômen firme, lombar no encosto.',
+                        passos: ['Empurre os halteres para cima até quase esticar os braços.', 'Os halteres se aproximam no topo, sem bater.', 'Desça devagar até a altura das orelhas.'],
+                        respiracao: 'Puxe o ar embaixo, solte ao subir.',
+                        erros: ['Arquear a lombar para subir o peso.', 'Descer só até a metade.']
+                    },
+                    'Remada Baixa no Cabo': {
+                        musculos: 'Meio das costas, dorsais e bíceps',
+                        posicao: 'Sentado, pés apoiados, joelhos levemente dobrados. Tronco reto, peito aberto, pegador triângulo nas mãos.',
+                        passos: ['Puxe o pegador em direção ao umbigo.', 'Leve os cotovelos para trás, rente ao corpo, e junte as escápulas.', 'Segure 1 segundo.', 'Volte devagar até esticar os braços, sem curvar as costas.'],
+                        respiracao: 'Solte o ar ao puxar, puxe o ar ao voltar.',
+                        erros: ['Jogar o tronco para trás para puxar.', 'Arredondar as costas na volta.']
+                    },
+                    'Bi-set: Rosca Alternada + Tríceps Francês': {
+                        musculos: 'Bíceps e tríceps',
+                        posicao: 'Rosca: em pé, um halter em cada mão, cotovelos colados ao corpo. Francês: sentado, um halter seguro com as duas mãos acima da cabeça.',
+                        passos: ['Rosca: suba um halter girando a palma para cima, desça e alterne o braço.', 'Sem pausa, pegue o halter do francês.', 'Francês: desça o halter atrás da cabeça dobrando só os cotovelos.', 'Estique os braços de volta. Depois descanse 60s.'],
+                        respiracao: 'Solte o ar ao subir (rosca) e ao esticar (francês).',
+                        erros: ['Balançar o tronco na rosca.', 'Abrir os cotovelos no francês.']
+                    },
+                    'Abdominal Infra': {
+                        musculos: 'Abdômen (parte de baixo)',
+                        posicao: 'Deitado de costas, mãos ao lado do corpo ou segurando um apoio atrás da cabeça, pernas dobradas a 90°.',
+                        passos: ['Contraia o abdômen e leve os joelhos em direção ao peito, tirando o quadril do chão.', 'Segure 1 segundo em cima.', 'Desça devagar, sem encostar os pés no chão.'],
+                        respiracao: 'Solte o ar ao subir o quadril.',
+                        erros: ['Usar impulso das pernas.', 'Arquear a lombar na descida.']
+                    },
                     'Supino Reto': {
                         musculos: 'Peitoral, tríceps e parte da frente do ombro',
                         posicao: 'Deitado no banco, olhos embaixo da barra, pés firmes no chão. Junte as escápulas (ombros para trás e para baixo) e mantenha uma leve curva na lombar.',
@@ -2348,6 +2432,7 @@
                 };
 
                 this.loadState();
+                this.refreshCurrentDay();
                 this.state.profile = { ...this.defaultProfile, ...(this.state.profile || {}) };
                 this.applyInbodyBaseline();
                 this.ensureAdminUser();
@@ -2667,7 +2752,9 @@
                 try {
                     const saved = localStorage.getItem('meuTreino_programs');
                     if (!saved) return this.defaultPrograms;
-                    const parsed = JSON.parse(saved);
+                    // Quinta antiga (Abdominal + Aeróbico) foi substituída por 'def_sup_forca'
+                    const retired = ['def_core'];
+                    const parsed = (JSON.parse(saved) || []).filter(p => p && !retired.includes(p.id));
                     if (!Array.isArray(parsed) || !parsed.length) return this.defaultPrograms;
                     // Plano de definição: adiciona os dias que ainda não existem nos programas salvos
                     const missing = this.defaultPrograms.filter(p => !parsed.some(m => m.id === p.id));
@@ -3483,7 +3570,7 @@
             getCurrentWorkoutProgramId() {
                 const daysSince = this.getDaysSinceStart();
                 // Plano de definição 40 dias: treino definido pelo dia da semana (0 = domingo)
-                const byWeekday = ['def_descanso', 'def_push', 'def_pull', 'def_pernas', 'def_core', 'def_inf_metab', 'def_sup_metab'];
+                const byWeekday = ['def_descanso', 'def_push', 'def_pull', 'def_pernas', 'def_sup_forca', 'def_inf_metab', 'def_sup_metab'];
                 const id = byWeekday[new Date().getDay()];
                 return this.programs.some(p => p.id === id) ? id : (daysSince % 2 === 0 ? 'fullbody' : 'fullbodyB');
             }
@@ -3539,9 +3626,9 @@
                     `;
                 }).join('');
 
-                // Quinta (4) e domingo (0) = dias leves; os demais = dias de treino
+                // Domingo (0) = dia leve; os demais têm musculação
                 const weekday = new Date().getDay();
-                const isLightDay = weekday === 0 || weekday === 4;
+                const isLightDay = weekday === 0;
                 const macros = isLightDay
                     ? { label: 'Dia leve (sem musculação)', kcal: '2.100', prot: '185g', carb: '180g', gord: '70g' }
                     : { label: 'Dia de treino', kcal: '2.350-2.400', prot: '185g', carb: '255g', gord: '65g' };
@@ -3665,6 +3752,7 @@
                 // Dia 1 = data de início; 40 dias ≈ 6 semanas
                 const cycleDay = Math.min(Math.max(daysSince + 1, 1), 40);
                 const cycleWeek = Math.min(Math.floor((cycleDay - 1) / 7) + 1, 6);
+                const deload = this.isDeloadWeek(cycleWeek);
                 const [dayName, workoutName] = program.name.includes(' • ') ? program.name.split(' • ') : ['', program.name];
                 const isCompleted = this.state.completedWorkouts?.[program.id];
                 const completionTitle = `Parabéns Jeann! ${program.name} concluído.`;
@@ -3683,7 +3771,7 @@
                 html += `
                     <div class="today-head">
                         <div class="today-meta">
-                            <span>${dayName ? dayName + ' · ' : ''}Semana ${cycleWeek} de 6</span>
+                            <span>${dayName ? dayName + ' · ' : ''}Semana ${cycleWeek} de 6${deload ? ' · Deload' : ''}</span>
                             <span>Dia ${cycleDay}/40</span>
                         </div>
                         <h2 class="today-title">${workoutName}</h2>
@@ -3691,6 +3779,8 @@
                         <div class="progress-bar" role="progressbar" aria-label="Progresso do ciclo de 40 dias" aria-valuemin="1" aria-valuemax="40" aria-valuenow="${cycleDay}">
                             <div class="progress-fill" style="width: ${(cycleDay / 40) * 100}%"></div>
                         </div>
+                        ${deload ? '<p class="today-deload">Semana de deload: 1 série a menos em cada exercício e carga 10% menor.</p>' : ''}
+                        <p class="today-tip">Déficit leve de 300-500 kcal, proteína 1,8-2,2 g/kg, 7-8h de sono, 8-10 mil passos/dia</p>
                     </div>
                 `;
 
@@ -3742,7 +3832,15 @@
 
                     const prefillSet = editingRecord ? editingRecord.set : (records.length + 1);
                     const prefillReps = editingRecord ? editingRecord.reps : '';
-                    const prefillWeight = editingRecord ? editingRecord.weight : (records.length ? records[records.length - 1].weight : '');
+                    const plannedSets = this.getPlannedSets(ex, cycleWeek);
+                    const suggestion = ex.sets > 1 ? this.getWeightSuggestion(program.id, ex) : null;
+                    const prefillWeight = editingRecord ? editingRecord.weight : (records.length ? records[records.length - 1].weight : (suggestion ? suggestion.suggested : ''));
+                    const weightHint = suggestion ? `
+                        <div class="weight-hint">Última: ${this.fmt(suggestion.lastWeight)} kg</div>
+                        ${suggestion.reason === 'up' ? `<div class="weight-hint weight-hint--up">Hoje: ${this.fmt(suggestion.suggested)} kg ↑</div>` : ''}
+                        ${suggestion.reason === 'deload' ? `<div class="weight-hint">Deload: ${this.fmt(suggestion.suggested)} kg</div>` : ''}
+                    ` : '';
+                    const restText = ex.rest === '0' ? ' · sem descanso' : (ex.rest ? ` · descanso ${ex.rest}` : '');
 
                     const recordsHtml = records.map((r, ri) => {
                         const badgeClass = r.set >= 1 && r.set <= 5 ? `s${r.set}` : 's0';
@@ -3767,11 +3865,11 @@
                                 </div>
                                 <div class="exercise-heading">
                                     <div class="exercise-title">${ex.name}</div>
-                                    <div class="exercise-meta">${ex.sets} ${ex.sets > 1 ? 'séries' : 'série'} × ${ex.reps}${/^[\d-]+$/.test(String(ex.reps)) ? ' reps' : ''}${ex.rest ? ` · descanso ${ex.rest}` : ''}</div>
+                                    <div class="exercise-meta">${plannedSets} ${plannedSets > 1 ? 'séries' : 'série'} × ${ex.reps}${/^[\d-]+$/.test(String(ex.reps)) ? ' reps' : ''}${restText}</div>
                                 </div>
                             </div>
                             ${ex.note ? `<p class="exercise-note">${ex.note}</p>` : ''}
-                            ${showDescription ? `<p class="exercise-description">${description}</p>` : ''}
+                            ${showDescription && description ? `<p class="exercise-description">${description}</p>` : ''}
                             ${howToHtml}
                             <div class="input-group">
                                 <div class="input-field">
@@ -3785,6 +3883,7 @@
                                 <div class="input-field">
                                     <label for="weight-${i}">Peso (kg)</label>
                                     <input type="number" id="weight-${i}" placeholder="Peso" step="0.5" value="${prefillWeight}" />
+                                    ${weightHint}
                                 </div>
                             </div>
                             <button class="btn btn-primary btn-record" onclick="app.recordExercise(${i}, '${ex.name}')">
@@ -4161,6 +4260,89 @@
                 `;
 
                 document.getElementById('tipsContent').innerHTML = html;
+            }
+
+            // Data local de hoje (AAAA-MM-DD). toISOString usa UTC e vira o dia às 21h no Brasil
+            getTodayKey() {
+                const d = new Date();
+                return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+            }
+
+            // Ao abrir em um novo dia: atualiza a data dos registros e libera o "treino concluído"
+            refreshCurrentDay() {
+                const today = this.getTodayKey();
+                if (this.state.currentDay !== today) {
+                    this.state.currentDay = today;
+                    this.state.completedWorkouts = {};
+                    this.saveState();
+                }
+            }
+
+            getCycleWeek() {
+                const cycleDay = Math.min(Math.max(this.getDaysSinceStart() + 1, 1), 40);
+                return Math.min(Math.floor((cycleDay - 1) / 7) + 1, 6);
+            }
+
+            isDeloadWeek(week = this.getCycleWeek()) {
+                return week === 4;
+            }
+
+            // Deload: 1 série a menos em cada exercício (mínimo 1)
+            getPlannedSets(ex, week = this.getCycleWeek()) {
+                const sets = Number(ex.sets) || 1;
+                return this.isDeloadWeek(week) && sets > 1 ? sets - 1 : sets;
+            }
+
+            // Básicos com progressão de carga: kg a somar quando fecha todas as séries no topo da faixa
+            getProgressionStep(name) {
+                const steps = {
+                    'Supino Reto': 2.5, 'Supino com Halteres': 2.5,
+                    'Desenvolvimento': 2.5, 'Desenvolvimento com Halteres': 2.5,
+                    'Puxada Frontal': 2.5, 'Barra Fixa ou Puxada Neutra': 2.5,
+                    'Remada Curvada': 2.5, 'Remada Baixa no Cabo': 2.5,
+                    'Agachamento Livre': 5, 'Terra Romeno': 5
+                };
+                return steps[name] || 0;
+            }
+
+            // Última sessão finalizada do exercício: prefere o mesmo dia de treino e ignora a semana de deload
+            getLastSession(programId, name) {
+                const history = Array.isArray(this.state.workoutHistory) ? this.state.workoutHistory : [];
+                const start = new Date(this.state.startDate + 'T00:00:00');
+                const weekOf = date => Math.floor((new Date(date + 'T00:00:00') - start) / 86400000 / 7) + 1;
+                const pick = sameProgram => {
+                    let fallback = null;
+                    for (let i = history.length - 1; i >= 0; i--) {
+                        const entry = history[i];
+                        if (sameProgram && entry.programId !== programId) continue;
+                        if (entry.date === this.state.currentDay) continue;
+                        const ex = (entry.exercises || []).find(item => item.name === name);
+                        if (!ex || !ex.sets?.length) continue;
+                        const found = { ...ex, deload: this.isDeloadWeek(weekOf(entry.date)), sameProgram };
+                        if (!found.deload) return found;
+                        fallback = fallback || found;
+                    }
+                    return fallback;
+                };
+                return pick(true) || pick(false);
+            }
+
+            // Sugestão de carga: +2,5/+5 kg ao fechar todas as séries no topo da faixa; -10% no deload
+            getWeightSuggestion(programId, ex) {
+                const last = this.getLastSession(programId, ex.name);
+                if (!last) return null;
+                const lastWeight = Math.max(...last.sets.map(set => Number(set.weight) || 0));
+                const top = Math.max(0, ...(String(ex.reps).match(/\d+/g) || []).map(Number));
+                const step = this.getProgressionStep(ex.name);
+                const hitTop = top > 0 && last.sameProgram && !last.deload &&
+                    last.sets.filter(set => (Number(set.weight) || 0) >= lastWeight && Number(set.reps) >= top).length >= (Number(ex.sets) || 1);
+                if (this.isDeloadWeek()) {
+                    return { lastWeight, suggested: Math.round(lastWeight * 0.9 * 2) / 2, reason: 'deload' };
+                }
+                if (step && hitTop) {
+                    return { lastWeight, suggested: lastWeight + step, reason: 'up' };
+                }
+                return { lastWeight, suggested: lastWeight, reason: '' };
             }
 
             // Número no padrão brasileiro: 81,2 · 40 · 42,5
